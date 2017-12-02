@@ -16,7 +16,8 @@
   "scripts": {
     "build": "ember build",
     "start": "ember serve",
-    "test": "ember try:each"
+    "test": "ember try:each",
+    "coverage": "COVERAGE=true ember test"
   },
   "dependencies": {
     "ember-cli-babel": "^6.6.0"
