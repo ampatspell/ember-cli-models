@@ -6,3 +6,4 @@
 # DONE
 
 * stores, store, database computed properties
+* test module for stores
