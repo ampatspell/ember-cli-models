@@ -2,4 +2,4 @@ export {
   stores,
   store,
   database
-} from '../-private/computed/globals';
+} from './-private/computed/globals';
