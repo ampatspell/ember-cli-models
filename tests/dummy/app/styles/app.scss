@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&subset=latin-ext');
+$font-family: 'Raleway', sans-serif;
+
+@import "reset";
+@import "body";
+
+@mixin ellipsis() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+*[data-ember-action] {
+  cursor: pointer;
+}
+
+.ui-application {
+  @import "app/form";
+  a {
+    color: #000;
+  }
+  > .header {
+    padding: 25px 25px 0 25px;
+    > .title {
+      font-weight: 600;
+    }
+    > .links {
+      font-size: 13px;
+      padding-top: 5px;
+      a {
+        display: inline-block;
+        text-decoration: none;
+        color: #000;
+        &.active {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  > .content {
+    padding: 25px;
+  }
+  > .identity {
+    margin-top: 50px;
+    background: fade-out(#000, 0.994);
+    border-top: 1px solid fade-out(#000, 0.9);
+    border-bottom: 1px solid fade-out(#000, 0.9);
+    padding: 25px 25px;
+  }
+}
+
+.ui-block.json {
+  font-family: 'Monaco';
+  font-size: 12px;
+  line-height: 14px;
+  white-space: pre-wrap;
+  &.tiny {
+    font-size: 10px;
+    line-height: 13px;
+  }
+}

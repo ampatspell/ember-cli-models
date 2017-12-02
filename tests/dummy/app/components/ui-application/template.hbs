@@ -1,0 +1,11 @@
+<div class="header">
+  <div class="title">ember-cli-models</div>
+  {{#unless isEmpty}}
+    <div class="links">
+      {{link-to 'index' 'index'}}
+    </div>
+  {{/unless}}
+</div>
+<div class="content">
+  {{yield}}
+</div>
