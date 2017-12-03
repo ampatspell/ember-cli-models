@@ -8,10 +8,12 @@ export default EmberObject.extend({
   identifier: null,
 
   _databases: null,
+  _modelFactory: null,
 
   init() {
     this._super(...arguments);
     this._databases = new Registry();
+    this._modelFactory = this._factoryFor('models:model/factory').create({ store: this });
   },
 
   _factoryFor() {

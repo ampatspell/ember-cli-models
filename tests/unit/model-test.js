@@ -12,7 +12,7 @@ module('model', {
   }
 });
 
-test('it exists', function(assert) {
+test.skip('it exists', function(assert) {
   let model = this.database.model('type');
   assert.ok(model);
 });

@@ -6,3 +6,7 @@ module('store');
 test('it exists', function(assert) {
   assert.ok(this.store);
 });
+
+test('store has model factory', function(assert) {
+  assert.ok(this.store._modelFactory);
+});

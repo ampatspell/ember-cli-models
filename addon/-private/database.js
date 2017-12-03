@@ -5,8 +5,11 @@ export default EmberObject.extend({
   store: null,
   identifier: null,
 
-  model() {
-  },
+  // model(modelName, props) {
+  // },
+
+  // push(storage) {
+  // },
 
   toStringExtension() {
     let store = this.get('store.identifier');
