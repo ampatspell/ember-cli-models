@@ -5,6 +5,9 @@ export default EmberObject.extend({
   store: null,
   identifier: null,
 
+  model() {
+  },
+
   toStringExtension() {
     let store = this.get('store.identifier');
     let identifier = this.get('identifier');

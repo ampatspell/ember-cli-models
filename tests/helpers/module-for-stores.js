@@ -11,6 +11,7 @@ export default function(name, options={}) {
     beforeEach() {
       this.application = startApp();
       this.instance = this.application.buildInstance();
+      this.register = (name, factory) => this.instance.register(name, factory);
       getter(this, 'stores', () => this.instance.lookup('models:stores'));
       getter(this, 'store', () => this.stores.store('default'));
       getter(this, 'database', () => this.store.database('main'));
