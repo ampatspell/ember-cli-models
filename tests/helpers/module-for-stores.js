@@ -13,6 +13,7 @@ export default function(name, options={}) {
       this.instance = this.application.buildInstance();
       getter(this, 'stores', () => this.instance.lookup('models:stores'));
       getter(this, 'store', () => this.stores.store('default'));
+      getter(this, 'database', () => this.store.database('main'));
       let beforeEach = options.beforeEach && options.beforeEach.apply(this, arguments);
       return resolve(beforeEach);
     },
