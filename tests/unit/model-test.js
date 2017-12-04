@@ -2,7 +2,7 @@ import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model';
-import Adapter from 'ember-cli-models/adapter';
+import Adapter from 'ember-cli-models/adapter/store';
 
 const MockAdapter = Adapter.extend({
 

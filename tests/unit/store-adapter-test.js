@@ -1,7 +1,7 @@
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Stores from 'ember-cli-models/stores';
-import Adapter from 'ember-cli-models/adapter';
+import Adapter from 'ember-cli-models/adapter/store';
 
 module('store-adapter', {
   beforeEach() {
@@ -18,7 +18,7 @@ module('store-adapter', {
           }
         }
       });
-      this.register('models:adapter/local', AdapterImpl);
+      this.register('models:adapter/store/local', AdapterImpl);
       this.register('models:stores', StoresImpl);
       return this.lookup('models:stores');
     };

@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import { Promise } from 'rsvp';
 import Stores from 'ember-cli-models/stores';
-import Adapter from 'ember-cli-models/adapter';
+import StoreAdapter from 'ember-cli-models/adapter/store';
 
-const LocalAdapter = Adapter.extend();
+const LocalAdapter = StoreAdapter.extend();
 
 const DummyStores = Stores.extend({
   storeOptionsForIdentifier(identifier) {

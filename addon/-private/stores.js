@@ -28,7 +28,7 @@ export default EmberObject.extend({
   _createAdapterForOptions(opts) {
     let name = opts.adapter;
     let normalizedName = normalizeIdentifier(name);
-    let factory = factoryFor(this, `models:adapter/${normalizedName}`);
+    let factory = factoryFor(this, `models:adapter/store/${normalizedName}`);
     assert(`adapter '${normalizedName}' is not registered`, !!factory);
     let props = omit(opts, [ 'adapter' ]);
     return factory.create(props);
