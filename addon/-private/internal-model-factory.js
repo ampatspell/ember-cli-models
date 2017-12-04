@@ -11,7 +11,8 @@ export default EmberObject.extend({
 
   createNewInternalModel(modelName, database) {
     let { normalizedName, factory } = this._modelClassForName(modelName);
-    return new InternalModel(database, normalizedName, factory, null);
+    let storage = null;
+    return new InternalModel(database, normalizedName, factory, storage);
   }
 
 });
