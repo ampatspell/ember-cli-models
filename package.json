@@ -20,7 +20,8 @@
     "coverage": "COVERAGE=true ember test"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.6.0"
+    "ember-cli-babel": "^6.6.0",
+    "serve-static": "^1.13.1"
   },
   "devDependencies": {
     "ember-cli-documents": "~0.0.0",
