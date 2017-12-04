@@ -6,11 +6,11 @@ import Model from 'ember-cli-models/model';
 const Duck = Model.extend();
 const Random = EmberObject.extend();
 
-module('model-factory', {
+module('model-class-factory', {
   beforeEach() {
     this.register('model:duck', Duck);
     this.register('model:random', Random);
-    this.factory = this.store._modelFactory;
+    this.factory = this.store._modelClassFactory;
   }
 });
 
