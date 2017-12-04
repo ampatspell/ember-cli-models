@@ -10,3 +10,7 @@ test('it exists', function(assert) {
 test('store has model factory', function(assert) {
   assert.ok(this.store._modelFactory);
 });
+
+test('toString includes identifier', function(assert) {
+  assert.ok(this.store.toString().endsWith('default>'));
+});
