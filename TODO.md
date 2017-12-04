@@ -1,6 +1,6 @@
 # TODO
 
-* `db.model`
+* create internal model gets storage for props
 
 # DONE
 
@@ -8,3 +8,4 @@
 * test module for stores
 * store and database cache. always return the same instance
 * destroy all stores and databases on `stores` destroy
+* `db.model`
