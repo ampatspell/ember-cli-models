@@ -37,7 +37,7 @@ test('lookup', function(assert) {
 });
 
 test('lookup returns same extended class', function(assert) {
-  let Duck1 = this.factory.lookup({
+  let { factory: Duck1 } = this.factory.lookup({
     prefix: 'model',
     name: 'duck',
     prepare: (Model, modelName) => {
@@ -45,14 +45,16 @@ test('lookup returns same extended class', function(assert) {
       Model.reopenClass({ modelName });
       return Model;
     }
-  }).factory;
-  let Duck2 = this.factory.lookup({
+  });
+
+  let { factory: Duck2 } = this.factory.lookup({
     prefix: 'model',
     name: 'duck',
     prepare: () => {
       assert.ok(false, 'prepare called');
     }
-  }).factory;
+  })
+
   assert.ok(Duck1 === Duck2);
 });
 
