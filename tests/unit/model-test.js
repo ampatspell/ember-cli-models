@@ -17,13 +17,13 @@ test('model is created with internal model', function(assert) {
   let model = this.database.model('duck');
   assert.ok(model);
   assert.ok(model._internal);
-  assert.ok(model._internal._model === model);
+  assert.ok(model._internal._model.instance === model);
 });
 
 test('model destroy unsets internalModel._model', function(assert) {
   let model = this.database.model('duck');
   let internal = model._internal;
-  assert.ok(internal._model === model);
+  assert.ok(internal._model.instance === model);
   run(() => model.destroy());
-  assert.ok(internal._model === null);
+  assert.ok(internal._model.instance === null);
 });
