@@ -5,15 +5,12 @@ export default EmberObject.extend({
   store: null,
   identifier: null,
 
-  _modelFactoryForName(modelName) {
-    return this.store._modelFactoryForName(modelName);
+  _createNewInternalModel(modelName) {
+    return this.store._internalModelFactory.createNewInternalModel(modelName, this);
   },
 
-  model(modelName, props) {
-    let factory = this._modelFactoryForName(modelName);
-    // adapter storage for props
-    // register in identity
-    return factory.create(props);
+  model(modelName) {
+    return this._createNewInternalModel(modelName).model(true);
   },
 
   // push(storage) {

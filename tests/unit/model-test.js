@@ -12,7 +12,9 @@ module('model', {
   }
 });
 
-test('it exists', function(assert) {
+test('model is created with internal model', function(assert) {
   let model = this.database.model('duck');
   assert.ok(model);
+  assert.ok(model._internal);
+  assert.ok(model._internal._model === model);
 });

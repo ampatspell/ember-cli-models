@@ -10,20 +10,22 @@ export default EmberObject.extend({
   _databases: null,
   _classFactory: null,
   _modelClassFactory: null,
+  _internalModelFactory: null,
 
   init() {
     this._super(...arguments);
     this._databases = new Registry();
     this._classFactory = this._factoryFor('models:class-factory').create();
-    this._modelClassFactory = this._factoryFor('models:model-class-factory').create({ _classFactory: this._classFactory });
+    this._modelClassFactory = this._factoryFor('models:model-class-factory').create({
+      _classFactory: this._classFactory
+    });
+    this._internalModelFactory = this._factoryFor('models:internal-model-factory').create({
+      _modelClassFactory: this._modelClassFactory
+    });
   },
 
   _factoryFor() {
     return this.stores._factoryFor(...arguments);
-  },
-
-  _modelFactoryForName(modelName) {
-    return this._modelClassFactory.lookup(modelName);
   },
 
   database(identifier) {
