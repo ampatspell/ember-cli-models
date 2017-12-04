@@ -1,9 +1,10 @@
 import EmberObject from '@ember/object';
 
-export default EmberObject.extend({
-
-  factoryForName(modelName) {
-
-  }
-
+const Model = EmberObject.extend({
 });
+
+Model.reopenClass({
+  modelName: null
+});
+
+export default Model;

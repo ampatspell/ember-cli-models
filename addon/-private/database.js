@@ -5,8 +5,16 @@ export default EmberObject.extend({
   store: null,
   identifier: null,
 
-  // model(modelName, props) {
-  // },
+  _modelFactoryForName(modelName) {
+    return this.store._modelFactoryForName(modelName);
+  },
+
+  model(modelName, props) {
+    let factory = this._modelFactoryForName(modelName);
+    // adapter storage for props
+    // register in identity
+    return factory.create(props);
+  },
 
   // push(storage) {
   // },

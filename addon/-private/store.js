@@ -2,15 +2,6 @@ import EmberObject from '@ember/object';
 import Registry from './util/registry';
 import normalizeIdentifier from './util/normalize-identifier';
 
-const createClassFactory = store => store._factoryFor('models:class/factory').create();
-const createModelFactory = store => store._factoryFor('models:model/factory').create({
-  _delegate: {
-    get classFactory() {
-      return store._classFactory;
-    }
-  }
-});
-
 export default EmberObject.extend({
 
   stores: null,
@@ -23,12 +14,16 @@ export default EmberObject.extend({
   init() {
     this._super(...arguments);
     this._databases = new Registry();
-    this._classFactory = createClassFactory(this);
-    this._modelFactory = createModelFactory(this);
+    this._classFactory = this._factoryFor('models:class/factory').create();
+    this._modelFactory = this._factoryFor('models:model/factory').create({ _classFactory: this._classFactory });
   },
 
   _factoryFor() {
     return this.stores._factoryFor(...arguments);
+  },
+
+  _modelFactoryForName(modelName) {
+    return this._modelFactory.lookup(modelName);
   },
 
   database(identifier) {
