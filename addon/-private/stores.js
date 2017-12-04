@@ -24,8 +24,8 @@ export default EmberObject.extend({
 
   _storeOptionsForIdentifier(identifier) {
     let opts = this.storeOptionsForIdentifier(identifier);
-    isObject('options', opts);
-    isString('options.adapter', opts.adapter);
+    isObject(`options for '${identifier}' store`, opts);
+    isString(`store adapter for '${identifier}'`, opts.adapter);
     return opts;
   },
 

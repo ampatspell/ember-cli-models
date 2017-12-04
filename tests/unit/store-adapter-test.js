@@ -44,7 +44,7 @@ test('throws for missing opts', function(assert) {
   } catch(err) {
     assert.deepEqual(err.toJSON(), {
       "error": "assertion",
-      "reason": "options must be object"
+      "reason": "options for 'something' store must be object"
     });
   }
 });
@@ -56,7 +56,7 @@ test('throws for missing adapter', function(assert) {
   } catch(err) {
     assert.deepEqual(err.toJSON(), {
       "error": "assertion",
-      "reason": "options.adapter must be string"
+      "reason": "store adapter for 'no-adapter' must be string"
     });
   }
 });
