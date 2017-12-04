@@ -1,4 +1,5 @@
 import EmberObject from '@ember/object';
+import factoryFor from './util/factory-for';
 
 export default EmberObject.extend({
 
@@ -9,7 +10,7 @@ export default EmberObject.extend({
 
   init() {
     this._super(...arguments);
-    this._internalModelIdentity = this.store._factoryFor('models:internal-model-identity').create();
+    this._internalModelIdentity = factoryFor(this, 'models:internal-model-identity').create();
   },
 
   _createNewInternalModel(modelName) {

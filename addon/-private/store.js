@@ -1,5 +1,6 @@
 import EmberObject from '@ember/object';
 import Registry from './util/registry';
+import factoryFor from './util/factory-for';
 import normalizeIdentifier from './util/normalize-identifier';
 
 export default EmberObject.extend({
@@ -15,17 +16,13 @@ export default EmberObject.extend({
   init() {
     this._super(...arguments);
     this._databases = new Registry();
-    this._classFactory = this._factoryFor('models:class-factory').create();
-    this._modelClassFactory = this._factoryFor('models:model-class-factory').create({
+    this._classFactory = factoryFor(this, 'models:class-factory').create();
+    this._modelClassFactory = factoryFor(this, 'models:model-class-factory').create({
       _classFactory: this._classFactory
     });
-    this._internalModelFactory = this._factoryFor('models:internal-model-factory').create({
+    this._internalModelFactory = factoryFor(this, 'models:internal-model-factory').create({
       _modelClassFactory: this._modelClassFactory
     });
-  },
-
-  _factoryFor() {
-    return this.stores._factoryFor(...arguments);
   },
 
   database(identifier) {
@@ -34,7 +31,7 @@ export default EmberObject.extend({
 
     let database = databases.get(normalizedIdentifier);
     if(!database) {
-      database = this._factoryFor('models:database').create({ store: this, identifier: normalizedIdentifier });
+      database = factoryFor(this, 'models:database').create({ store: this, identifier: normalizedIdentifier });
       databases.set(normalizedIdentifier, database);
     }
 
