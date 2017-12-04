@@ -8,21 +8,22 @@ import Adapter from 'ember-cli-models/adapter';
 
 const getter = (object, name, fn) => Object.defineProperty(object, name, { get: () => fn() });
 
-const NoopAdapter = Adapter.extend();
+const createOpts = () => {
+  let noop = { adapter: 'noop' };
+  return {
+    'default': noop,
+    'local': noop,
+    'remote': noop
+  };
+}
 
-const TestStores = Stores.extend({
-  storeOptionsForIdentifier(identifier) {
-    if([ 'default', 'local', 'remote' ].includes(identifier)) {
-      return {
-        adapter: 'noop'
-      };
-    }
-  }
-});
-
-const createStores = ({ register }) => {
-  register('models:stores', TestStores);
-  register('models:adapter/noop', NoopAdapter);
+const createStores = owner => {
+  const NoopAdapter = Adapter.extend();
+  const TestStores = Stores.extend({
+    storeOptionsForIdentifier: identifier => owner.opts[identifier]
+  });
+  owner.register('models:stores', TestStores);
+  owner.register('models:adapter/noop', NoopAdapter);
 }
 
 export default function(name, options={}) {
@@ -32,10 +33,17 @@ export default function(name, options={}) {
       this.instance = this.application.buildInstance();
       this.register = (name, factory) => this.instance.register(name, factory);
       this.lookup = name => this.instance.lookup(name);
+
+      this.opts = createOpts();
       createStores(this);
+
+      this.registerAdapter = (name, factory) => this.register(`models:adapter/${name}`, factory);
+      this.setAdapter = (storeName, adapterName) => this.opts[storeName] = { adapter: adapterName };
+
       getter(this, 'stores', () => this.lookup('models:stores'));
       getter(this, 'store', () => this.stores.store('default'));
       getter(this, 'database', () => this.store.database('main'));
+
       let beforeEach = options.beforeEach && options.beforeEach.apply(this, arguments);
       return resolve(beforeEach);
     },
