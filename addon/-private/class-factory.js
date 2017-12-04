@@ -2,6 +2,7 @@ import EmberObject from '@ember/object';
 import { getOwner } from '@ember/application';
 import normalizeIdentifier from './util/normalize-identifier';
 import { assert } from './util/assert';
+import factoryFor from './util/factory-for';
 
 export default EmberObject.extend({
 
@@ -16,7 +17,7 @@ export default EmberObject.extend({
     let classes = this._classes;
     let factory = classes[name];
     if(!factory) {
-      factory = getOwner(this).factoryFor(name);
+      factory = factoryFor(this, name);
       if(factory) {
         classes[name] = factory;
       }
