@@ -22,4 +22,8 @@ export default class InternalModel {
     return model;
   }
 
+  modelWillDestroy() {
+    this._model = null;
+  }
+
 }

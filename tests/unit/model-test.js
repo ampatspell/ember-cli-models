@@ -1,3 +1,4 @@
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model';
@@ -17,4 +18,12 @@ test('model is created with internal model', function(assert) {
   assert.ok(model);
   assert.ok(model._internal);
   assert.ok(model._internal._model === model);
+});
+
+test('model destroy unsets internalModel._model', function(assert) {
+  let model = this.database.model('duck');
+  let internal = model._internal;
+  assert.ok(internal._model === model);
+  run(() => model.destroy());
+  assert.ok(internal._model === null);
 });
