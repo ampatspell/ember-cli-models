@@ -1,6 +1,7 @@
 import Stores from 'ember-cli-models/-private/stores';
 import Store from 'ember-cli-models/-private/store';
 import Database from 'ember-cli-models/-private/database';
+import ClassFactory from 'ember-cli-models/-private/class-factory';
 import ModelFactory from 'ember-cli-models/-private/model-factory';
 
 export default {
@@ -9,6 +10,7 @@ export default {
     container.register('models:stores', Stores);
     container.register('models:store', Store);
     container.register('models:database', Database);
+    container.register('models:class/factory', ClassFactory);
     container.register('models:model/factory', ModelFactory);
   }
 };

@@ -10,3 +10,9 @@ module('model-factory', {
 test('it exists', function(assert) {
   assert.ok(this.factory);
 });
+
+test('lookup returns extended factory', function(assert) {
+});
+
+test('lookup throws for unregistered factory', function(assert) {
+});

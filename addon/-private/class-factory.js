@@ -2,8 +2,7 @@ import EmberObject from '@ember/object';
 
 export default EmberObject.extend({
 
-  factoryForName(modelName) {
-
+  lookup({ prefix, name, prepare }) {
   }
 
 });
