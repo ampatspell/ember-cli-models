@@ -19,7 +19,7 @@ test('it exists', function(assert) {
 });
 
 test('lookup returns extended factory', function(assert) {
-  let Model = this.factory.lookup('duck');
+  let Model = this.factory.lookup('duck').factory;
   assert.ok(Model);
   assert.equal(get(Model.class, 'modelName'), 'duck');
 });

@@ -43,7 +43,7 @@ export default EmberObject.extend({
       this._registerFactory(registeredName, BaseClass);
       factory = this._lookupFactory(registeredName);
     }
-    return factory;
+    return { normalizedName, factory };
   }
 
 });

@@ -7,6 +7,7 @@ const Duck = EmberObject.extend();
 module('class-factory', {
   beforeEach() {
     this.register('model:duck', Duck);
+    this.register('model:yellow-duck', Duck);
     this.factory = this.store._classFactory;
   }
 });
@@ -16,7 +17,7 @@ test('it exists', function(assert) {
 });
 
 test('lookup', function(assert) {
-  let Model = this.factory.lookup({
+  let { normalizedName, factory: Model } = this.factory.lookup({
     prefix: 'model',
     name: 'duck',
     prepare: (Model, modelName) => {
@@ -25,6 +26,7 @@ test('lookup', function(assert) {
       return Model;
     }
   });
+  assert.equal(normalizedName, 'duck');
   assert.ok(Model);
   assert.ok(!!Model.class);
   assert.ok(!!Model.create);
@@ -43,13 +45,26 @@ test('lookup returns same extended class', function(assert) {
       Model.reopenClass({ modelName });
       return Model;
     }
-  });
+  }).factory;
   let Duck2 = this.factory.lookup({
     prefix: 'model',
     name: 'duck',
     prepare: () => {
       assert.ok(false, 'prepare called');
     }
-  });
+  }).factory;
   assert.ok(Duck1 === Duck2);
+});
+
+test('lookup returns normalized name', function(assert) {
+  let { normalizedName } = this.factory.lookup({
+    prefix: 'model',
+    name: 'YellowDuck',
+    prepare: (Model, modelName) => {
+      Model = Model.extend({ ok: true });
+      Model.reopenClass({ modelName });
+      return Model;
+    }
+  });
+  assert.equal(normalizedName, 'yellow-duck');
 });

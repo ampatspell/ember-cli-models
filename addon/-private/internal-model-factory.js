@@ -1,4 +1,4 @@
-import EmberObject, { get } from '@ember/object';
+import EmberObject from '@ember/object';
 import InternalModel from './internal-model';
 
 export default EmberObject.extend({
@@ -10,9 +10,8 @@ export default EmberObject.extend({
   },
 
   createNewInternalModel(modelName, database) {
-    let factory = this._modelClassForName(modelName);
-    let normalizedModelName = get(factory.class, 'modelName');
-    return new InternalModel(database, normalizedModelName, factory, null);
+    let { normalizedName, factory } = this._modelClassForName(modelName);
+    return new InternalModel(database, normalizedName, factory, null);
   }
 
 });
