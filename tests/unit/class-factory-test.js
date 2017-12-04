@@ -60,11 +60,7 @@ test('lookup returns normalized name', function(assert) {
   let { normalizedName } = this.factory.lookup({
     prefix: 'model',
     name: 'YellowDuck',
-    prepare: (Model, modelName) => {
-      Model = Model.extend({ ok: true });
-      Model.reopenClass({ modelName });
-      return Model;
-    }
+    prepare: Model => Model
   });
   assert.equal(normalizedName, 'yellow-duck');
 });
