@@ -7,7 +7,7 @@ export default Component.extend({
   layout,
 
   stores: stores(),
-  store: store('remote'),
-  database: database('remote', 'main')
+  store: store('local'),
+  database: database('local', 'main')
 
 });
