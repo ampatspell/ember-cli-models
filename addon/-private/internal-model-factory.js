@@ -13,7 +13,7 @@ export default EmberObject.extend({
   },
 
   _expandData(data, database) {
-    let built = adapterForDatabase(database).build(data);
+    let built = adapterForDatabase(database).build(data, database);
     isObject('adapter.build result', built);
     return built;
   },
