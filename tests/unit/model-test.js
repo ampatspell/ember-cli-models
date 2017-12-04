@@ -9,9 +9,7 @@ const MockAdapter = Adapter.extend({
   build(opts) {
     return {
       props: opts,
-      storage: {
-        type: 'storage'
-      }
+      storage: { type: 'storage' }
     };
   }
 
