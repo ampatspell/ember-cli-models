@@ -24,7 +24,7 @@ export default class InternalModel {
 
   modelWillDestroy() {
     this._model.instance = null;
-    this.database._internalModelWillDestroy();
+    this.database._internalModelWillDestroy(this);
   }
 
 }
