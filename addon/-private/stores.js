@@ -1,4 +1,5 @@
 import EmberObject from '@ember/object';
+import { assign } from '@ember/polyfills';
 import Registry from './util/registry';
 import normalizeIdentifier from './util/normalize-identifier';
 import { assert, isObject, isString } from './util/assert';
@@ -28,9 +29,9 @@ export default EmberObject.extend({
   _createAdapterForOptions(opts) {
     let name = opts.adapter;
     let normalizedName = normalizeIdentifier(name);
-    let factory = factoryFor(this, `models:adapter/store/${normalizedName}`);
-    assert(`adapter '${normalizedName}' is not registered`, !!factory);
-    let props = omit(opts, [ 'adapter' ]);
+    let factory = factoryFor(this, `models:adapter/${normalizedName}/store`);
+    assert(`store adapter '${normalizedName}' is not registered`, !!factory);
+    let props = assign({ identifier: normalizedName }, omit(opts, [ 'adapter' ]));
     return factory.create(props);
   },
 

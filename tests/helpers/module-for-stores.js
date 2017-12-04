@@ -5,6 +5,7 @@ import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
 import Stores from 'ember-cli-models/stores';
 import StoreAdapter from 'ember-cli-models/adapter/store';
+import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
 const getter = (object, name, fn) => Object.defineProperty(object, name, { get: () => fn() });
 
@@ -18,12 +19,14 @@ const createOpts = () => {
 }
 
 const createStores = owner => {
-  const NoopAdapter = StoreAdapter.extend();
+  const StoreNoopAdapter = StoreAdapter.extend();
+  const DatabaseNoopAdapter = DatabaseAdapter.extend();
   const TestStores = Stores.extend({
     storeOptionsForIdentifier: identifier => owner.opts[identifier]
   });
   owner.register('models:stores', TestStores);
-  owner.register('models:adapter/store/noop', NoopAdapter);
+  owner.register('models:adapter/noop/store', StoreNoopAdapter);
+  owner.register('models:adapter/noop/database', DatabaseNoopAdapter);
 }
 
 export default function(name, options={}) {
@@ -37,7 +40,11 @@ export default function(name, options={}) {
       this.opts = createOpts();
       createStores(this);
 
-      this.registerAdapter = (name, factory) => this.register(`models:adapter/store/${name}`, factory);
+      this.registerAdapter = (name, storeFactory, databaseFactory) => {
+        this.register(`models:adapter/${name}/store`, storeFactory);
+        this.register(`models:adapter/${name}/database`, databaseFactory)
+      };
+
       this.setAdapter = (storeName, adapterName) => this.opts[storeName] = { adapter: adapterName };
 
       getter(this, 'stores', () => this.lookup('models:stores'));

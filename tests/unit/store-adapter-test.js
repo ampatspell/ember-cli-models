@@ -1,12 +1,14 @@
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Stores from 'ember-cli-models/stores';
-import Adapter from 'ember-cli-models/adapter/store';
+import StoreAdapter from 'ember-cli-models/adapter/store';
+import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
 module('store-adapter', {
   beforeEach() {
     this.create = () => {
-      const AdapterImpl = Adapter.extend();
+      const StoreAdapterImpl = StoreAdapter.extend();
+      const DatabaseAdapterImpl = DatabaseAdapter.extend();
       const StoresImpl = Stores.extend({
         storeOptionsForIdentifier(identifier) {
           if(identifier === 'local') {
@@ -18,7 +20,8 @@ module('store-adapter', {
           }
         }
       });
-      this.register('models:adapter/store/local', AdapterImpl);
+      this.register('models:adapter/local/store', StoreAdapterImpl);
+      this.register('models:adapter/local/database', DatabaseAdapterImpl);
       this.register('models:stores', StoresImpl);
       return this.lookup('models:stores');
     };
@@ -35,6 +38,12 @@ test('adapter is set', function(assert) {
   let store = stores.store('local');
   assert.ok(store._adapter);
   assert.ok(store._adapter.store === store);
+});
+
+test('adapter has identifier', function(assert) {
+  let stores = this.create();
+  let store = stores.store('local');
+  assert.equal(store._adapter.identifier, 'local');
 });
 
 test('throws for missing opts', function(assert) {

@@ -2,9 +2,10 @@ import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model';
-import Adapter from 'ember-cli-models/adapter/store';
+import StoreAdapter from 'ember-cli-models/adapter/store';
+import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
-const MockAdapter = Adapter.extend({
+const MockStoreAdapter = StoreAdapter.extend({
 
   build(opts) {
     return {
@@ -15,19 +16,26 @@ const MockAdapter = Adapter.extend({
 
 });
 
+const MockDatabaseAdapter = DatabaseAdapter.extend({
+});
+
 const Duck = Model.extend();
 
 module('model', {
   beforeEach() {
     this.register('model:duck', Duck);
-    this.registerAdapter('mock', MockAdapter);
+    this.registerAdapter('mock', MockStoreAdapter, MockDatabaseAdapter);
     this.setAdapter('default', 'mock');
     this.identity = this.database._internalModelIdentity._identity;
   }
 });
 
 test('store has mock adapter', function(assert) {
-  assert.ok(MockAdapter.detectInstance(this.store._adapter));
+  assert.ok(MockStoreAdapter.detectInstance(this.store._adapter));
+});
+
+test('database has mock adapter', function(assert) {
+  assert.ok(MockDatabaseAdapter.detectInstance(this.database._adapter));
 });
 
 test('model is created with internal model', function(assert) {

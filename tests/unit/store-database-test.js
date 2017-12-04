@@ -34,3 +34,8 @@ test('store destroy destroys cached databases', function(assert) {
   assert.ok(this.store.isDestroyed);
   assert.ok(db.isDestroyed);
 });
+
+test('adapter is set', function(assert) {
+  let db = this.store.database('main');
+  assert.ok(db._adapter);
+});
