@@ -3,16 +3,17 @@ import { Promise } from 'rsvp';
 import Stores from 'ember-cli-models/stores';
 import StoreAdapter from 'ember-cli-models/adapter/store';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
+import environment from '../config/environment';
 
 const LocalStoreAdapter = StoreAdapter.extend();
-
 const LocalDatabaseAdapter = DatabaseAdapter.extend();
 
 const DummyStores = Stores.extend({
   storeOptionsForIdentifier(identifier) {
     if(identifier === 'local') {
       return {
-        adapter: 'local'
+        adapter: 'local',
+        url: environment.COUCHDB_URL
       };
     }
   }
