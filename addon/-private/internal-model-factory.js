@@ -1,8 +1,5 @@
 import EmberObject from '@ember/object';
 import InternalModel from './model/internal-model';
-import { isObject } from './util/assert';
-
-const adapterForDatabase = database => database.store._adapter;
 
 export default EmberObject.extend({
 
@@ -12,16 +9,9 @@ export default EmberObject.extend({
     return this._modelClassFactory.lookup(modelName);
   },
 
-  _expandData(data, database) {
-    let built = adapterForDatabase(database).build(data, database);
-    isObject('adapter.build result', built);
-    return built;
-  },
-
-  createNewInternalModel(modelName, database, data) {
+  createNewInternalModel(manager, modelName) {
     let { normalizedName, factory } = this._modelClassForName(modelName);
-    let { storage, props } = this._expandData(data, database);
-    return new InternalModel(database, normalizedName, factory, props, storage);
+    return new InternalModel(manager, normalizedName, factory);
   }
 
 });

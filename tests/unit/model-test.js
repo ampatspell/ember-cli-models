@@ -30,15 +30,15 @@ module('model', {
   }
 });
 
-test('store has mock adapter', function(assert) {
+test.skip('store has mock adapter', function(assert) {
   assert.ok(MockStoreAdapter.detectInstance(this.store._adapter));
 });
 
-test('database has mock adapter', function(assert) {
+test.skip('database has mock adapter', function(assert) {
   assert.ok(MockDatabaseAdapter.detectInstance(this.database._adapter));
 });
 
-test('model is created with internal model', function(assert) {
+test.skip('model is created with internal model', function(assert) {
   let model = this.database.model('duck');
   assert.ok(model);
   assert.ok(model._internal);
@@ -46,7 +46,7 @@ test('model is created with internal model', function(assert) {
   assert.ok(this.identity.all.includes(model._internal));
 });
 
-test('model destroy unsets internalModel._model', function(assert) {
+test.skip('model destroy unsets internalModel._model', function(assert) {
   let model = this.database.model('duck');
   let internal = model._internal;
   assert.ok(internal._model.instance === model);
@@ -56,7 +56,7 @@ test('model destroy unsets internalModel._model', function(assert) {
   assert.ok(!this.identity.all.includes(model._internal));
 });
 
-test('model is created with storage and props provided by adapter', function(assert) {
+test.skip('model is created with storage and props provided by adapter', function(assert) {
   let model = this.database.model('duck', { type: 'props' });
   let internal = model._internal;
   let storage = internal.storage;

@@ -1,1 +1,1 @@
-export { default } from '../-private/store-adapter';
+export { default } from '../-private/adapter/store';

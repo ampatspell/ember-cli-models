@@ -6,25 +6,16 @@ export default EmberObject.extend({
   store: null,
   identifier: null,
 
-  _internalModelIdentity: null,
+  _internalModelManager: null,
 
   init() {
     this._super(...arguments);
-    this._internalModelIdentity = factoryFor(this, 'models:internal-model-identity').create();
-  },
-
-  _createNewInternalModel(modelName, data) {
-    let internal = this.store._internalModelFactory.createNewInternalModel(modelName, this, data);
-    this._internalModelIdentity.registerNewInternalModel(internal);
-    return internal;
-  },
-
-  _internalModelWillDestroy(internal) {
-    this._internalModelIdentity.unregisterInternalModel(internal);
+    let _internalModelFactory = this.store._internalModelFactory;
+    this._internalModelManager = factoryFor(this, 'models:internal-model-manager').create({ _internalModelFactory });
   },
 
   model(modelName, data) {
-    return this._createNewInternalModel(modelName, data).model(true);
+    return this._internalModelManager.model(modelName, data);
   },
 
   toStringExtension() {

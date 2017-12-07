@@ -1,1 +1,1 @@
-export { default } from '../-private/database-adapter';
+export { default } from '../-private/adapter/database';
