@@ -13,7 +13,7 @@ const StoresImpl = Stores.extend({
 
 module('documents-adapter');
 
-test('hello', async function(assert) {
+test.skip('hello', async function(assert) {
   this.register('documents:stores', StoresImpl);
   let stores = this.lookup('documents:stores');
   assert.ok(stores);
