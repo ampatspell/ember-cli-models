@@ -14,6 +14,10 @@ export default EmberObject.extend({
     this._internalModelManager = factoryFor(this, 'models:internal-model-manager').create({ _internalModelFactory });
   },
 
+  _start() {
+    this._adapter._start();
+  },
+
   model(modelName, data) {
     return this._internalModelManager.model(modelName, data);
   },

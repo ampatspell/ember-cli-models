@@ -2,6 +2,15 @@ import EmberObject from '@ember/object';
 
 export default EmberObject.extend({
 
-  database: null
+  store: null,
+  adapter: null,
+  database: null,
+
+  start() {
+  },
+
+  _start() {
+    this.start();
+  }
 
 });

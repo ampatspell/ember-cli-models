@@ -39,3 +39,9 @@ test('adapter is set', function(assert) {
   let db = this.store.database('main');
   assert.ok(db._adapter);
 });
+
+test('adapter has store and store adapter', function(assert) {
+  let db = this.store.database('main');
+  assert.ok(db._adapter.store === this.store);
+  assert.ok(db._adapter.adapter === this.store._adapter);
+});

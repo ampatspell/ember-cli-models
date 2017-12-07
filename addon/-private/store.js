@@ -27,11 +27,15 @@ export default EmberObject.extend({
     });
   },
 
-  _createDatabaseAdapter() {
+  _start() {
+    this._adapter._start();
+  },
+
+  _createDatabaseAdapter(database) {
     let identifier = this._adapter.identifier;
     let factory = factoryFor(this, `models:adapter/${identifier}/database`);
     assert(`database adapter '${identifier}' not registered`, !!factory);
-    return factory.create();
+    return factory.create({ store: this, adapter: this._adapter, database });
   },
 
   database(identifier) {
@@ -40,17 +44,10 @@ export default EmberObject.extend({
 
     let database = databases.get(normalizedIdentifier);
     if(!database) {
-      let adapter = this._createDatabaseAdapter();
-
-      database = factoryFor(this, 'models:database').create({
-        store: this,
-        identifier: normalizedIdentifier,
-        _adapter: adapter
-      });
-
-      adapter.database = database;
-
+      database = factoryFor(this, 'models:database').create({ store: this, identifier: normalizedIdentifier });
+      database._adapter = this._createDatabaseAdapter(database);
       databases.set(normalizedIdentifier, database);
+      database._start();
     }
 
     return database;

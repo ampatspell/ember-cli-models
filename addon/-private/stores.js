@@ -26,13 +26,18 @@ export default EmberObject.extend({
     return opts;
   },
 
-  _createAdapterForOptions(opts) {
+  _createAdapterForOptions(store, opts) {
     let name = opts.adapter;
     let normalizedName = normalizeIdentifier(name);
     let factory = factoryFor(this, `models:adapter/${normalizedName}/store`);
     assert(`store adapter '${normalizedName}' is not registered`, !!factory);
-    let props = assign({ identifier: normalizedName }, omit(opts, [ 'adapter' ]));
+    let props = assign({ identifier: normalizedName }, omit(opts, [ 'adapter' ]), { store });
     return factory.create(props);
+  },
+
+  _createAdapterForIdentifier(store, identifier) {
+    let options = this._storeOptionsForIdentifier(identifier);
+    return this._createAdapterForOptions(store, options);
   },
 
   store(identifier) {
@@ -41,18 +46,10 @@ export default EmberObject.extend({
 
     let store = stores.get(normalizedIdentifier);
     if(!store) {
-      let options = this._storeOptionsForIdentifier(normalizedIdentifier);
-      let adapter = this._createAdapterForOptions(options);
-
-      store = factoryFor(this, 'models:store').create({
-        stores:     this,
-        identifier: normalizedIdentifier,
-        _adapter:   adapter
-      });
-
-      adapter.store = store;
-
+      store = factoryFor(this, 'models:store').create({ stores: this, identifier: normalizedIdentifier });
+      store._adapter = this._createAdapterForIdentifier(store, normalizedIdentifier);
       stores.set(normalizedIdentifier, store);
+      store._start();
     }
 
     return store;
