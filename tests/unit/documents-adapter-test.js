@@ -3,7 +3,7 @@ import { test } from '../helpers/qunit';
 import Stores from 'documents/stores';
 
 const StoresImpl = Stores.extend({
-  storeOptionsForIdentifier(identifier) {
+  storeOptionsForIdentifier() {
     return {
       adapter: 'couch',
       url: 'http://127.0.0.1:5984'
