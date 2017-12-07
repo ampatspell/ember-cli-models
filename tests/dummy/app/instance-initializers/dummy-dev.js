@@ -2,8 +2,11 @@ import Ember from 'ember';
 import { Promise } from 'rsvp';
 import Stores from 'ember-cli-models/stores';
 import StoreAdapter from 'ember-cli-models/adapter/store';
+import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
-const LocalAdapter = StoreAdapter.extend();
+const LocalStoreAdapter = StoreAdapter.extend();
+
+const LocalDatabaseAdapter = DatabaseAdapter.extend();
 
 const DummyStores = Stores.extend({
   storeOptionsForIdentifier(identifier) {
@@ -20,7 +23,8 @@ export default {
   initialize(app) {
     window.Promise = Promise;
 
-    app.register('models:adapter/local', LocalAdapter);
+    app.register('models:adapter/local/store', LocalStoreAdapter);
+    app.register('models:adapter/local/database', LocalDatabaseAdapter);
     app.register('models:stores', DummyStores);
 
     let stores = app.lookup('models:stores');
