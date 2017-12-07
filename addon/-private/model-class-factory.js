@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import Model from './model';
+import Model from './model/model';
 import { assert } from './util/assert';
 
 export default EmberObject.extend({

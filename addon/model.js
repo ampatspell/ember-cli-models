@@ -1,1 +1,1 @@
-export { default } from './-private/model';
+export { default } from './-private/model/model';

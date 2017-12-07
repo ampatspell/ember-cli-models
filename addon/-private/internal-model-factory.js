@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import InternalModel from './internal-model';
+import InternalModel from './model/internal-model';
 import { isObject } from './util/assert';
 
 const adapterForDatabase = database => database.store._adapter;
