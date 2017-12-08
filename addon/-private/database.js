@@ -1,19 +1,16 @@
 import EmberObject from '@ember/object';
-import makeContextMixin from './util/make-context-mixin';
-import factoryFor from './util/factory-for';
+import Context, { makeContextMixin } from './util/make-context-mixin';
 
-class DatabaseContext {
+class DatabaseContext extends Context {
   constructor(owner) {
-    this.owner = owner;
-    this.parent = owner.store._context;
-    let props = { _context: this };
-    this.internalModelFactory = factoryFor(owner, 'models:internal-model-factory').create(props);
-    this.internalModelManager = factoryFor(owner, 'models:internal-model-manager').create(props);
+    super(owner, owner.store._context);
+
+    this.adapter = null;
+
+    this.internalModelFactory = this.create('models:internal-model-factory');
+    this.internalModelManager = this.create('models:internal-model-manager');
     this.modelClassFactory = this.parent.modelClassFactory;
     this.modelFactory = this.parent.modelFactory;
-  }
-  get adapter() {
-    return this.owner._adapter;
   }
   destroy() {
   }
@@ -27,7 +24,7 @@ export default EmberObject.extend(DatabaseContextMixin, {
   identifier: null,
 
   _start() {
-    this._adapter._start();
+    this._context.adapter._start();
   },
 
   model() {

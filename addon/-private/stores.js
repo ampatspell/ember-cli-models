@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import makeContextMixin from './util/make-context-mixin';
+import Context, { makeContextMixin } from './util/make-context-mixin';
 import { assign } from '@ember/polyfills';
 import Registry from './util/registry';
 import normalizeIdentifier from './util/normalize-identifier';
@@ -7,9 +7,9 @@ import { assert, isObject, isString } from './util/assert';
 import { omit } from './util/object';
 import factoryFor from './util/factory-for';
 
-class StoresContext {
+class StoresContext extends Context {
   constructor(owner) {
-    this.owner = owner;
+    super(owner);
     this.stores = new Registry();
   }
   destroy() {

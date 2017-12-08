@@ -1,22 +1,20 @@
 import EmberObject from '@ember/object';
-import makeContextMixin from './util/make-context-mixin';
+import Context, { makeContextMixin } from './util/make-context-mixin';
 import Registry from './util/registry';
 import factoryFor from './util/factory-for';
 import normalizeIdentifier from './util/normalize-identifier';
 import { assert } from './util/assert';
 
-class StoreContext {
+class StoreContext extends Context {
   constructor(owner) {
-    this.owner = owner;
-    this.parent = owner.stores._context;
+    super(owner, owner.stores._context);
 
     this.adapter = null;
     this.databases = new Registry();
 
-    let props = { _context: this };
-    this.classFactory = factoryFor(owner, 'models:class-factory').create(props);
-    this.modelClassFactory = factoryFor(owner, 'models:model-class-factory').create(props);
-    this.modelFactory = factoryFor(owner, 'models:model-factory').create(props);
+    this.classFactory = this.create('models:class-factory');
+    this.modelClassFactory = this.create('models:model-class-factory');
+    this.modelFactory = this.create('models:model-factory')
   }
   destroy() {
     this.databases.destroy();
@@ -49,7 +47,7 @@ export default EmberObject.extend(StoreContextMixin, {
     let database = databases.get(normalizedIdentifier);
     if(!database) {
       database = factoryFor(this, 'models:database').create({ store: this, identifier: normalizedIdentifier });
-      database._adapter = this._createDatabaseAdapter(database);
+      database._context.adapter = this._createDatabaseAdapter(database);
       databases.set(normalizedIdentifier, database);
       database._start();
     }

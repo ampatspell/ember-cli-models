@@ -37,11 +37,11 @@ test('store destroy destroys cached databases', function(assert) {
 
 test('adapter is set', function(assert) {
   let db = this.store.database('main');
-  assert.ok(db._adapter);
+  assert.ok(db._context.adapter);
 });
 
 test('adapter has store and store adapter', function(assert) {
   let db = this.store.database('main');
-  assert.ok(db._adapter.store === this.store);
-  assert.ok(db._adapter.adapter === this.store._context.adapter);
+  assert.ok(db._context.adapter.store === this.store);
+  assert.ok(db._context.adapter.adapter === this.store._context.adapter);
 });
