@@ -2,22 +2,12 @@ import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/transient';
-import StoreAdapter from 'ember-cli-models/adapter/store';
-import DatabaseAdapter from 'ember-cli-models/adapter/database';
-
-const MockStoreAdapter = StoreAdapter.extend({
-});
-
-const MockDatabaseAdapter = DatabaseAdapter.extend({
-});
 
 const Duck = Model.extend();
 
 module('transient-model', {
   beforeEach() {
     this.register('model:duck', Duck);
-    this.registerAdapter('mock', MockStoreAdapter, MockDatabaseAdapter);
-    this.setAdapter('default', 'mock');
     this.identity = this.database._context.internalModelManager._internalModelIdentity._identity;
   }
 });

@@ -24,8 +24,8 @@ const Duck = Model.extend();
 module('backed-model', {
   beforeEach() {
     this.register('model:duck', Duck);
-    this.registerAdapter('mock', MockStoreAdapter, MockDatabaseAdapter);
-    this.setAdapter('default', 'mock');
+    this.registerAdapters('mock', MockStoreAdapter, MockDatabaseAdapter);
+    this.adapter = 'mock';
     this.identity = this.database._context.internalModelManager._internalModelIdentity._identity;
   }
 });

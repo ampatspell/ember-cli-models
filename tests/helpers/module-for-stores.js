@@ -9,43 +9,35 @@ import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
 const getter = (object, name, fn) => Object.defineProperty(object, name, { get: () => fn() });
 
-const createOpts = () => {
-  let noop = { adapter: 'noop' };
-  return {
-    'default': noop,
-    'local': noop,
-    'remote': noop
-  };
-}
+const StoreNoopAdapter = StoreAdapter.extend();
+const DatabaseNoopAdapter = DatabaseAdapter.extend();
 
-const createStores = owner => {
-  const StoreNoopAdapter = StoreAdapter.extend();
-  const DatabaseNoopAdapter = DatabaseAdapter.extend();
-  const TestStores = Stores.extend({
-    storeOptionsForIdentifier: identifier => owner.opts[identifier]
-  });
-  owner.register('models:stores', TestStores);
-  owner.register('models:adapter/noop/store', StoreNoopAdapter);
-  owner.register('models:adapter/noop/database', DatabaseNoopAdapter);
-}
+const createStores = owner => Stores.extend({
+  storeOptionsForIdentifier() {
+    let adapter = owner.adapter;
+    return { adapter };
+  }
+});
 
 export default function(name, options={}) {
   module(name, {
     beforeEach() {
       this.application = startApp();
       this.instance = this.application.buildInstance();
+
       this.register = (name, factory) => this.instance.register(name, factory);
       this.lookup = name => this.instance.lookup(name);
 
-      this.opts = createOpts();
-      createStores(this);
+      this.adapter = 'noop';
 
-      this.registerAdapter = (name, storeFactory, databaseFactory) => {
+      this.registerAdapters = (name, storeFactory, databaseFactory) => {
         this.register(`models:adapter/${name}/store`, storeFactory);
         this.register(`models:adapter/${name}/database`, databaseFactory)
       };
 
-      this.setAdapter = (storeName, adapterName) => this.opts[storeName] = { adapter: adapterName };
+      this.registerAdapters('noop', StoreNoopAdapter, DatabaseNoopAdapter);
+
+      this.register('models:stores', createStores(this));
 
       getter(this, 'stores', () => this.lookup('models:stores'));
       getter(this, 'store', () => this.stores.store('default'));
