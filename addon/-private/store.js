@@ -18,6 +18,9 @@ class StoreContext extends Context {
   get identity() {
     return this._identity = this._identity || this.create('models:store-identity', { content: A() });
   }
+  start() {
+    this.adapter.start();
+  }
   destroy() {
     this.adapter.destroy();
     this.databases.destroy();
@@ -33,10 +36,6 @@ export default EmberObject.extend(StoreContextMixin, {
 
   adapter: adapter(),
   identity: identity(),
-
-  _start() {
-    this._context.adapter.start();
-  },
 
   _createDatabaseAdapter(database) {
     let adapter = this._context.adapter;
@@ -55,7 +54,7 @@ export default EmberObject.extend(StoreContextMixin, {
       database = factoryFor(this, 'models:database').create({ store: this, identifier: normalizedIdentifier });
       database._context.adapter = this._createDatabaseAdapter(database);
       databases.set(normalizedIdentifier, database);
-      database._start();
+      database._context.start();
     }
 
     return database;

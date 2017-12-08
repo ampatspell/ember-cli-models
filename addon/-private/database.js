@@ -16,6 +16,9 @@ class DatabaseContext extends Context {
       content: this.internalModelIdentity._identity.all
     });
   }
+  start() {
+    this.adapter.start();
+  }
   destroy() {
     this.adapter.destroy();
   }
@@ -30,10 +33,6 @@ export default EmberObject.extend(DatabaseContextMixin, {
 
   adapter: adapter(),
   identity: identity(),
-
-  _start() {
-    this._context.adapter.start();
-  },
 
   model() {
     return this._context.internalModelManager.model(...arguments);
