@@ -1,5 +1,6 @@
 import EmberObject from '@ember/object';
-import { Context, makeContextMixin } from './util/make-context-mixin';
+import { A } from '@ember/array';
+import { Context, makeContextMixin, identity } from './util/make-context-mixin';
 import { assign } from '@ember/polyfills';
 import Registry from './util/registry';
 import normalizeIdentifier from './util/normalize-identifier';
@@ -11,6 +12,7 @@ class StoresContext extends Context {
   constructor(owner) {
     super(owner);
     this.stores = new Registry();
+    this.identity = this.create('models:stores-identity', { content: A() });
   }
   destroy() {
     this.stores.destroy();
@@ -20,6 +22,8 @@ class StoresContext extends Context {
 const ContextMixin = makeContextMixin(StoresContext);
 
 export default EmberObject.extend(ContextMixin, {
+
+  identity: identity(),
 
   storeOptionsForIdentifier() {
     assert(`override storeOptionsForIdentifier`, false);
