@@ -36,14 +36,14 @@ test('it exists', function(assert) {
 test('adapter is set', function(assert) {
   let stores = this.create();
   let store = stores.store('local');
-  assert.ok(store._adapter);
-  assert.ok(store._adapter.store === store);
+  assert.ok(store._context.adapter);
+  assert.ok(store._context.adapter.store === store);
 });
 
 test('adapter has identifier', function(assert) {
   let stores = this.create();
   let store = stores.store('local');
-  assert.equal(store._adapter.identifier, 'local');
+  assert.equal(store._context.adapter.identifier, 'local');
 });
 
 test('throws for missing opts', function(assert) {

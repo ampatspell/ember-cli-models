@@ -53,7 +53,7 @@ export default EmberObject.extend(ContextMixin, {
     let store = stores.get(normalizedIdentifier);
     if(!store) {
       store = factoryFor(this, 'models:store').create({ stores: this, identifier: normalizedIdentifier });
-      store._adapter = this._createAdapterForIdentifier(store, normalizedIdentifier);
+      store._context.adapter = this._createAdapterForIdentifier(store, normalizedIdentifier);
       stores.set(normalizedIdentifier, store);
       store._start();
     }
