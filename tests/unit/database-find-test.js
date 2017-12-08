@@ -31,6 +31,8 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
   async find(opts) {
     if(opts.all === true) {
       return [ this._storage('duck', { id: 'duck:yellow' }) ];
+    } else if(opts.id) {
+      return this._storage('duck', { id: opts.id });
     }
     throw new Error('unsupported query');
   },
@@ -63,6 +65,13 @@ test('find', async function(assert) {
 
 test('first', async function(assert) {
   let duck = await this.database.first({ id: 'duck:yellow' });
+  assert.ok(duck);
+  assert.equal(duck.get('storage.id'), 'duck:yellow');
+  assert.ok(this.database.get('identity.length'), 1);
+});
+
+test('find one', async function(assert) {
+  let duck = await this.database.find({ id: 'duck:yellow' });
   assert.ok(duck);
   assert.equal(duck.get('storage.id'), 'duck:yellow');
   assert.ok(this.database.get('identity.length'), 1);
