@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import { Context, makeContextMixin, adapter } from './util/make-context-mixin';
+import { Context, makeContextMixin, adapter, identity } from './util/make-context-mixin';
 
 class DatabaseContext extends Context {
   constructor(owner) {
@@ -12,6 +12,7 @@ class DatabaseContext extends Context {
     this.internalModelIdentity = this.create('models:internal-model-identity');
     this.modelClassFactory = this.parent.modelClassFactory;
     this.modelFactory = this.parent.modelFactory;
+    this.identity = this.create('models:database-identity', { content: this.internalModelIdentity._identity.all });
   }
   destroy() {
     this.adapter.destroy();
@@ -26,6 +27,7 @@ export default EmberObject.extend(DatabaseContextMixin, {
   identifier: null,
 
   adapter: adapter(),
+  identity: identity(),
 
   _start() {
     this._context.adapter.start();

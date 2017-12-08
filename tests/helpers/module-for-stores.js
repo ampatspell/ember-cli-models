@@ -10,7 +10,14 @@ import DatabaseAdapter from 'ember-cli-models/adapter/database';
 const getter = (object, name, fn) => Object.defineProperty(object, name, { get: () => fn() });
 
 const StoreNoopAdapter = StoreAdapter.extend();
-const DatabaseNoopAdapter = DatabaseAdapter.extend();
+const DatabaseNoopAdapter = DatabaseAdapter.extend({
+  modelDefinitionForStorage() {
+    return {
+      observe: [ 'type' ],
+      name: storage => storage.get('type')
+    };
+  }
+});
 
 const createStores = owner => Stores.extend({
   storeOptionsForIdentifier() {
