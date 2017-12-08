@@ -1,5 +1,4 @@
 import EmberObject from '@ember/object';
-import factoryFor from './util/factory-for';
 
 export default EmberObject.extend({
 

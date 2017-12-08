@@ -3,6 +3,16 @@ import { readOnly } from '@ember/object/computed';
 import { assign } from '@ember/polyfills';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
+const designDocument = {
+  observe: [],
+  name: () => 'design-document'
+};
+
+const model = {
+  observe: [ 'type' ],
+  name: storage => storage.get('type')
+};
+
 export default DatabaseAdapter.extend({
 
   documents: computed(function() {
@@ -41,10 +51,11 @@ export default DatabaseAdapter.extend({
   //
 
   modelDefinitionForStorage(storage) {
-    return {
-      observe: [ 'type' ],
-      name: storage => storage.get('type')
-    };
+    let id = storage.get('id');
+    if(id && id.startsWith('_design/')) {
+      return designDocument;
+    }
+    return model;
   },
 
   createStorage(modelName, props) {
