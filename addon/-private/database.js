@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import Context, { makeContextMixin } from './util/make-context-mixin';
+import { Context, makeContextMixin, adapter } from './util/make-context-mixin';
 
 class DatabaseContext extends Context {
   constructor(owner) {
@@ -22,6 +22,8 @@ export default EmberObject.extend(DatabaseContextMixin, {
 
   store: null,
   identifier: null,
+
+  adapter: adapter(),
 
   _start() {
     this._context.adapter._start();

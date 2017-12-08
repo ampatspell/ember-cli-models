@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import Context, { makeContextMixin } from './util/make-context-mixin';
+import { Context, makeContextMixin, adapter } from './util/make-context-mixin';
 import Registry from './util/registry';
 import factoryFor from './util/factory-for';
 import normalizeIdentifier from './util/normalize-identifier';
@@ -27,6 +27,8 @@ export default EmberObject.extend(StoreContextMixin, {
 
   stores: null,
   identifier: null,
+
+  adapter: adapter(),
 
   _start() {
     this._context.adapter._start();

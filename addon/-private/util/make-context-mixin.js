@@ -1,4 +1,5 @@
 import Mixin from '@ember/object/mixin';
+import { computed } from '@ember/object';
 import factoryFor from './factory-for';
 
 export const makeContextMixin = Class => Mixin.create({
@@ -15,7 +16,7 @@ export const makeContextMixin = Class => Mixin.create({
 
 });
 
-export default class Context {
+export class Context {
 
   constructor(owner, parent) {
     this.owner = owner;
@@ -27,3 +28,9 @@ export default class Context {
   }
 
 }
+
+export const prop = name => computed(function() {
+  return this._context[name];
+}).readOnly();
+
+export const adapter = () => prop('adapter');

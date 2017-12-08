@@ -1,5 +1,5 @@
 import EmberObject from '@ember/object';
-import Context, { makeContextMixin } from './util/make-context-mixin';
+import { Context, makeContextMixin } from './util/make-context-mixin';
 import { assign } from '@ember/polyfills';
 import Registry from './util/registry';
 import normalizeIdentifier from './util/normalize-identifier';
