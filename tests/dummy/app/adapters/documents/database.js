@@ -63,6 +63,14 @@ export default DatabaseAdapter.extend({
     return {
       storage
     };
+  },
+
+  find() {
+    return this.get('documents').find(...arguments);
+  },
+
+  first() {
+    return this.get('documents').first(...arguments);
   }
 
 });

@@ -1,5 +1,6 @@
 import EmberObject from '@ember/object';
 import { A } from '@ember/array';
+import { typeOf } from '@ember/utils';
 import Push from './model/push';
 
 export default EmberObject.extend({
@@ -62,15 +63,22 @@ export default EmberObject.extend({
     return internal.model(true);
   },
 
+  _pushStorageReturningModel(storage) {
+    return this.pushStorage(storage).model;
+  },
+
   find() {
-    return this._context.adapter.find(...arguments).then(array => {
-      return A(array.map(storage => this.pushStorage(storage).model));
+    return this._context.adapter.find(...arguments).then(result => {
+      if(typeOf(result) === 'array') {
+        return A(result.map(storage => this._pushStorageReturningModel(storage)));
+      }
+      return this._pushStorageReturningModel(result);
     });
   },
 
   first() {
     return this._context.adapter.first(...arguments).then(storage => {
-      return this.pushStorage(storage).model;
+      return this._pushStorageReturningModel(storage);
     });
   }
 
