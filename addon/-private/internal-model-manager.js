@@ -33,10 +33,10 @@ export default EmberObject.extend({
   pushStorage(storage) {
     let internal = this._context.internalModelIdentity.byStorage(storage);
     if(internal) {
-      return;
+      return new Push(internal, false);
     }
     internal = this._createExistingBackedInternalModel(storage);
-    return new Push(internal);
+    return new Push(internal, true);
   },
 
   deleteStorage() {

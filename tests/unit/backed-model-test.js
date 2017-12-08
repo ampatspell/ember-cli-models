@@ -143,11 +143,33 @@ test('props are set on model, everything else on storage', function(assert) {
 test('push storage returns Push', function(assert) {
   let adapter = this.database.get('adapter');
   let storage = adapter._storage('duck', { id: 'yellow' });
+
   let result = adapter.push(storage);
+
   assert.ok(result);
   assert.ok(result.modelName);
   assert.ok(!result._internal._model);
+
   let model = result.model;
   assert.ok(result._internal._model);
   assert.ok(model.get('storage') === storage);
+
+  assert.ok(this.identity.all.includes(model._internal));
+  assert.ok(this.identity.storage.get(model._internal.storage));
+});
+
+test('push the same does not make a duplicate model', function(assert) {
+  let adapter = this.database.get('adapter');
+  let storage = adapter._storage('duck', { id: 'yellow' });
+
+  let first = adapter.push(storage);
+  let second = adapter.push(storage);
+
+  assert.equal(first.created, true);
+  assert.equal(second.created, false);
+
+  assert.ok(first._internal === second._internal);
+  assert.ok(first.model === second.model);
+
+  assert.equal(this.identity.all.get('length'), 1);
 });

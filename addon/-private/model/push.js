@@ -1,7 +1,12 @@
 export default class Push {
 
-  constructor(internal) {
+  constructor(internal, created) {
     this._internal = internal;
+    this._created = created;
+  }
+
+  get created() {
+    return this._created;
   }
 
   get modelName() {
