@@ -8,6 +8,7 @@ import InternalModelManager from 'ember-cli-models/-private/internal-model-manag
 import InternalModelIdentity from 'ember-cli-models/-private/internal-model-identity';
 import ModelFactory from 'ember-cli-models/-private/model-factory';
 import DatabaseIdentity from 'ember-cli-models/-private/identity/database';
+import StoreIdentity from 'ember-cli-models/-private/identity/store';
 
 export default {
   name: 'ember-cli-models:internal',
@@ -22,5 +23,6 @@ export default {
     container.register('models:internal-model-identity', InternalModelIdentity);
     container.register('models:model-factory', ModelFactory);
     container.register('models:database-identity', DatabaseIdentity);
+    container.register('models:store-identity', StoreIdentity);
   }
 };

@@ -1,5 +1,6 @@
 import EmberObject from '@ember/object';
-import { Context, makeContextMixin, adapter } from './util/make-context-mixin';
+import { A } from '@ember/array';
+import { Context, makeContextMixin, adapter, identity } from './util/make-context-mixin';
 import Registry from './util/registry';
 import factoryFor from './util/factory-for';
 import normalizeIdentifier from './util/normalize-identifier';
@@ -14,7 +15,8 @@ class StoreContext extends Context {
 
     this.classFactory = this.create('models:class-factory');
     this.modelClassFactory = this.create('models:model-class-factory');
-    this.modelFactory = this.create('models:model-factory')
+    this.modelFactory = this.create('models:model-factory');
+    this.identity = this.create('models:store-identity', { content: A() });
   }
   destroy() {
     this.adapter.destroy();
@@ -30,6 +32,7 @@ export default EmberObject.extend(StoreContextMixin, {
   identifier: null,
 
   adapter: adapter(),
+  identity: identity(),
 
   _start() {
     this._context.adapter.start();

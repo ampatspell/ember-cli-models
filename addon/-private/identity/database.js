@@ -1,14 +1,4 @@
 import ArrayProxy from '@ember/array/proxy';
-import createTransform from '../util/create-array-transform-mixin';
-import ModelsError from '../util/error';
-
-const TransformMixin = createTransform({
-  internal() {
-    throw new ModelsError({ error: 'internal', reason: 'immutable array' });
-  },
-  public(internal) {
-    return internal && internal.model(true);
-  }
-});
+import TransformMixin from '../util/immutable-model-array-transform-mixin';
 
 export default ArrayProxy.extend(TransformMixin);
