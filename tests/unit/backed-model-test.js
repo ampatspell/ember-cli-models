@@ -146,9 +146,8 @@ test('push storage returns Push', function(assert) {
   let result = adapter.push(storage);
   assert.ok(result);
   assert.ok(result.modelName);
-  assert.ok(result.model);
   assert.ok(!result._internal._model);
-  let model = result.model();
+  let model = result.model;
   assert.ok(result._internal._model);
   assert.ok(model.get('storage') === storage);
 });
