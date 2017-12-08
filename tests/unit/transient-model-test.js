@@ -17,6 +17,7 @@ test('model is created with internal model', function(assert) {
   assert.ok(model._internal);
   assert.ok(model._internal._model === model);
   assert.ok(this.identity.all.includes(model._internal));
+  assert.ok(!this.identity.deleted.includes(model._internal));
 });
 
 test('model destroy unsets internalModel._model', function(assert) {
@@ -27,6 +28,7 @@ test('model destroy unsets internalModel._model', function(assert) {
   run(() => model.destroy());
   assert.ok(internal._model === null);
   assert.ok(!this.identity.all.includes(model._internal));
+  assert.ok(!this.identity.deleted.includes(model._internal));
 });
 
 test('storage is not set', function(assert) {

@@ -15,8 +15,10 @@ export default EmberObject.extend({
     this._context.internalModelIdentity.registerDeleted(internal);
   },
 
-  _internalModelWillDestroy(internal) {
-    this._context.internalModelIdentity.unregister(internal);
+  _internalModelWillDestroy(internal, unregister) {
+    if(unregister) {
+      this._context.internalModelIdentity.unregister(internal);
+    }
   },
 
   _existingInternalModelForStorage(storage) {

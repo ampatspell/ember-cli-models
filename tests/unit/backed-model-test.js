@@ -217,3 +217,22 @@ test('model name is required', function(assert) {
     });
   }
 });
+
+test('destroy model', function(assert) {
+  let model = this.database.model('duck', { id: 'duck:yellow' });
+  let internal = model._internal;
+  let storage = model.get('storage');
+
+  assert.ok(this.identity.all.includes(internal));
+  assert.ok(!this.identity.deleted.includes(internal));
+  assert.ok(this.identity.storage.get(storage));
+
+  run(() => model.destroy());
+
+  assert.ok(!this.identity.all.includes(internal));
+  assert.ok(!this.identity.deleted.includes(internal));
+  assert.ok(!this.identity.storage.get(storage));
+
+  assert.ok(internal.isDestroyed);
+  assert.ok(!internal.model(true));
+});

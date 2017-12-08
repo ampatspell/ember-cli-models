@@ -27,6 +27,9 @@ export default class BackedInternalModel extends InternalModel {
   }
 
   observer(create) {
+    if(this.isDestroyed) {
+      return;
+    }
     let observer = this._observer;
     if(!observer && create) {
       observer = new StorageObserver(this.context, this.storage, {
@@ -38,7 +41,8 @@ export default class BackedInternalModel extends InternalModel {
   }
 
   modelName(create) {
-    return this.observer(create).modelName;
+    let observer = this.observer(create);
+    return observer && observer.modelName;
   }
 
   _createModel() {

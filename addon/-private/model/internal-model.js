@@ -6,6 +6,7 @@ export default class InternalModel {
     this.context = context;
     this.opts = opts;
     this._model = null;
+    this.isDestroyed = false;
   }
 
   __createModel() {
@@ -13,6 +14,9 @@ export default class InternalModel {
   }
 
   model(create) {
+    if(this.isDestroyed) {
+      return;
+    }
     let model = this._model;
     if(!model && create) {
       model = this._createModel();
@@ -32,16 +36,24 @@ export default class InternalModel {
   }
 
   modelWillDestroy(model) {
-    if(!model[__recreate]) {
-      this.context.internalModelManager._internalModelWillDestroy(this);
-    }
+    let recreate = model[__recreate];
+    this.context.internalModelManager._internalModelWillDestroy(this, !recreate);
+
     model._internal = null;
     if(this._model === model) {
       this._model = null;
     }
+
+    if(!recreate) {
+      this.destroy();
+    }
   }
 
   destroy() {
+    if(this.isDestroyed) {
+      return;
+    }
+    this.isDestroyed = true;
     this.destroyModel();
   }
 
