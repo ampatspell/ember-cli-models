@@ -1,5 +1,6 @@
 import { computed } from '@ember/object';
 import { readOnly } from '@ember/object/computed';
+import { assign } from '@ember/polyfills';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
 export default DatabaseAdapter.extend({
@@ -34,20 +35,23 @@ export default DatabaseAdapter.extend({
   },
 
   _identityDidChange(array, removeCount, adding) {
-    adding.forEach(doc => this.push(doc, {
-      observe: [ 'type' ],
-      name: storage => storage.get('type')
-    }));
+    adding.forEach(doc => this.push(doc));
   },
 
   //
 
-  modelNameForStorage(storage) {
-    let type = storage.get('type');
-    if(!type) {
-      return;
-    }
-    return type;
+  modelDefinitionForStorage(storage) {
+    return {
+      observe: [ 'type' ],
+      name: storage => storage.get('type')
+    };
+  },
+
+  createStorage(modelName, props) {
+    let storage = this.get('documents').doc(assign({}, props, { type: modelName }));
+    return {
+      storage
+    };
   }
 
 });

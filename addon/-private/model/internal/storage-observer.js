@@ -1,31 +1,26 @@
 import ObjectObserver from './object-observer';
 
-const INVALIDATED = {};
-
 export default class StorageObserver {
 
-  constructor(context, storage, definition, delegate) {
+  constructor(context, storage, delegate) {
     this._context = context;
     this._storage = storage;
-    this._definition = definition;
     this._delegate = delegate;
-    this._observer = new ObjectObserver(storage, definition.observe, key => this._storageValueForKeyDidChange(key));
-    this._modelName = INVALIDATED;
+    this._definition = this._lookupDefinition();
+    this._modelName = this._lookupModelName();
+    this._observer = new ObjectObserver(storage, this._definition.observe, key => this._storageValueForKeyDidChange(key));
+  }
+
+  _lookupDefinition() {
+    return this._context.adapter.modelDefinitionForStorage(this._storage);
   }
 
   _lookupModelName() {
-    return this._context.adapter.modelNameForStorage(this._storage);
+    return this._definition.name(this._storage);
   }
 
   get modelName() {
-    let modelName = this._modelName;
-    if(modelName === INVALIDATED) {
-      if(modelName) {
-        modelName = this._lookupModelName();
-        this._modelName = modelName;
-      }
-    }
-    return modelName;
+    return this._modelName;
   }
 
   _storageValueForKeyDidChange() {
@@ -38,7 +33,7 @@ export default class StorageObserver {
   }
 
   destroy() {
-    this._observer.destroy();
+    this._observer && this._observer.destroy();
   }
 
 }

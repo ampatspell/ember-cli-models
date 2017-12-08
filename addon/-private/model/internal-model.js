@@ -1,3 +1,5 @@
+const __recreate = '__models_recreate';
+
 export default class InternalModel {
 
   constructor(context, opts) {
@@ -19,20 +21,27 @@ export default class InternalModel {
     return model;
   }
 
-  destroyModel() {
+  destroyModel(recreate) {
     let model = this._model;
     if(!model) {
       return;
     }
     this._model = null;
+    model[__recreate] = recreate;
     model.destroy();
   }
 
   modelWillDestroy(model) {
-    // this.context.internalModelManager._internalModelWillDestroy(this);
+    if(!model[__recreate]) {
+      this.context.internalModelManager._internalModelWillDestroy(this);
+    }
     if(this._model === model) {
       this._model = null;
     }
+  }
+
+  destroy() {
+    this.destroyModel();
   }
 
 }

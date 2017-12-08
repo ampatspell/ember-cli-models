@@ -12,8 +12,8 @@ export default EmberObject.extend({
   stop() {
   },
 
-  push(storage, definition) {
-    return this.database._context.internalModelManager.pushStorage(storage, definition);
+  push(storage) {
+    return this.database._context.internalModelManager.pushStorage(storage);
   },
 
   delete(storage) {
