@@ -198,8 +198,8 @@ test('delete storage and push again', function(assert) {
   adapter.push(storage);
 
   assert.ok(!internal.state.isDeleted);
-  // assert.equal(this.identity.all.get('length'), 1);
-  // assert.equal(this.identity.deleted.get('length'), 0);
-  // assert.ok(this.identity.all.includes(internal));
-  // assert.ok(this.identity.storage.get(storage));
+  assert.equal(this.identity.all.get('length'), 1);
+  assert.equal(this.identity.deleted.get('length'), 0);
+  assert.ok(this.identity.all.includes(internal));
+  assert.ok(this.identity.storage.get(storage));
 });
