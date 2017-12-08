@@ -48,6 +48,9 @@ export default EmberObject.extend({
       name: 'createNew',
       args: [ manager, normalizedName, data ]
     });
-  }
+  },
+
+  // createExistingBackedInternalModel(manager, storage) {
+  // }
 
 });

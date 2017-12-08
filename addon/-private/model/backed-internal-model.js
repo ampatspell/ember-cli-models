@@ -8,7 +8,8 @@ export default class BackedInternalModel extends InternalModel {
   }
 
   _createModel() {
-    let { modelName, props } = this.opts;
+    let props = this.opts.props;
+    let modelName = this.opts.modelName; // temporary
     return this.__createModel(modelName, props);
   }
 

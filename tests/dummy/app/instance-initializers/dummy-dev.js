@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import EmberObject from '@ember/object';
+import { assign } from '@ember/polyfills';
 import { getOwner } from '@ember/application';
 import { Promise } from 'rsvp';
 import Stores from 'ember-cli-models/stores';
@@ -12,10 +13,23 @@ const LocalStorage = EmberObject.extend();
 const LocalStoreAdapter = StoreAdapter.extend();
 const LocalDatabaseAdapter = DatabaseAdapter.extend({
 
-  createStorage(props) {
+  _model(props) {
+    return getOwner(this).factoryFor('local:storage').create(props);
+  },
+
+  createStorage(modelName, props) {
     return {
-      storage: getOwner(this).factoryFor('local:storage').create(props)
+      storage: this._model(assign({}, props, { type: modelName })),
+      model: {
+        observe: [ 'type' ],
+        name: storage => storage.get('type')
+      }
     };
+  },
+
+  push(props) {
+    let model = this._model(props);
+    this.pushStorage(model);
   }
 
 });
@@ -55,5 +69,6 @@ export default {
     window.stores = stores;
     window.store = store;
     window.database = database;
+    window.adapter = database._adapter;
   }
 };
