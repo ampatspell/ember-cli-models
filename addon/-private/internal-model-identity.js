@@ -8,16 +8,31 @@ export default EmberObject.extend({
   init() {
     this._super(...arguments);
     this._identity = {
-      all: A()
+      all: A(),
+      storage: new Map()
     };
   },
 
-  registerNewInternalModel(internal) {
-    this._identity.all.addObject(internal);
+  register(internal) {
+    let identity = this._identity;
+    identity.all.addObject(internal);
+    let storage = internal.storage;
+    if(storage) {
+      identity.storage.set(storage, internal);
+    }
   },
 
-  unregisterInternalModel(internal) {
-    this._identity.all.removeObject(internal);
+  unregister(internal) {
+    let identity = this._identity;
+    identity.all.removeObject(internal);
+    let storage = internal.storage;
+    if(storage) {
+      identity.storage.delete(storage);
+    }
+  },
+
+  byStorage(storage) {
+    return this._identity.storage.get(storage);
   }
 
 });

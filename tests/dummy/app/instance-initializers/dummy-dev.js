@@ -12,8 +12,8 @@ export default {
     window.Promise = Promise;
 
     let stores = app.lookup('models:stores');
-    let store = stores.store('local');
-    let database = store.database('main');
+    let local = stores.store('local');
+    let remote = stores.store('remote');
 
     app.inject('component', 'router', 'router:main');
 
@@ -22,8 +22,8 @@ export default {
     }
 
     window.stores = stores;
-    window.store = store;
-    window.database = database;
-    window.adapter = database._adapter;
+    window.local = local;
+    window.remote = remote;
+    window.docs = remote.database('main').get('adapter.documents');
   }
 };

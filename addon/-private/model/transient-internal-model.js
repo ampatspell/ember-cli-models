@@ -2,8 +2,8 @@ import InternalModel from './internal-model';
 
 export default class TransientInternalModel extends InternalModel {
 
-  constructor(manager, modelName, props) {
-    super(manager, { modelName, props });
+  constructor(context, modelName, props) {
+    super(context, { modelName, props });
   }
 
   _createModel() {

@@ -9,10 +9,12 @@ class DatabaseContext extends Context {
 
     this.internalModelFactory = this.create('models:internal-model-factory');
     this.internalModelManager = this.create('models:internal-model-manager');
+    this.internalModelIdentity = this.create('models:internal-model-identity');
     this.modelClassFactory = this.parent.modelClassFactory;
     this.modelFactory = this.parent.modelFactory;
   }
   destroy() {
+    this.adapter.destroy();
   }
 }
 
@@ -26,7 +28,7 @@ export default EmberObject.extend(DatabaseContextMixin, {
   adapter: adapter(),
 
   _start() {
-    this._context.adapter._start();
+    this._context.adapter.start();
   },
 
   model() {

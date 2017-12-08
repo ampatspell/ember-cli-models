@@ -9,8 +9,20 @@ export default EmberObject.extend({
   start() {
   },
 
-  _start() {
-    this.start();
+  stop() {
+  },
+
+  push(storage) {
+    return this.database._context.internalModelManager.pushStorage(storage);
+  },
+
+  delete(storage) {
+    return this.database._context.internalModelManager.deleteStorage(storage);
+  },
+
+  willDestroy() {
+    this.stop();
+    this._super();
   }
 
 });

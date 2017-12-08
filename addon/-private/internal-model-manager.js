@@ -5,39 +5,43 @@ export default EmberObject.extend({
 
   _context: null,
 
-  init() {
-    this._super(...arguments);
-    this._internalModelIdentity = factoryFor(this, 'models:internal-model-identity').create();
-  },
-
-  _registerNewInternalModel(internal) {
-    this._internalModelIdentity.registerNewInternalModel(internal);
+  _registerInternalModel(internal) {
+    this._context.internalModelIdentity.register(internal);
   },
 
   _internalModelWillDestroy(internal) {
-    this._internalModelIdentity.unregisterInternalModel(internal);
+    this._context.internalModelIdentity.unregister(internal);
+  },
+
+  _existingInternalModelForStorage(storage) {
+    this._context.internalModelIdentity.existingByStorage(storage);
   },
 
   _createNewInternalModel() {
     let internal = this._context.internalModelFactory.createNewInternalModel(this._context, ...arguments);
-    this._registerNewInternalModel(internal);
+    this._registerInternalModel(internal);
     return internal;
   },
 
   _createExistingBackedInternalModel() {
-    let internal = this._internalModelFactory.createExistingBackedInternalModel(this._context, ...arguments);
-    this._registerExistingInternalModel(internal);
+    let internal = this._context.internalModelFactory.createExistingBackedInternalModel(this._context, ...arguments);
+    this._registerInternalModel(internal);
     return internal;
   },
 
-  // creates or updates existing backed model
-  // pushStorage(storage) {
-  //   let internal = null; // lookup
-  //   if(!internal) {
-  //     internal = this._createExistingBackedInternalModel(storage);
-  //   }
-  //   return internal;
-  // },
+  // creates *existing* backed model if does not already exist
+  pushStorage(storage) {
+    let internal = this._context.internalModelIdentity.byStorage(storage);
+    if(internal) {
+      return;
+    }
+    internal = this._createExistingBackedInternalModel(storage);
+    return internal.model(true);
+  },
+
+  deleteStorage() {
+
+  },
 
   // creates *new* transient or backed model
   model() {

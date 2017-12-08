@@ -17,6 +17,7 @@ class StoreContext extends Context {
     this.modelFactory = this.create('models:model-factory')
   }
   destroy() {
+    this.adapter.destroy();
     this.databases.destroy();
   }
 }
@@ -31,7 +32,7 @@ export default EmberObject.extend(StoreContextMixin, {
   adapter: adapter(),
 
   _start() {
-    this._context.adapter._start();
+    this._context.adapter.start();
   },
 
   _createDatabaseAdapter(database) {

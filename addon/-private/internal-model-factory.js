@@ -30,13 +30,17 @@ export default EmberObject.extend({
     return this._context.adapter.createStorage(modelName, data);
   },
 
-  _createNewBackedInternalModel(context, modelName, data) {
-    let { props, storage } = this._createStorage(modelName, data);
-    return new BackedInternalModel(context, modelName, props, storage);
+  _createBackedInternalModel(context, props, storage) {
+    return new BackedInternalModel(context, props, storage);
   },
 
   _createNewTransientInternalModel(context, modelName, props) {
     return new TransientInternalModel(context, modelName, props);
+  },
+
+  _createNewBackedInternalModel(context, modelName, data) {
+    let { props, storage } = this._createStorage(modelName, data);
+    return this._createBackedInternalModel(context, props, storage);
   },
 
   createNewInternalModel(context, modelName, data) {
@@ -49,7 +53,8 @@ export default EmberObject.extend({
     });
   },
 
-  // createExistingBackedInternalModel(manager, storage) {
-  // }
+  createExistingBackedInternalModel(context, storage) {
+    return this._createBackedInternalModel(context, null, storage);
+  }
 
 });

@@ -8,8 +8,12 @@ export default EmberObject.extend({
   start() {
   },
 
-  _start() {
-    this.start();
+  stop() {
+  },
+
+  willDestroy() {
+    this.stop();
+    this._super();
   }
 
 });
