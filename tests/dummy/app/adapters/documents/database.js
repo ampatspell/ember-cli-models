@@ -3,8 +3,8 @@ import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
 export default DatabaseAdapter.extend({
 
-  _database: computed(function() {
-    let store = this.get('adapter._store');
+  documents: computed(function() {
+    let store = this.get('adapter.documents');
     let identifier = this.get('database.identifier');
     return store.database(identifier);
   }).readOnly()
