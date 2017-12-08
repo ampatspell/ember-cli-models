@@ -34,7 +34,20 @@ export default DatabaseAdapter.extend({
   },
 
   _identityDidChange(array, removeCount, adding) {
-    adding.forEach(doc => this.push(doc));
+    adding.forEach(doc => this.push(doc, {
+      observe: [ 'type' ],
+      name: storage => storage.get('type')
+    }));
+  },
+
+  //
+
+  modelNameForStorage(storage) {
+    let type = storage.get('type');
+    if(!type) {
+      return;
+    }
+    return type;
   }
 
 });

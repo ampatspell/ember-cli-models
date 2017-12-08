@@ -30,12 +30,12 @@ export default EmberObject.extend({
   },
 
   // creates *existing* backed model if does not already exist
-  pushStorage(storage) {
+  pushStorage(storage, definition) {
     let internal = this._context.internalModelIdentity.byStorage(storage);
     if(internal) {
       return;
     }
-    internal = this._createExistingBackedInternalModel(storage);
+    internal = this._createExistingBackedInternalModel(storage, definition);
     return internal.model(true);
   },
 

@@ -9,7 +9,7 @@ const Model = EmberObject.extend({
   _internal: null,
 
   willDestroy() {
-    this._internal.modelWillDestroy();
+    this._internal.modelWillDestroy(this);
     this._super();
   }
 

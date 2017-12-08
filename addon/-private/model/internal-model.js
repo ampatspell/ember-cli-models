@@ -19,9 +19,20 @@ export default class InternalModel {
     return model;
   }
 
-  modelWillDestroy() {
-    this.context.internalModelManager._internalModelWillDestroy(this);
+  destroyModel() {
+    let model = this._model;
+    if(!model) {
+      return;
+    }
     this._model = null;
+    model.destroy();
+  }
+
+  modelWillDestroy(model) {
+    // this.context.internalModelManager._internalModelWillDestroy(this);
+    if(this._model === model) {
+      this._model = null;
+    }
   }
 
 }
