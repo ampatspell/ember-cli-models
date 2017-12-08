@@ -1,7 +1,7 @@
 import EmberObject, { computed } from '@ember/object';
 
 export const prop = name => computed(function() {
-  return this._internal[name];
+  return this._internal && this._internal[name];
 }).readOnly();
 
 const Model = EmberObject.extend({

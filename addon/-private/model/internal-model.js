@@ -35,6 +35,7 @@ export default class InternalModel {
     if(!model[__recreate]) {
       this.context.internalModelManager._internalModelWillDestroy(this);
     }
+    model._internal = null;
     if(this._model === model) {
       this._model = null;
     }
