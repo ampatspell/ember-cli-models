@@ -1,7 +1,7 @@
 import EmberObject, { get } from '@ember/object';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
-import Model from 'ember-cli-models/model';
+import Model from 'ember-cli-models/model/transient';
 
 const Duck = Model.extend();
 const Random = EmberObject.extend();

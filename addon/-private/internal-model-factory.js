@@ -5,6 +5,8 @@ import BackedInternalModel from './model/backed-internal-model';
 import TransientInternalModel from './model/transient-internal-model';
 import assert from './util/assert';
 
+const normalizeData = data => typeof data === 'undefined' ? {} : data;
+
 const _internalModelMapping = [
   { modelClass: BackedModel,    createNew: '_createNewBackedInternalModel' },
   { modelClass: TransientModel, createNew: '_createNewTransientInternalModel' },
@@ -25,12 +27,12 @@ export default EmberObject.extend({
     return this._modelClassFactory.lookup(modelName);
   },
 
-  _createStorage(data) {
-    return this._adapter.createStorage(data);
+  _createStorage(modelName, data) {
+    return this._adapter.createStorage(modelName, data);
   },
 
   _createNewBackedInternalModel(manager, modelName, data) {
-    let { props, storage } = this._createStorage(data);
+    let { props, storage } = this._createStorage(modelName, data);
     return new BackedInternalModel(manager, modelName, props, storage);
   },
 
@@ -39,6 +41,7 @@ export default EmberObject.extend({
   },
 
   createNewInternalModel(manager, modelName, data) {
+    data = normalizeData(data);
     let { normalizedName, factory } = this._modelClassForName(modelName);
     return invoke(this, {
       find: info => info.modelClass.detect(factory.class),
