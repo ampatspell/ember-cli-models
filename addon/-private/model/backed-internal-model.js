@@ -1,12 +1,29 @@
 import InternalModel from './internal-model';
 import BackedModel from './backed-model';
 import StorageObserver from './internal/storage-observer';
+import State from './internal/state';
+import withPropertyChanges from './internal/with-property-changes';
 
 export default class BackedInternalModel extends InternalModel {
 
   constructor(context, props, storage) {
     super(context, { props });
+    this.state = new State();
     this.storage = storage;
+  }
+
+  _withState(notify, cb) {
+    withPropertyChanges(this, notify, changed => {
+      cb(this.state, changed);
+    });
+  }
+
+  onCreated(notify) {
+    this._withState(notify, (state, changed) => state.onCreated(changed));
+  }
+
+  onDeleted(notify) {
+    this._withState(notify, (state, changed) => state.onDeleted(changed));
   }
 
   observer(create) {

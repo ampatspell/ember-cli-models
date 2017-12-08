@@ -5,8 +5,14 @@ export default EmberObject.extend({
 
   _context: null,
 
-  _registerInternalModel(internal) {
-    this._context.internalModelIdentity.register(internal);
+  _onCreated(internal, notify) {
+    internal.onCreated && internal.onCreated(notify);
+    this._context.internalModelIdentity.registerCreated(internal);
+  },
+
+  _onDeleted(internal, notify) {
+    internal.onDeleted && internal.onDeleted(notify);
+    this._context.internalModelIdentity.registerDeleted(internal);
   },
 
   _internalModelWillDestroy(internal) {
@@ -14,38 +20,43 @@ export default EmberObject.extend({
   },
 
   _existingInternalModelForStorage(storage) {
-    this._context.internalModelIdentity.existingByStorage(storage);
+    return this._context.internalModelIdentity.byStorage(storage);
   },
 
   _createNewInternalModel() {
-    let internal = this._context.internalModelFactory.createNewInternalModel(this._context, ...arguments);
-    this._registerInternalModel(internal);
-    return internal;
+    return this._context.internalModelFactory.createNewInternalModel(this._context, ...arguments);
   },
 
   _createExistingBackedInternalModel() {
-    let internal = this._context.internalModelFactory.createExistingBackedInternalModel(this._context, ...arguments);
-    this._registerInternalModel(internal);
-    return internal;
+    return this._context.internalModelFactory.createExistingBackedInternalModel(this._context, ...arguments);
   },
 
   // creates *existing* backed model if does not already exist
   pushStorage(storage) {
-    let internal = this._context.internalModelIdentity.byStorage(storage);
+    let internal = this._existingInternalModelForStorage(storage);
     if(internal) {
+      this._onCreated(internal, true);
       return new Push(internal, false);
+    } else {
+      internal = this._createExistingBackedInternalModel(storage);
+      this._onCreated(internal, false);
+      return new Push(internal, true);
     }
-    internal = this._createExistingBackedInternalModel(storage);
-    return new Push(internal, true);
   },
 
-  deleteStorage() {
-
+  deleteStorage(storage) {
+    let internal = this._context.internalModelIdentity.byStorage(storage);
+    if(!internal) {
+      return;
+    }
+    this._onDeleted(internal, true);
   },
 
   // creates *new* transient or backed model
   model() {
-    return this._createNewInternalModel(...arguments).model(true);
+    let internal = this._createNewInternalModel(...arguments);
+    this._onCreated(internal, false);
+    return internal.model(true);
   }
 
 });

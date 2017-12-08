@@ -172,4 +172,34 @@ test('push the same does not make a duplicate model', function(assert) {
   assert.ok(first.model === second.model);
 
   assert.equal(this.identity.all.get('length'), 1);
+  assert.ok(this.identity.storage.get(first._internal.storage));
+});
+
+test('delete storage and push again', function(assert) {
+  let adapter = this.database.get('adapter');
+  let storage = adapter._storage('duck', { id: 'yellow' });
+
+  let internal = adapter.push(storage)._internal;
+
+  assert.ok(!internal.state.isDeleted);
+  assert.equal(this.identity.all.get('length'), 1);
+  assert.equal(this.identity.deleted.get('length'), 0);
+  assert.ok(this.identity.all.includes(internal));
+  assert.ok(this.identity.storage.get(storage));
+
+  adapter.delete(storage);
+
+  assert.ok(internal.state.isDeleted);
+  assert.equal(this.identity.all.get('length'), 0);
+  assert.equal(this.identity.deleted.get('length'), 1);
+  assert.ok(!this.identity.all.includes(internal));
+  assert.ok(this.identity.storage.get(storage));
+
+  adapter.push(storage);
+
+  assert.ok(!internal.state.isDeleted);
+  // assert.equal(this.identity.all.get('length'), 1);
+  // assert.equal(this.identity.deleted.get('length'), 0);
+  // assert.ok(this.identity.all.includes(internal));
+  // assert.ok(this.identity.storage.get(storage));
 });
