@@ -18,7 +18,7 @@ module('transient-model', {
     this.register('model:duck', Duck);
     this.registerAdapter('mock', MockStoreAdapter, MockDatabaseAdapter);
     this.setAdapter('default', 'mock');
-    this.identity = this.database._internalModelManager._internalModelIdentity._identity;
+    this.identity = this.database._context.internalModelManager._internalModelIdentity._identity;
   }
 });
 

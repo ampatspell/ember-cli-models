@@ -1,31 +1,32 @@
 import EmberObject from '@ember/object';
+import makeContextMixin from './util/make-context-mixin';
 import Registry from './util/registry';
 import factoryFor from './util/factory-for';
 import normalizeIdentifier from './util/normalize-identifier';
 import { assert } from './util/assert';
 
-export default EmberObject.extend({
+class StoreContext {
+  constructor(owner) {
+    this.owner = owner;
+    this.parent = owner.stores._context;
+    this.databases = new Registry();
+    let props = { _context: this };
+    this.classFactory = factoryFor(owner, 'models:class-factory').create(props);
+    this.modelClassFactory = factoryFor(owner, 'models:model-class-factory').create(props);
+    this.modelFactory = factoryFor(owner, 'models:model-factory').create(props);
+  }
+  destroy() {
+    this.databases.destroy();
+  }
+}
+
+const StoreContextMixin = makeContextMixin(StoreContext);
+
+export default EmberObject.extend(StoreContextMixin, {
 
   stores: null,
   identifier: null,
   _adapter: null,
-
-  _databases: null,
-  _classFactory: null,
-  _modelClassFactory: null,
-  _modelFactory: null,
-
-  init() {
-    this._super(...arguments);
-    this._databases = new Registry();
-    this._classFactory = factoryFor(this, 'models:class-factory').create();
-    this._modelClassFactory = factoryFor(this, 'models:model-class-factory').create({
-      _classFactory: this._classFactory
-    });
-    this._modelFactory = factoryFor(this, 'models:model-factory').create({
-      _modelClassFactory: this._modelClassFactory
-    });
-  },
 
   _start() {
     this._adapter._start();
@@ -40,7 +41,7 @@ export default EmberObject.extend({
 
   database(identifier) {
     let normalizedIdentifier = normalizeIdentifier(identifier);
-    let databases = this._databases;
+    let databases = this._context.databases;
 
     let database = databases.get(normalizedIdentifier);
     if(!database) {
@@ -55,11 +56,6 @@ export default EmberObject.extend({
 
   toStringExtension() {
     return this.get('identifier');
-  },
-
-  willDestroy() {
-    this._super();
-    this._databases.destroy();
   }
 
 });

@@ -20,33 +20,32 @@ const invoke = (owner, { find, name, args }) => {
 
 export default EmberObject.extend({
 
-  _adapter: null,
-  _modelClassFactory: null,
+  _context: null,
 
   _modelClassForName(modelName) {
-    return this._modelClassFactory.lookup(modelName);
+    return this._context.modelClassFactory.lookup(modelName);
   },
 
   _createStorage(modelName, data) {
-    return this._adapter.createStorage(modelName, data);
+    return this._context.adapter.createStorage(modelName, data);
   },
 
-  _createNewBackedInternalModel(manager, modelName, data) {
+  _createNewBackedInternalModel(context, modelName, data) {
     let { props, storage } = this._createStorage(modelName, data);
-    return new BackedInternalModel(manager, modelName, props, storage);
+    return new BackedInternalModel(context, modelName, props, storage);
   },
 
-  _createNewTransientInternalModel(manager, modelName, props) {
-    return new TransientInternalModel(manager, modelName, props);
+  _createNewTransientInternalModel(context, modelName, props) {
+    return new TransientInternalModel(context, modelName, props);
   },
 
-  createNewInternalModel(manager, modelName, data) {
+  createNewInternalModel(context, modelName, data) {
     data = normalizeData(data);
     let { normalizedName, factory } = this._modelClassForName(modelName);
     return invoke(this, {
       find: info => info.modelClass.detect(factory.class),
       name: 'createNew',
-      args: [ manager, normalizedName, data ]
+      args: [ context, normalizedName, data ]
     });
   },
 

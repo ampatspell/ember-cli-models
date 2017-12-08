@@ -8,7 +8,7 @@ module('class-factory', {
   beforeEach() {
     this.register('model:duck', Duck);
     this.register('model:yellow-duck', Duck);
-    this.factory = this.store._classFactory;
+    this.factory = this.store._context.classFactory;
   }
 });
 

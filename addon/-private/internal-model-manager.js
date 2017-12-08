@@ -3,10 +3,7 @@ import factoryFor from './util/factory-for';
 
 export default EmberObject.extend({
 
-  _adapter: null,
-  _modelFactory: null,
-  _internalModelFactory: null,
-  _internalModelIdentity: null,
+  _context: null,
 
   init() {
     this._super(...arguments);
@@ -22,13 +19,13 @@ export default EmberObject.extend({
   },
 
   _createNewInternalModel() {
-    let internal = this._internalModelFactory.createNewInternalModel(this, ...arguments);
+    let internal = this._context.internalModelFactory.createNewInternalModel(this._context, ...arguments);
     this._registerNewInternalModel(internal);
     return internal;
   },
 
   _createExistingBackedInternalModel() {
-    let internal = this._internalModelFactory.createExistingBackedInternalModel(this, ...arguments);
+    let internal = this._internalModelFactory.createExistingBackedInternalModel(this._context, ...arguments);
     this._registerExistingInternalModel(internal);
     return internal;
   },

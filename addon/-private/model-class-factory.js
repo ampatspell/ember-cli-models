@@ -4,7 +4,7 @@ import { assert } from './util/assert';
 
 export default EmberObject.extend({
 
-  _classFactory: null,
+  _context: null,
 
   isModelClass(arg) {
     let curr = arg;
@@ -18,7 +18,7 @@ export default EmberObject.extend({
   },
 
   lookup(modelName) {
-    return this._classFactory.lookup({
+    return this._context.classFactory.lookup({
       prefix: 'model',
       name: modelName,
       prepare: (Model, normalizedModelName) => {

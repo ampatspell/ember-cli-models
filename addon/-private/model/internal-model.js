@@ -1,13 +1,13 @@
 export default class InternalModel {
 
-  constructor(manager, opts) {
-    this.manager = manager;
+  constructor(context, opts) {
+    this.context = context;
     this.opts = opts;
     this._model = null;
   }
 
   __createModel() {
-    return this.manager._modelFactory.createModel(this, ...arguments);
+    return this.context.modelFactory.createModel(this, ...arguments);
   }
 
   model(create) {
@@ -20,7 +20,7 @@ export default class InternalModel {
   }
 
   modelWillDestroy() {
-    this.manager._internalModelWillDestroy(this);
+    this.context.internalModelManager._internalModelWillDestroy(this);
     this._model = null;
   }
 

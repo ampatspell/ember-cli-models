@@ -1,29 +1,37 @@
 import EmberObject from '@ember/object';
+import makeContextMixin from './util/make-context-mixin';
 import factoryFor from './util/factory-for';
 
-export default EmberObject.extend({
+class DatabaseContext {
+  constructor(owner) {
+    this.owner = owner;
+    this.parent = owner.store._context;
+    let props = { _context: this };
+    this.internalModelFactory = factoryFor(owner, 'models:internal-model-factory').create(props);
+    this.internalModelManager = factoryFor(owner, 'models:internal-model-manager').create(props);
+    this.modelClassFactory = this.parent.modelClassFactory;
+    this.modelFactory = this.parent.modelFactory;
+  }
+  get adapter() {
+    return this.owner._adapter;
+  }
+  destroy() {
+  }
+}
+
+const DatabaseContextMixin = makeContextMixin(DatabaseContext);
+
+export default EmberObject.extend(DatabaseContextMixin, {
 
   store: null,
   identifier: null,
 
-  _internalModelFactory: null,
-  _internalModelManager: null,
-
   _start() {
-    this._internalModelFactory = factoryFor(this, 'models:internal-model-factory').create({
-      _modelClassFactory: this.store._modelClassFactory,
-      _adapter: this._adapter
-    });
-    this._internalModelManager = factoryFor(this, 'models:internal-model-manager').create({
-      _internalModelFactory: this._internalModelFactory,
-      _modelFactory: this.store._modelFactory,
-      _adapter: this._adapter
-    });
     this._adapter._start();
   },
 
   model() {
-    return this._internalModelManager.model(...arguments);
+    return this._context.internalModelManager.model(...arguments);
   },
 
   toStringExtension() {

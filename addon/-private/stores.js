@@ -1,4 +1,5 @@
 import EmberObject from '@ember/object';
+import makeContextMixin from './util/make-context-mixin';
 import { assign } from '@ember/polyfills';
 import Registry from './util/registry';
 import normalizeIdentifier from './util/normalize-identifier';
@@ -6,14 +7,19 @@ import { assert, isObject, isString } from './util/assert';
 import { omit } from './util/object';
 import factoryFor from './util/factory-for';
 
-export default EmberObject.extend({
+class StoresContext {
+  constructor(owner) {
+    this.owner = owner;
+    this.stores = new Registry();
+  }
+  destroy() {
+    this.stores.destroy();
+  }
+}
 
-  _stores: null,
+const ContextMixin = makeContextMixin(StoresContext);
 
-  init() {
-    this._super(...arguments);
-    this._stores = new Registry();
-  },
+export default EmberObject.extend(ContextMixin, {
 
   storeOptionsForIdentifier() {
     assert(`override storeOptionsForIdentifier`, false);
@@ -42,7 +48,7 @@ export default EmberObject.extend({
 
   store(identifier) {
     let normalizedIdentifier = normalizeIdentifier(identifier);
-    let stores = this._stores;
+    let stores = this._context.stores;
 
     let store = stores.get(normalizedIdentifier);
     if(!store) {
@@ -53,11 +59,6 @@ export default EmberObject.extend({
     }
 
     return store;
-  },
-
-  willDestroy() {
-    this._super();
-    this._stores.destroy();
   }
 
 });

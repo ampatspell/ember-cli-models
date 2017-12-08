@@ -10,7 +10,7 @@ module('model-class-factory', {
   beforeEach() {
     this.register('model:duck', Duck);
     this.register('model:random', Random);
-    this.factory = this.store._modelClassFactory;
+    this.factory = this.store._context.modelClassFactory;
   }
 });
 
