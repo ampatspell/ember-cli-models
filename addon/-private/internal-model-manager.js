@@ -1,4 +1,5 @@
 import EmberObject from '@ember/object';
+import Push from './model/push';
 
 export default EmberObject.extend({
 
@@ -35,7 +36,7 @@ export default EmberObject.extend({
       return;
     }
     internal = this._createExistingBackedInternalModel(storage);
-    return internal.model(true);
+    return new Push(internal);
   },
 
   deleteStorage() {

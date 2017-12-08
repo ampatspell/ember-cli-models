@@ -7,6 +7,7 @@ import BackedModel from 'ember-cli-models/model/backed';
 import TransientModel from 'ember-cli-models/model/transient';
 import StoreAdapter from 'ember-cli-models/adapter/store';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
+import { pick, omit } from 'ember-cli-models/-private/util/object';
 
 const MockStoreAdapter = StoreAdapter.extend();
 
@@ -19,9 +20,14 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
     };
   },
 
+  _storage(modelName, data) {
+    return EmberObject.create(assign({}, omit(data, [ 'message' ]), { type: modelName }));
+  },
+
   createStorage(modelName, data) {
-    let storage = EmberObject.create(assign({}, data, { type: modelName }));
-    return { storage };
+    let props = pick(data, [ 'message' ]);
+    let storage = this._storage(modelName, data);
+    return { props, storage };
   }
 
 });
@@ -122,4 +128,27 @@ test('model must be backed on recreate', function(assert) {
       "reason": "model 'thing' must be backed model"
     });
   }
+});
+
+test('props are set on model, everything else on storage', function(assert) {
+  let model = this.database.model('duck', { message: 'hey', id: 'duck:yellow' });
+
+  assert.equal(model.get('message'), 'hey');
+  assert.equal(model.get('storage.message'), undefined);
+
+  assert.equal(model.get('id'), undefined);
+  assert.equal(model.get('storage.id'), 'duck:yellow');
+});
+
+test('push storage returns Push', function(assert) {
+  let adapter = this.database.get('adapter');
+  let storage = adapter._storage('duck', { id: 'yellow' });
+  let result = adapter.push(storage);
+  assert.ok(result);
+  assert.ok(result.modelName);
+  assert.ok(result.model);
+  assert.ok(!result._internal._model);
+  let model = result.model();
+  assert.ok(result._internal._model);
+  assert.ok(model.get('storage') === storage);
 });

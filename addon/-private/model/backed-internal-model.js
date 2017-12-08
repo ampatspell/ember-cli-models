@@ -20,9 +20,12 @@ export default class BackedInternalModel extends InternalModel {
     return observer;
   }
 
+  modelName(create) {
+    return this.observer(create).modelName;
+  }
+
   _createModel() {
-    let observer = this.observer(true);
-    let modelName = observer.modelName;
+    let modelName = this.modelName(true);
     if(!modelName) {
       return;
     }
