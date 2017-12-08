@@ -26,7 +26,6 @@ module('backed-model', {
     this.register('model:duck', Duck);
     this.registerAdapters('mock', MockStoreAdapter, MockDatabaseAdapter);
     this.adapter = 'mock';
-    this.identity = this.database._context.internalModelManager._internalModelIdentity._identity;
   }
 });
 

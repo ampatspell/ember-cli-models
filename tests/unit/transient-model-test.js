@@ -8,7 +8,6 @@ const Duck = Model.extend();
 module('transient-model', {
   beforeEach() {
     this.register('model:duck', Duck);
-    this.identity = this.database._context.internalModelManager._internalModelIdentity._identity;
   }
 });
 
