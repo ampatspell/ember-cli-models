@@ -20,7 +20,7 @@ export default EmberObject.extend({
 
   storeOptionsForIdentifier(identifier) {
     let store = this.get('models').store(identifier);
-    return store.get('adapter.documents');
+    return store.get('adapter.options.documents');
   }
 
 });

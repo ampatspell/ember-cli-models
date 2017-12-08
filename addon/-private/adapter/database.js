@@ -11,10 +11,6 @@ export default EmberObject.extend({
 
   _start() {
     this.start();
-  },
-
-  // pushStorage(storage) {
-  //   return this.database._internalModelManager.pushStorage(storage);
-  // }
+  }
 
 });

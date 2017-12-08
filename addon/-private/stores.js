@@ -37,7 +37,7 @@ export default EmberObject.extend(ContextMixin, {
     let normalizedName = normalizeIdentifier(name);
     let factory = factoryFor(this, `models:adapter/${normalizedName}/store`);
     assert(`store adapter '${normalizedName}' is not registered`, !!factory);
-    let props = assign({ identifier: normalizedName }, omit(opts, [ 'adapter' ]), { store });
+    let props = assign({ identifier: normalizedName, store, options: omit(opts, [ 'adapter' ]) });
     return factory.create(props);
   },
 
