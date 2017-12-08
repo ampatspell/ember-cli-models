@@ -4,9 +4,7 @@ import { Context, makeContextMixin, adapter, identity } from './util/make-contex
 class DatabaseContext extends Context {
   constructor(owner) {
     super(owner, owner.store._context);
-
     this.adapter = null;
-
     this.internalModelFactory = this.create('models:internal-model-factory');
     this.internalModelManager = this.create('models:internal-model-manager');
     this.internalModelIdentity = this.create('models:internal-model-identity');

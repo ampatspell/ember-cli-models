@@ -9,10 +9,8 @@ import { assert } from './util/assert';
 class StoreContext extends Context {
   constructor(owner) {
     super(owner, owner.stores._context);
-
     this.adapter = null;
     this.databases = new Registry();
-
     this.classFactory = this.create('models:class-factory');
     this.modelClassFactory = this.create('models:model-class-factory');
     this.modelFactory = this.create('models:model-factory');
