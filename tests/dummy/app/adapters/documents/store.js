@@ -4,13 +4,13 @@ import StoreAdapter from 'ember-cli-models/adapter/store';
 
 export default StoreAdapter.extend({
 
-  manager: computed(function() {
-    return getOwner(this).lookup('models:adapter/documents/manager');
+  stores: computed(function() {
+    return getOwner(this).lookup('models:adapter/documents/stores');
   }).readOnly(),
 
   documents: computed(function() {
     let identifier = this.get('store.identifier');
-    return this.get('manager.documents').store(identifier);
+    return this.get('stores').store(identifier);
   }).readOnly()
 
 });
