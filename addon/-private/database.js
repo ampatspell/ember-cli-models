@@ -38,6 +38,14 @@ export default EmberObject.extend(DatabaseContextMixin, {
     return this._context.internalModelManager.model(...arguments);
   },
 
+  find() {
+    return this._context.internalModelManager.find(...arguments);
+  },
+
+  first() {
+    return this._context.internalModelManager.first(...arguments);
+  },
+
   toStringExtension() {
     let store = this.get('store.identifier');
     let identifier = this.get('identifier');

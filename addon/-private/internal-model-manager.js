@@ -1,4 +1,5 @@
 import EmberObject from '@ember/object';
+import { A } from '@ember/array';
 import Push from './model/push';
 
 export default EmberObject.extend({
@@ -59,6 +60,18 @@ export default EmberObject.extend({
     let internal = this._createNewInternalModel(...arguments);
     this._onCreated(internal, false);
     return internal.model(true);
+  },
+
+  find() {
+    return this._context.adapter.find(...arguments).then(array => {
+      return A(array.map(storage => this.pushStorage(storage).model));
+    });
+  },
+
+  first() {
+    return this._context.adapter.first(...arguments).then(storage => {
+      return this.pushStorage(storage).model;
+    });
   }
 
 });
