@@ -1,0 +1,10 @@
+{{#each models as |model|}}
+  <div class="model" onclick={{action 'select' model}}>
+    <div class="info">{{model}} <span class="type">{{model.constructor.modelType}}</span></div>
+    {{#if model.storage}}
+      <div class="storage">{{model.storage}}</div>
+    {{/if}}
+  </div>
+{{else}}
+  <div class="placeholder">No models in any of the stores yet</div>
+{{/each}}
