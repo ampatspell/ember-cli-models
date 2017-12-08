@@ -43,7 +43,7 @@ export default function(name, options={}) {
       getter(this, 'store', () => this.stores.store('default'));
       getter(this, 'database', () => this.store.database('main'));
 
-      this.identityForDatabase = database => database._context.internalModelManager._internalModelIdentity._identity;
+      this.identityForDatabase = database => database._context.internalModelIdentity._identity;
       getter(this, 'identity', () => this.identityForDatabase(this.database));
 
       let beforeEach = options.beforeEach && options.beforeEach.apply(this, arguments);
