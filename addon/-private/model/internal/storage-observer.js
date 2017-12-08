@@ -1,3 +1,4 @@
+import { isObject, isArray, isFunction } from '../../util/assert';
 import ObjectObserver from './object-observer';
 
 export default class StorageObserver {
@@ -12,7 +13,11 @@ export default class StorageObserver {
   }
 
   _lookupDefinition() {
-    return this._context.adapter.modelDefinitionForStorage(this._storage);
+    let definition = this._context.adapter.modelDefinitionForStorage(this._storage);
+    isObject('definition', definition);
+    isArray('definition.observe', definition.observe);
+    isFunction('definition.name', definition.name);
+    return definition;
   }
 
   _lookupModelName() {
