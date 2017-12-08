@@ -12,7 +12,11 @@ class DatabaseContext extends Context {
     this.internalModelIdentity = this.create('models:internal-model-identity');
     this.modelClassFactory = this.parent.modelClassFactory;
     this.modelFactory = this.parent.modelFactory;
-    this.identity = this.create('models:database-identity', { content: this.internalModelIdentity._identity.all });
+  }
+  get identity() {
+    return this._identity = this._identity ||  this.create('models:database-identity', {
+      content: this.internalModelIdentity._identity.all
+    });
   }
   destroy() {
     this.adapter.destroy();

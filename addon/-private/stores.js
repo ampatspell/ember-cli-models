@@ -12,7 +12,9 @@ class StoresContext extends Context {
   constructor(owner) {
     super(owner);
     this.stores = new Registry();
-    this.identity = this.create('models:stores-identity', { content: A() });
+  }
+  get identity() {
+    return this._identity = this._identity || this.create('models:stores-identity', { content: A() });
   }
   destroy() {
     this.stores.destroy();

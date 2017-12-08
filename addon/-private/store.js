@@ -16,7 +16,9 @@ class StoreContext extends Context {
     this.classFactory = this.create('models:class-factory');
     this.modelClassFactory = this.create('models:model-class-factory');
     this.modelFactory = this.create('models:model-factory');
-    this.identity = this.create('models:store-identity', { content: A() });
+  }
+  get identity() {
+    return this._identity = this._identity || this.create('models:store-identity', { content: A() });
   }
   destroy() {
     this.adapter.destroy();
