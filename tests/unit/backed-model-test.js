@@ -3,7 +3,8 @@ import { assign } from '@ember/polyfills';
 import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
-import Model from 'ember-cli-models/model/backed';
+import BackedModel from 'ember-cli-models/model/backed';
+import TransientModel from 'ember-cli-models/model/transient';
 import StoreAdapter from 'ember-cli-models/adapter/store';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
@@ -25,12 +26,14 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
 
 });
 
-const Duck = Model.extend();
+const Duck = BackedModel.extend();
+const Thing = TransientModel.extend();
 const YellowDuck = Duck.extend();
 const GreenDuck = Duck.extend();
 
 module('backed-model', {
   beforeEach() {
+    this.register('model:thing', Thing);
     this.register('model:duck', Duck);
     this.register('model:yellow-duck', YellowDuck);
     this.register('model:green-duck', GreenDuck);
@@ -105,4 +108,18 @@ test('model is recreated on type change', function(assert) {
   model = internal.model(true);
   assert.ok(model);
   assert.ok(GreenDuck.detectInstance(model));
+});
+
+test('model must be backed on recreate', function(assert) {
+  let model = this.database.model('duck');
+  let internal = model._internal;
+  run(() => model.set('storage.type', 'thing'));
+  try {
+    internal.model(true);
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "assertion",
+      "reason": "model 'thing' must be backed model"
+    });
+  }
 });
