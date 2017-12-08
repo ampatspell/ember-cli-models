@@ -1,4 +1,8 @@
-import EmberObject from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
+
+export const prop = name => computed(function() {
+  return this._internal[name];
+}).readOnly();
 
 const Model = EmberObject.extend({
 
@@ -12,7 +16,8 @@ const Model = EmberObject.extend({
 });
 
 Model.reopenClass({
-  modelName: null
+  modelName: null,
+  modelType: 'base'
 });
 
 export default Model;

@@ -6,20 +6,23 @@ export default EmberObject.extend({
   store: null,
   identifier: null,
 
+  _internalModelFactory: null,
   _internalModelManager: null,
 
-  init() {
-    this._super(...arguments);
-    let _internalModelFactory = this.store._internalModelFactory;
-    this._internalModelManager = factoryFor(this, 'models:internal-model-manager').create({ _internalModelFactory });
-  },
-
   _start() {
+    this._internalModelFactory = factoryFor(this, 'models:internal-model-factory').create({
+      _modelClassFactory: this.store._modelClassFactory,
+      _adapter: this._adapter
+    });
+    this._internalModelManager = factoryFor(this, 'models:internal-model-manager').create({
+      _internalModelFactory: this._internalModelFactory,
+      _modelFactory: this.store._modelFactory
+    });
     this._adapter._start();
   },
 
-  model(modelName, data) {
-    return this._internalModelManager.model(modelName, data);
+  model() {
+    return this._internalModelManager.model(...arguments);
   },
 
   toStringExtension() {

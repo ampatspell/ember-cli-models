@@ -3,6 +3,7 @@ import factoryFor from './util/factory-for';
 
 export default EmberObject.extend({
 
+  _modelFactory: null,
   _internalModelFactory: null,
   _internalModelIdentity: null,
 
@@ -11,27 +12,22 @@ export default EmberObject.extend({
     this._internalModelIdentity = factoryFor(this, 'models:internal-model-identity').create();
   },
 
-/*
-  _expandData(data, manager) {
-    let built = adapterForDatabase(database).build(data, database);
-    isObject('adapter.build result', built);
-    return built;
-  },
-
-*/
-
-  _createNewInternalModel(modelName, data) {
-    let internal = this._internalModelFactory.createNewInternalModel(modelName, this, data);
+  _registerNewInternalModel(internal) {
     this._internalModelIdentity.registerNewInternalModel(internal);
-    return internal;
   },
 
   _internalModelWillDestroy(internal) {
     this._internalModelIdentity.unregisterInternalModel(internal);
   },
 
-  model(modelName, data) {
-    return this._createNewInternalModel(modelName, data).model(true);
+  _createNewInternalModel() {
+    let internal = this._internalModelFactory.createNewInternalModel(this, ...arguments);
+    this._registerNewInternalModel(internal);
+    return internal;
+  },
+
+  model() {
+    return this._createNewInternalModel(...arguments).model(true);
   }
 
 });

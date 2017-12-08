@@ -13,7 +13,7 @@ export default EmberObject.extend({
   _databases: null,
   _classFactory: null,
   _modelClassFactory: null,
-  _internalModelFactory: null,
+  _modelFactory: null,
 
   init() {
     this._super(...arguments);
@@ -22,7 +22,7 @@ export default EmberObject.extend({
     this._modelClassFactory = factoryFor(this, 'models:model-class-factory').create({
       _classFactory: this._classFactory
     });
-    this._internalModelFactory = factoryFor(this, 'models:internal-model-factory').create({
+    this._modelFactory = factoryFor(this, 'models:model-factory').create({
       _modelClassFactory: this._modelClassFactory
     });
   },

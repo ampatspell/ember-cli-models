@@ -1,8 +1,13 @@
 export default class InternalModel {
 
-  constructor(manager) {
+  constructor(manager, opts) {
     this.manager = manager;
+    this.opts = opts;
     this._model = null;
+  }
+
+  __createModel() {
+    return this.manager._modelFactory.createModel(this, ...arguments);
   }
 
   model(create) {
