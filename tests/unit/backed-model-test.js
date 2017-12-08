@@ -12,6 +12,13 @@ const MockStoreAdapter = StoreAdapter.extend({
 
 const MockDatabaseAdapter = DatabaseAdapter.extend({
 
+  modelDefinitionForStorage() {
+    return {
+      observe: [ 'type' ],
+      name: storage => storage.get('type')
+    };
+  },
+
   createStorage(modelName, data) {
     let storage = EmberObject.create(assign({}, data, { type: modelName }));
     return { storage };
