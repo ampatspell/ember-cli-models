@@ -1,4 +1,4 @@
-import { isObject, isArray, isFunction } from '../../util/assert';
+import { isObject, isArray, isFunction, assert } from '../../util/assert';
 import ObjectObserver from './object-observer';
 
 export default class StorageObserver {
@@ -21,7 +21,9 @@ export default class StorageObserver {
   }
 
   _lookupModelName() {
-    return this._definition.name(this._storage);
+    let modelName = this._definition.name(this._storage);
+    assert(`definition.name must return model name`, !!modelName);
+    return modelName;
   }
 
   get modelName() {

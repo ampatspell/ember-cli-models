@@ -203,3 +203,17 @@ test('delete storage and push again', function(assert) {
   assert.ok(this.identity.all.includes(internal));
   assert.ok(this.identity.storage.get(storage));
 });
+
+test('model name is required', function(assert) {
+  let adapter = this.database.get('adapter');
+  let storage = adapter._storage(null, { id: 'yellow' });
+  try {
+    adapter.push(storage).model;
+    assert.ok(false, 'should throw');
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "assertion",
+      "reason": "definition.name must return model name"
+    });
+  }
+});
