@@ -24,8 +24,7 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
   },
 
   createStorage(modelName, data) {
-    let storage = this._storage(modelName, data);
-    return { storage };
+    return this._storage(modelName, data);
   },
 
   async find(opts) {

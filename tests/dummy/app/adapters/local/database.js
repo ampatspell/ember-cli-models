@@ -1,26 +1,25 @@
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
+import { computed } from '@ember/object';
 import { getOwner } from '@ember/application';
 import { assign } from '@ember/polyfills';
 
+const definition = {
+  observe: [ 'type' ],
+  name: storage => storage.get('type')
+};
+
 export default DatabaseAdapter.extend({
 
-  _model(props) {
-    return getOwner(this).factoryFor('models:adapter/local/storage').create(props);
+  _factory: computed(function() {
+    return getOwner(this).factoryFor('models:adapter/local/storage');
+  }).readOnly(),
+
+  modelDefinitionForStorage() {
+    return definition;
   },
 
-  createStorage(modelName, props) {
-    return {
-      storage: this._model(assign({}, props, { type: modelName })),
-      model: {
-        observe: [ 'type' ],
-        name: storage => storage.get('type')
-      }
-    };
-  },
-
-  push(props) {
-    let model = this._model(props);
-    this.pushStorage(model);
+  build(modelName, props) {
+    return this.get('_factory').create(assign({}, props, { type: modelName }));
   }
 
 });

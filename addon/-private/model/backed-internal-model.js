@@ -6,7 +6,7 @@ import withPropertyChanges from './internal/with-property-changes';
 
 export default class BackedInternalModel extends InternalModel {
 
-  constructor(context, props, storage) {
+  constructor(context, storage, props) {
     super(context, { props });
     this.state = new State();
     this.storage = storage;
@@ -32,12 +32,21 @@ export default class BackedInternalModel extends InternalModel {
     }
     let observer = this._observer;
     if(!observer && create) {
-      observer = new StorageObserver(this.context, this.storage, {
-        modelNameDidChange: () => this.destroyModel(true)
+      observer = new StorageObserver({
+        context: this.context,
+        storage: this.storage,
+        delegate: {
+          target: this,
+          modelNameDidChange: this._modelNameDidChange
+        }
       });
       this._observer = observer;
     }
     return observer;
+  }
+
+  _modelNameDidChange() {
+    this.destroyModel(true);
   }
 
   modelName(create) {

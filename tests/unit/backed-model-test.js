@@ -7,7 +7,6 @@ import BackedModel from 'ember-cli-models/model/backed';
 import TransientModel from 'ember-cli-models/model/transient';
 import StoreAdapter from 'ember-cli-models/adapter/store';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
-import { pick, omit } from 'ember-cli-models/-private/util/object';
 
 const MockStoreAdapter = StoreAdapter.extend();
 
@@ -21,13 +20,11 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
   },
 
   _storage(modelName, data) {
-    return EmberObject.create(assign({}, omit(data, [ 'message' ]), { type: modelName }));
+    return EmberObject.create(assign({}, data, { type: modelName }));
   },
 
-  createStorage(modelName, data) {
-    let props = pick(data, [ 'message' ]);
-    let storage = this._storage(modelName, data);
-    return { props, storage };
+  build(modelName, data) {
+    return this._storage(modelName, data);
   }
 
 });
@@ -130,13 +127,10 @@ test('model must be backed on recreate', function(assert) {
   }
 });
 
-test('props are set on model, everything else on storage', function(assert) {
+test('props are set to storage', function(assert) {
   let model = this.database.model('duck', { message: 'hey', id: 'duck:yellow' });
 
-  assert.equal(model.get('message'), 'hey');
-  assert.equal(model.get('storage.message'), undefined);
-
-  assert.equal(model.get('id'), undefined);
+  assert.equal(model.get('storage.message'), 'hey');
   assert.equal(model.get('storage.id'), 'duck:yellow');
 });
 
@@ -144,7 +138,7 @@ test('push storage returns Push', function(assert) {
   let adapter = this.database.get('adapter');
   let storage = adapter._storage('duck', { id: 'yellow' });
 
-  let result = adapter.push(storage);
+  let [ result ] = adapter.push([ storage ]);
 
   assert.ok(result);
   assert.ok(result.modelName);
@@ -162,8 +156,8 @@ test('push the same does not make a duplicate model', function(assert) {
   let adapter = this.database.get('adapter');
   let storage = adapter._storage('duck', { id: 'yellow' });
 
-  let first = adapter.push(storage);
-  let second = adapter.push(storage);
+  let [ first ] = adapter.push([ storage ]);
+  let [ second ] = adapter.push([ storage ]);
 
   assert.equal(first.created, true);
   assert.equal(second.created, false);
@@ -179,7 +173,7 @@ test('delete storage and push again', function(assert) {
   let adapter = this.database.get('adapter');
   let storage = adapter._storage('duck', { id: 'yellow' });
 
-  let internal = adapter.push(storage)._internal;
+  let internal = adapter.push([ storage ])[0]._internal;
 
   assert.ok(!internal.state.isDeleted);
   assert.equal(this.identity.all.get('length'), 1);
@@ -187,7 +181,7 @@ test('delete storage and push again', function(assert) {
   assert.ok(this.identity.all.includes(internal));
   assert.ok(this.identity.storage.get(storage));
 
-  adapter.delete(storage);
+  adapter.delete([ storage ]);
 
   assert.ok(internal.state.isDeleted);
   assert.equal(this.identity.all.get('length'), 0);
@@ -195,7 +189,7 @@ test('delete storage and push again', function(assert) {
   assert.ok(!this.identity.all.includes(internal));
   assert.ok(this.identity.storage.get(storage));
 
-  adapter.push(storage);
+  adapter.push([ storage ]);
 
   assert.ok(!internal.state.isDeleted);
   assert.equal(this.identity.all.get('length'), 1);
@@ -208,7 +202,7 @@ test('model name is required', function(assert) {
   let adapter = this.database.get('adapter');
   let storage = adapter._storage(null, { id: 'yellow' });
   try {
-    adapter.push(storage).model;
+    adapter.push([ storage ])[0].model;
     assert.ok(false, 'should throw');
   } catch(err) {
     assert.deepEqual(err.toJSON(), {

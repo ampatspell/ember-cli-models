@@ -37,14 +37,14 @@ test('destroyed models are removed', function(assert) {
 test('pushed models are added', function(assert) {
   let adapter = this.database.get('adapter');
   let storage = EmberObject.create({ type: 'person' });
-  let model = adapter.push(storage).model;
+  let model = adapter.push([ storage ])[0].model;
   let internal = model._internal;
   assert.ok(model);
 
   let identity = this.database.get('identity');
   assert.ok(identity.includes(model));
 
-  adapter.delete(storage);
+  adapter.delete([ storage ]);
   assert.ok(!identity.includes(model));
   assert.ok(internal.model() === model);
 });
@@ -54,7 +54,7 @@ test('recreated models are removed and added', function(assert) {
   let adapter = this.database.get('adapter');
   let storage = EmberObject.create({ type: 'person' });
 
-  let person = adapter.push(storage).model;
+  let person = adapter.push([ storage ])[0].model;
   let internal = person._internal;
 
   assert.ok(person);

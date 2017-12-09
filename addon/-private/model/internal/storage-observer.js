@@ -1,15 +1,21 @@
 import { isObject, isArray, isFunction, assert } from '../../util/assert';
-import ObjectObserver from './object-observer';
+import ObjectObserver from '../../util/object-observer';
+import { call as delegateCall } from '../../util/function-call';
 
 export default class StorageObserver {
 
-  constructor(context, storage, delegate) {
+  constructor({ context, storage, delegate }) {
     this._context = context;
     this._storage = storage;
     this._delegate = delegate;
     this._definition = this._lookupDefinition();
     this._modelName = this._lookupModelName();
     this._observer = new ObjectObserver(storage, this._definition.observe, key => this._storageValueForKeyDidChange(key));
+  }
+
+  _notifyDelegate(name) {
+    let delegate = this._delegate;
+    delegateCall(delegate.target, delegate[name]);
   }
 
   _lookupDefinition() {
@@ -36,7 +42,7 @@ export default class StorageObserver {
       return;
     }
     this._modelName = modelName;
-    this._delegate.modelNameDidChange();
+    this._notifyDelegate('modelNameDidChange');
   }
 
   destroy() {
