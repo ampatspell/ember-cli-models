@@ -65,6 +65,7 @@ export default class BackedInternalModel extends InternalModel {
 
   destroy() {
     this._observer && this._observer.destroy();
+    this.storage.destroy();
     super.destroy();
   }
 

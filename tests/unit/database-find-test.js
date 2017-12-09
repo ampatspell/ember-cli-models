@@ -23,10 +23,6 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
     return EmberObject.create(assign({}, data, { type: modelName }));
   },
 
-  createStorage(modelName, data) {
-    return this._storage(modelName, data);
-  },
-
   async find(opts) {
     if(opts.all === true) {
       return [ this._storage('duck', { id: 'duck:yellow' }) ];
