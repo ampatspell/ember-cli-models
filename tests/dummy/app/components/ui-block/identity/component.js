@@ -15,6 +15,10 @@ export default Component.extend({
     select(model) {
       window.model = model;
       info(`window.model = ${model}`);
+      let select = this.get('select');
+      if(select) {
+        select(model);
+      }
     }
   }
 

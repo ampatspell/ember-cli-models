@@ -8,6 +8,12 @@ export default Component.extend({
 
   stores: stores(),
   store: store('local'),
-  database: database('local', 'main')
+  database: database('local', 'main'),
+
+  actions: {
+    select(mdoel) {
+      this.set('selected', model);
+    }
+  }
 
 });

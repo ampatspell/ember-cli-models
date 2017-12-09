@@ -3,6 +3,11 @@
   <div>{{store}}</div>
   <div>{{database}}</div>
 </div>
+{{#if selected}}
+  <div class="row">
+    window.model={{selected}}
+  </div>
+{{/if}}
 <div class="row">
-  {{ui-block/identity}}
+  {{ui-block/identity select=(action 'select')}}
 </div>
