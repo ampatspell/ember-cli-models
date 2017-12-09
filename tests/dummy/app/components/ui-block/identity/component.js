@@ -3,6 +3,7 @@ import layout from './template';
 import { readOnly } from '@ember/object/computed';
 import { stores } from 'ember-cli-models/computed';
 import { info } from 'ember-cli-models/-private/util/logger';
+import { maybeInvokeAction } from 'dummy/util/action';
 
 export default Component.extend({
   classNameBindings: [ ':ui-block:', ':identity' ],
@@ -15,10 +16,7 @@ export default Component.extend({
     select(model) {
       window.model = model;
       info(`window.model = ${model}`);
-      let select = this.get('select');
-      if(select) {
-        select(model);
-      }
+      maybeInvokeAction(this, 'select');
     }
   }
 
