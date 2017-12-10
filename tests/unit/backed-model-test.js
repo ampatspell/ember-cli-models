@@ -28,13 +28,17 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
   },
 
   _storage(modelName, data) {
-    let storage = Storage.create(assign({}, data, { type: modelName, _adapter: this }));
+    let storage = Storage.create(assign({  _destroysModel: true }, data, { type: modelName, _adapter: this }));
     this.get('content').pushObject(storage);
     return storage;
   },
 
   build(modelName, data) {
     return this._storage(modelName, data);
+  },
+
+  compact(storage) {
+    return !!storage.get('_destroysModel');
   }
 
 });
@@ -260,4 +264,49 @@ test('remove storage object marks model as deleted', function(assert) {
   assert.equal(internal.state.isDeleted, false);
   assert.deepEqual(identity.map(m => m), [ model ]);
   assert.deepEqual(deleted.map(m => m), []);
+});
+
+test('compact database destroys internal models and models', function(assert) {
+  let adapter = this.database.get('adapter');
+  let content = adapter.get('content');
+  let deleted = this.identity.deleted;
+
+  let model = this.database.model('duck');
+  let internal = model._internal;
+  let storage = model.get('storage');
+
+  content.removeObject(storage);
+
+  assert.equal(internal.isDestroyed, false);
+  assert.equal(model.isDestroyed, false);
+  assert.deepEqual(deleted.map(m => m), [ internal ]);
+
+  run(() => this.database.compact());
+
+  assert.equal(internal.isDestroyed, true);
+  assert.equal(model.isDestroyed, true);
+  assert.deepEqual(deleted.map(m => m), []);
+});
+
+test('adapter chooses whether to destroy on compact', function(assert) {
+  let adapter = this.database.get('adapter');
+  let content = adapter.get('content');
+  let deleted = this.identity.deleted;
+
+  let model = this.database.model('duck');
+  let internal = model._internal;
+  let storage = model.get('storage');
+  storage._destroysModel = false;
+
+  content.removeObject(storage);
+
+  assert.equal(internal.isDestroyed, false);
+  assert.equal(model.isDestroyed, false);
+  assert.deepEqual(deleted.map(m => m), [ internal ]);
+
+  run(() => this.database.compact());
+
+  assert.equal(internal.isDestroyed, false);
+  assert.equal(model.isDestroyed, false);
+  assert.deepEqual(deleted.map(m => m), [ internal ]);
 });

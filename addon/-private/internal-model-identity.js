@@ -46,6 +46,10 @@ export default EmberObject.extend({
 
   byStorage(storage) {
     return this._identity.storage.get(storage);
-  }
+  },
+
+  withDeletedInternalModels(cb) {
+    return this._identity.deleted.map(cb);
+  },
 
 });

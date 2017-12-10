@@ -50,6 +50,10 @@ export default EmberObject.extend({
   push:   storage('push'),
   delete: storage('delete'),
 
+  compact() {
+    return true;
+  },
+
   willDestroy() {
     this.stop();
     this._super();

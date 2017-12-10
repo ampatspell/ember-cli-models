@@ -43,12 +43,13 @@ export default EmberObject.extend({
 
   _createInternalModel(modelName, data) {
     data = normalizeData(data);
-    let { normalizedName, factory } = this._context.modelClassFactory.lookup(modelName);
+    let context = this._context;
+    let { normalizedName, factory } = context.modelClassFactory.lookup(modelName);
     let type = get(factory.class, 'modelType');
     let internal;
     if(type === 'backed') {
-      let storage = this._context.adapter.build(normalizedName, data);
-      internal = this._context.internalModelIdentity.byStorage(storage);
+      let storage = context.adapter.build(normalizedName, data);
+      internal = context.internalModelIdentity.byStorage(storage);
       if(!internal) {
         internal = this._createBackedInternalModel(storage);
         this._onCreated(internal, false);
@@ -78,7 +79,6 @@ export default EmberObject.extend({
     return this._pushBackedInternalModel(storage).internal.model(true);
   },
 
-  // creates *existing* backed model if does not already exist
   push(storage) {
     let { internal } = this._pushBackedInternalModel(storage);
     return new Push(internal);
@@ -93,7 +93,6 @@ export default EmberObject.extend({
     return false;
   },
 
-  // creates *new* transient or backed model
   model(modelName, data) {
     return this._createInternalModel(modelName, data).model(true);
   },
@@ -110,6 +109,21 @@ export default EmberObject.extend({
   first() {
     return this._context.adapter.first(...arguments).then(storage => {
       return this._pushBackedModel(storage);
+    });
+  },
+
+  compact() {
+    let context = this._context;
+    let adapter = context.adapter;
+    context.internalModelIdentity.withDeletedInternalModels(internal => {
+      let storage = internal.storage;
+      if(!storage) {
+        return;
+      }
+      if(!adapter.compact(storage)) {
+        return;
+      }
+      internal.destroy();
     });
   }
 

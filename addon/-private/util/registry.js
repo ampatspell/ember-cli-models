@@ -24,6 +24,10 @@ export default class Registry {
     this.all.removeObject(value);
   }
 
+  map(cb) {
+    return this.all.map(cb);
+  }
+
   destroy() {
     copy(this.all).forEach(object => object.destroy());
   }
