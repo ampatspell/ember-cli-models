@@ -159,9 +159,6 @@ test('push the same does not make a duplicate model', function(assert) {
   let [ first ] = adapter.push([ storage ]);
   let [ second ] = adapter.push([ storage ]);
 
-  assert.equal(first.created, true);
-  assert.equal(second.created, false);
-
   assert.ok(first._internal === second._internal);
   assert.ok(first.model === second.model);
 

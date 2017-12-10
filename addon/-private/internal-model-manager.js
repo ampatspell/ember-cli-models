@@ -80,8 +80,8 @@ export default EmberObject.extend({
 
   // creates *existing* backed model if does not already exist
   push(storage) {
-    let { internal, pushed } = this._pushBackedInternalModel(storage);
-    return new Push(internal, pushed);
+    let { internal } = this._pushBackedInternalModel(storage);
+    return new Push(internal);
   },
 
   delete(storage) {
