@@ -8,16 +8,6 @@ export default Component.extend({
 
   stores: stores(),
   store: store('remote'),
-  database: database('remote', 'main'),
-
-  actions: {
-    select(model) {
-      this.set('selected', model);
-    },
-    saveAuthor() {
-      let model = this.get('database').model('author', { name: 'ampatspell' });
-      model.save();
-    }
-  }
+  database: database('remote', 'main')
 
 });

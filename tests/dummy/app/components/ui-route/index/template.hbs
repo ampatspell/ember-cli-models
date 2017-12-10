@@ -3,14 +3,3 @@
   <div>{{store}}</div>
   <div>{{database}}</div>
 </div>
-<div class="row">
-  <button onclick={{action 'saveAuthor'}}>Save author</button>
-</div>
-{{#if selected}}
-  <div class="row">
-    window.model={{selected}}
-  </div>
-{{/if}}
-<div class="row">
-  {{ui-block/identity select=(action 'select')}}
-</div>

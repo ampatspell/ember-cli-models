@@ -6,7 +6,7 @@ import { info } from 'ember-cli-models/-private/util/logger';
 import { maybeInvokeAction } from 'dummy/util/action';
 
 export default Component.extend({
-  classNameBindings: [ ':ui-block:', ':identity' ],
+  classNameBindings: [ ':ui-block-identity' ],
   layout,
 
   stores: stores(),
