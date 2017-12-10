@@ -6,7 +6,7 @@ export default Route.extend({
   database: database('remote', 'main'),
 
   model() {
-    return this.get('database').model('state');
+    return this.get('database').model('state').start();
   }
 
 });
