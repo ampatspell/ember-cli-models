@@ -1,0 +1,8 @@
+{{#ui-block/master-detail as |md|}}
+  {{#md.master}}
+    master
+  {{/md.master}}
+  {{md.detail}}
+    {{yield}}
+  {{md.detail}}
+{{/ui-block/master-detail}}
