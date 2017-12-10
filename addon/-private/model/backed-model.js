@@ -1,8 +1,12 @@
-import Model, { prop } from './model';
+import Model, { prop, state } from './model';
+
+const storage = () => prop('storage').readOnly();
+const isDeleted = () => state('isDeleted').readOnly();
 
 export default Model.extend({
 
-  storage: prop('storage')
+  storage: storage(),
+  isDeleted: isDeleted(),
 
 }).reopenClass({
 

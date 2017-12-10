@@ -8,8 +8,16 @@ import TransientModel from 'ember-cli-models/model/transient';
 import StoreAdapter from 'ember-cli-models/adapter/store';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
 
-const MockStoreAdapter = StoreAdapter.extend();
+const Storage = EmberObject.extend({
 
+  willDestroy() {
+    this._super();
+    this._adapter.get('content').removeObject(this);
+  }
+
+});
+
+const MockStoreAdapter = StoreAdapter.extend();
 const MockDatabaseAdapter = DatabaseAdapter.extend({
 
   modelDefinitionForStorage() {
@@ -20,7 +28,9 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
   },
 
   _storage(modelName, data) {
-    return EmberObject.create(assign({}, data, { type: modelName }));
+    let storage = Storage.create(assign({}, data, { type: modelName, _adapter: this }));
+    this.get('content').pushObject(storage);
+    return storage;
   },
 
   build(modelName, data) {
@@ -226,4 +236,28 @@ test('destroy model', function(assert) {
 
   assert.ok(internal.isDestroyed);
   assert.ok(!internal.model(true));
+});
+
+test('remove storage object marks model as deleted', function(assert) {
+  let adapter = this.database.get('adapter');
+  let content = adapter.get('content');
+  let identity = this.database.get('identity');
+  let deleted = this.identity.deleted;
+
+  let model = this.database.model('duck');
+  let internal = model._internal;
+  let storage = model.get('storage');
+
+  content.removeObject(storage);
+
+  assert.ok(!model.isDestroyed);
+  assert.equal(internal.state.isDeleted, true);
+  assert.deepEqual(identity.map(m => m), []);
+  assert.deepEqual(deleted.map(m => m), [ internal ]);
+
+  content.addObject(storage);
+
+  assert.equal(internal.state.isDeleted, false);
+  assert.deepEqual(identity.map(m => m), [ model ]);
+  assert.deepEqual(deleted.map(m => m), []);
 });
