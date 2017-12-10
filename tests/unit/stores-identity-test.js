@@ -38,3 +38,19 @@ test('models are removed', function(assert) {
   assert.equal(identity.get('length'), 0);
   assert.ok(!identity.includes(model));
 });
+
+test('existing models are present on init', function(assert) {
+  let model = this.database.model('duck');
+
+  let databaseIdentity = this.database.get('identity');
+  assert.equal(databaseIdentity.get('length'), 1);
+  assert.ok(databaseIdentity.indexOf(model) === 0);
+
+  let storeIdentity = this.store.get('identity');
+  assert.equal(storeIdentity.get('length'), 1);
+  assert.ok(storeIdentity.indexOf(model) === 0);
+
+  let storesIdentity = this.stores.get('identity');
+  assert.equal(storesIdentity.get('length'), 1);
+  assert.ok(storesIdentity.indexOf(model) === 0);
+});

@@ -5,7 +5,7 @@ import createArrayUnify from '../util/create-array-unify-mixin';
 const UnifyMixin = createArrayUnify({
   root: {
     array: '_context.stores.all',
-    key: '_context.identity.content'
+    key: '_context.owner.identity.content'
   },
   content: 'content'
 });

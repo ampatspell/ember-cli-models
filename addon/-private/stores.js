@@ -1,5 +1,4 @@
 import EmberObject from '@ember/object';
-import { A } from '@ember/array';
 import { Context, makeContextMixin, identity } from './util/make-context-mixin';
 import { assign } from '@ember/polyfills';
 import Registry from './util/registry';
@@ -18,7 +17,14 @@ class StoresContext extends Context {
     this.internalModelFactory = this.create('models:internal-model-factory');
   }
   get identity() {
-    return this._identity = this._identity || this.create('models:stores-identity', { content: A() });
+    let identity = this._identity;
+    if(!identity) {
+      identity = this.create('models:stores-identity');
+      // TODO: something weird is going one there
+      identity.notifyPropertyChange('content');
+      this._identity = identity;
+    }
+    return identity;
   }
   destroy() {
     this.stores.destroy();

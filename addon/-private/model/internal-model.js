@@ -9,6 +9,10 @@ export default class InternalModel {
     this.isDestroyed = false;
   }
 
+  get database() {
+    return this.context.owner;
+  }
+
   __createModel() {
     return this.context.modelFactory.createModel(this, ...arguments);
   }

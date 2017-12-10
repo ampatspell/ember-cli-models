@@ -1,5 +1,4 @@
 import EmberObject from '@ember/object';
-import { A } from '@ember/array';
 import { Context, makeContextMixin, adapter, identity } from './util/make-context-mixin';
 import Registry from './util/registry';
 import factoryFor from './util/factory-for';
@@ -16,7 +15,14 @@ class StoreContext extends Context {
     this.modelFactory = this.parent.modelFactory;
   }
   get identity() {
-    return this._identity = this._identity || this.create('models:store-identity', { content: A() });
+    let identity = this._identity;
+    if(!identity) {
+      identity = this.create('models:store-identity');
+      // TODO: something weird is going one there
+      identity.notifyPropertyChange('content');
+      this._identity = identity;
+    }
+    return identity;
   }
   start() {
     this.adapter.start();
