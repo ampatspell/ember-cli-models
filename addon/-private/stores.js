@@ -79,6 +79,14 @@ export default EmberObject.extend(ContextMixin, {
     return store;
   },
 
+  database(storeIdentifier, databaseIdentifier) {
+    return this.store(storeIdentifier).database(databaseIdentifier);
+  },
+
+  model(storeIdentifier, databaseIdentifier, ...remaining) {
+    return this.database(storeIdentifier, databaseIdentifier).model(...remaining);
+  },
+
   compact() {
     this._context.stores.map(store => store.compact());
   }
