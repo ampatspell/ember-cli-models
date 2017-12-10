@@ -3,24 +3,13 @@ import { Promise } from 'rsvp';
 
 export default {
   name: 'dummy:dev',
-  after: [
-    'dummy:adapter-documents',
-    'dummy:adapter-local',
-    'dummy:stores'
-  ],
+  after: 'dummy:app',
   initialize(app) {
-    window.Promise = Promise;
-
-    let stores = app.lookup('models:stores');
-
-    let state = stores.model('remote', 'main', 'state');
-    app.register('service:state', state, { instantiate: false });
-
-    app.inject('component', 'router', 'router:main');
-
     if(Ember.testing) {
       return;
     }
+
+    let stores = app.lookup('models:stores');
 
     window.stores = stores;
     window.local = stores.store('local');
