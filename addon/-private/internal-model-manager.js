@@ -127,9 +127,6 @@ export default EmberObject.extend({
     let adapter = context.adapter;
     context.internalModelIdentity.withDeletedInternalModels(internal => {
       let storage = internal.storage;
-      if(!storage) {
-        return;
-      }
       if(!adapter.compact(storage)) {
         return;
       }

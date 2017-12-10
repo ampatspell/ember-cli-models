@@ -281,7 +281,7 @@ test('compact database destroys internal models and models', function(assert) {
   assert.equal(model.isDestroyed, false);
   assert.deepEqual(deleted.map(m => m), [ internal ]);
 
-  run(() => this.database.compact());
+  run(() => this.stores.compact());
 
   assert.equal(internal.isDestroyed, true);
   assert.equal(model.isDestroyed, true);
@@ -304,7 +304,7 @@ test('adapter chooses whether to destroy on compact', function(assert) {
   assert.equal(model.isDestroyed, false);
   assert.deepEqual(deleted.map(m => m), [ internal ]);
 
-  run(() => this.database.compact());
+  run(() => this.stores.compact());
 
   assert.equal(internal.isDestroyed, false);
   assert.equal(model.isDestroyed, false);
