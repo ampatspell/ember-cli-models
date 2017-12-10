@@ -29,10 +29,7 @@ export default EmberObject.extend({
     getOwner(this).register(name, factory);
   },
 
-  lookup({ prefix, name, prepare }) {
-    let normalizedName = normalizeIdentifier(name);
-    let fullName = `${prefix}:${normalizedName}`;
-    let registeredName = `models:${prefix}/${normalizedName}`;
+  _preparedBase({ fullName, normalizedName, registeredName, prepare }) {
     let factory = this._lookupFactory(registeredName);
     if(!factory) {
       let Base = this._lookupFactory(fullName);
@@ -44,7 +41,52 @@ export default EmberObject.extend({
       this._registerFactory(registeredName, BaseClass);
       factory = this._lookupFactory(registeredName);
     }
-    return { normalizedName, factory };
+    return factory;
+  },
+
+  _preparedVariant(base, { normalizedName, registeredName, prepare }) {
+    let factory = this._lookupFactory(registeredName);
+    if(!factory) {
+      let Base = this._preparedBase(base);
+      let BaseClass = Base.class;
+      if(prepare) {
+        BaseClass = prepare(BaseClass, base.normalizedName, normalizedName);
+      }
+      this._registerFactory(registeredName, BaseClass);
+      factory = this._lookupFactory(registeredName);
+    }
+    return factory;
+  },
+
+  lookup({ prefix, name, prepare, variant }) {
+    let normalizedName = normalizeIdentifier(name);
+    let fullName = `${prefix}:${normalizedName}`;
+
+    let base = {
+      fullName,
+      normalizedName,
+      registeredName: `models:${prefix}/${normalizedName}`,
+      prepare
+    };
+
+    let normalizedVariantName;
+    if(variant && variant.name) {
+      normalizedVariantName = normalizeIdentifier(variant.name);
+    }
+
+    let factory;
+
+    if(normalizedVariantName) {
+      factory = this._preparedVariant(base, {
+        normalizedName: normalizedVariantName,
+        registeredName: `models:${prefix}/${normalizedVariantName}/${normalizedName}`,
+        prepare: variant.prepare
+      });
+    } else {
+      factory = this._preparedBase(base);
+    }
+
+    return { normalizedName, normalizedVariantName, factory };
   }
 
 });

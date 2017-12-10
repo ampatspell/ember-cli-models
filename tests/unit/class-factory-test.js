@@ -66,3 +66,105 @@ test('lookup returns normalized name', function(assert) {
   });
   assert.equal(normalizedName, 'yellow-duck');
 });
+
+test('lookup with variant', function(assert) {
+  let { factory } = this.factory.lookup({
+    prefix: 'model',
+    name: 'duck',
+    prepare(Model) {
+      return Model.extend({
+        prepared: true
+      });
+    },
+    variant: {
+      name: 'nice',
+      prepare(Model) {
+        return Model.extend({
+          variant: 'nice'
+        });
+      }
+    }
+  });
+  let nice = factory.create();
+  assert.equal(nice.get('prepared'), true);
+  assert.equal(nice.get('variant'), 'nice');
+  assert.ok(nice.toString().startsWith('<dummy@models:model/nice/duck::'));
+});
+
+test('variants are isolated', function(assert) {
+  let create = key => this.factory.lookup({
+    prefix: 'model',
+    name: 'duck',
+    prepare(Model) {
+      return Model.extend({
+        prepared: true
+      });
+    },
+    variant: {
+      name: key,
+      prepare(Model) {
+        return Model.extend({
+          [key]: true
+        });
+      }
+    }
+  }).factory;
+
+  let Yellow = create('yellow');
+  let Green = create('green');
+  let Base = create();
+
+  let yellow = Yellow.create();
+  let green = Green.create();
+  let base = Base.create();
+
+  assert.ok(Yellow.class.detectInstance(yellow));
+  assert.ok(Base.class.detectInstance(yellow));
+  assert.ok(!Green.class.detectInstance(yellow));
+
+  assert.equal(yellow.get('yellow'), true);
+  assert.equal(yellow.get('green'), undefined);
+
+  assert.equal(green.get('yellow'), undefined);
+  assert.equal(green.get('green'), true);
+
+  assert.equal(base.get('yellow'), undefined);
+  assert.equal(base.get('green'), undefined);
+});
+
+test('base is cached', function(assert) {
+  let create = () => this.factory.lookup({
+    prefix: 'model',
+    name: 'duck',
+    prepare(Model) {
+      return Model.extend({
+        prepared: true
+      });
+    }
+  }).factory;
+  assert.ok(create().class === create().class);
+});
+
+test('variant is cached', function(assert) {
+  let create = key => this.factory.lookup({
+    prefix: 'model',
+    name: 'duck',
+    prepare(Model) {
+      return Model.extend({
+        prepared: true
+      });
+    },
+    variant: {
+      name: key,
+      prepare(Model) {
+        return Model.extend({
+          [key]: true
+        });
+      }
+    }
+  }).factory;
+
+  assert.ok(create('yellow').class === create('yellow').class);
+  assert.ok(create('green').class === create('green').class);
+  assert.ok(create('yellow').class !== create('green').class);
+});
