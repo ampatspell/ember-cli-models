@@ -5,9 +5,9 @@ class DatabaseContext extends Context {
   constructor(owner) {
     super(owner, owner.store._context);
     this.adapter = null;
-    this.internalModelFactory = this.create('models:internal-model-factory');
     this.internalModelManager = this.create('models:internal-model-manager');
     this.internalModelIdentity = this.create('models:internal-model-identity');
+    this.internalModelFactory = this.parent.internalModelFactory;
     this.modelClassFactory = this.parent.modelClassFactory;
     this.modelFactory = this.parent.modelFactory;
   }

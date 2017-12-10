@@ -12,6 +12,10 @@ class StoresContext extends Context {
   constructor(owner) {
     super(owner);
     this.stores = new Registry();
+    this.classFactory = this.create('models:class-factory');
+    this.modelClassFactory = this.create('models:model-class-factory');
+    this.modelFactory = this.create('models:model-factory');
+    this.internalModelFactory = this.create('models:internal-model-factory');
   }
   get identity() {
     return this._identity = this._identity || this.create('models:stores-identity', { content: A() });
@@ -40,16 +44,19 @@ export default EmberObject.extend(ContextMixin, {
 
   _createAdapterForOptions(store, opts) {
     let name = opts.adapter;
-    let normalizedName = normalizeIdentifier(name);
-    let factory = factoryFor(this, `models:adapter/${normalizedName}/store`);
-    assert(`store adapter '${normalizedName}' is not registered`, !!factory);
-    let props = assign({ identifier: normalizedName, store, options: omit(opts, [ 'adapter' ]) });
+    let identifier = normalizeIdentifier(name);
+    let factory = factoryFor(this, `models:stack/${identifier}/store/adapter`);
+    assert(`store adapter '${identifier}' is not registered`, !!factory);
+    let props = assign({ identifier, store, options: omit(opts, [ 'adapter' ]) });
     return factory.create(props);
   },
 
-  _createAdapterForIdentifier(store, identifier) {
-    let options = this._storeOptionsForIdentifier(identifier);
-    return this._createAdapterForOptions(store, options);
+  _createStoreForIdentifier(identifier, adapter) {
+    let factory = factoryFor(this, `models:stack/${adapter}/store`);
+    if(!factory) {
+      factory = factoryFor(this, 'models:store');
+    }
+    return factory.create({ stores: this, identifier });
   },
 
   store(identifier) {
@@ -58,8 +65,9 @@ export default EmberObject.extend(ContextMixin, {
 
     let store = stores.get(normalizedIdentifier);
     if(!store) {
-      store = factoryFor(this, 'models:store').create({ stores: this, identifier: normalizedIdentifier });
-      store._context.adapter = this._createAdapterForIdentifier(store, normalizedIdentifier);
+      let options = this._storeOptionsForIdentifier(identifier);
+      store = this._createStoreForIdentifier(normalizedIdentifier, options.adapter);
+      store._context.adapter = this._createAdapterForOptions(store, options);
       stores.set(normalizedIdentifier, store);
       store._context.start();
     }

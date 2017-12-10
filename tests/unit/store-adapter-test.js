@@ -20,8 +20,8 @@ module('store-adapter', {
           }
         }
       });
-      this.register('models:adapter/local/store', StoreAdapterImpl);
-      this.register('models:adapter/local/database', DatabaseAdapterImpl);
+      this.register('models:stack/local/store/adapter', StoreAdapterImpl);
+      this.register('models:stack/local/database/adapter', DatabaseAdapterImpl);
       this.register('models:stores', StoresImpl);
       return this.lookup('models:stores');
     };

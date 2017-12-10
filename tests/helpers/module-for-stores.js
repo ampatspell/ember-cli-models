@@ -38,8 +38,8 @@ export default function(name, options={}) {
       this.adapter = 'noop';
 
       this.registerAdapters = (name, storeFactory, databaseFactory) => {
-        this.register(`models:adapter/${name}/store`, storeFactory);
-        this.register(`models:adapter/${name}/database`, databaseFactory)
+        this.register(`models:stack/${name}/store/adapter`, storeFactory);
+        this.register(`models:stack/${name}/database/adapter`, databaseFactory)
       };
 
       this.registerAdapters('noop', StoreNoopAdapter, DatabaseNoopAdapter);

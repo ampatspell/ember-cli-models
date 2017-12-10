@@ -11,9 +11,9 @@ class StoreContext extends Context {
     super(owner, owner.stores._context);
     this.adapter = null;
     this.databases = new Registry();
-    this.classFactory = this.create('models:class-factory');
-    this.modelClassFactory = this.create('models:model-class-factory');
-    this.modelFactory = this.create('models:model-factory');
+    this.internalModelFactory = this.parent.internalModelFactory;
+    this.modelClassFactory = this.parent.modelClassFactory;
+    this.modelFactory = this.parent.modelFactory;
   }
   get identity() {
     return this._identity = this._identity || this.create('models:store-identity', { content: A() });
@@ -37,12 +37,21 @@ export default EmberObject.extend(StoreContextMixin, {
   adapter: adapter(),
   identity: identity(),
 
-  _createDatabaseAdapter(database) {
+  _createAdapterForDatabase(database) {
     let adapter = this._context.adapter;
     let identifier = adapter.identifier;
-    let factory = factoryFor(this, `models:adapter/${identifier}/database`);
+    let factory = factoryFor(this, `models:stack/${identifier}/database/adapter`);
     assert(`database adapter '${identifier}' not registered`, !!factory);
     return factory.create({ store: this, adapter, database });
+  },
+
+  _createDatabaseForIdentifier(identifier) {
+    let adapter = this._context.adapter.identifier;
+    let factory = factoryFor(this, `models:stack/${adapter}/database`);
+    if(!factory) {
+      factory = factoryFor(this, 'models:database');
+    }
+    return factory.create({ store: this, identifier });
   },
 
   database(identifier) {
@@ -51,8 +60,8 @@ export default EmberObject.extend(StoreContextMixin, {
 
     let database = databases.get(normalizedIdentifier);
     if(!database) {
-      database = factoryFor(this, 'models:database').create({ store: this, identifier: normalizedIdentifier });
-      database._context.adapter = this._createDatabaseAdapter(database);
+      database = this._createDatabaseForIdentifier(normalizedIdentifier);
+      database._context.adapter = this._createAdapterForDatabase(database);
       databases.set(normalizedIdentifier, database);
       database._context.start();
     }
