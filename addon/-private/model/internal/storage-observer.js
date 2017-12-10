@@ -27,9 +27,9 @@ export default class StorageObserver {
   }
 
   _lookupModelName() {
-    let modelName = this._definition.name(this._storage);
-    assert(`definition.name must return model name`, !!modelName);
-    return modelName;
+    let name = this._definition.name(this._storage);
+    assert(`definition.name must return model name`, !!name);
+    return this._context.internalModelManager.modelNameForName(name);
   }
 
   get modelName() {

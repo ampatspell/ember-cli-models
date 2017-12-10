@@ -8,7 +8,9 @@ const definition = {
     if(id && id.startsWith('_design/')) {
       return 'design';
     }
-    return type;
+    if(type) {
+      return type;
+    }
   }
 };
 
@@ -18,11 +20,15 @@ export default Base.extend({
     return definition;
   },
 
-  build(modelName, props) {
-    if(modelName === 'design') {
+  modelName(name) {
+    return `remote/${name}`;
+  },
+
+  build(name, props) {
+    if(name === 'design') {
       return this.doc(props);
     }
-    return this.doc(assign({}, props, { type: modelName }));
+    return this.doc(assign({}, props, { type: name }));
   }
 
 });

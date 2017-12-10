@@ -7,12 +7,16 @@ export default Component.extend({
   layout,
 
   stores: stores(),
-  store: store('local'),
-  database: database('local', 'main'),
+  store: store('remote'),
+  database: database('remote', 'main'),
 
   actions: {
     select(model) {
       this.set('selected', model);
+    },
+    saveAuthor() {
+      let model = this.get('database').model('author', { name: 'ampatspell' });
+      model.save();
     }
   }
 

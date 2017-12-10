@@ -2,6 +2,8 @@ import EmberObject, { get } from '@ember/object';
 import { A } from '@ember/array';
 import { typeOf } from '@ember/utils';
 import Push from './model/push';
+import { isString } from './util/assert';
+import normalizeIdentifier from './util/normalize-identifier';
 
 const normalizeData = data => typeof data === 'undefined' ? {} : data;
 
@@ -41,10 +43,12 @@ export default EmberObject.extend({
     return this._context.internalModelFactory.createTransientInternalModel(this._context, modelName, props);
   },
 
-  _createInternalModel(modelName, data) {
+  _createInternalModel(name, data) {
     data = normalizeData(data);
+    let normalizedName = normalizeIdentifier(name);
     let context = this._context;
-    let { normalizedName, factory } = context.modelClassFactory.lookup(modelName);
+    let modelName = this.modelNameForName(name);
+    let { normalizedName: normalizedFactoryName, factory } = context.modelClassFactory.lookup(modelName);
     let type = get(factory.class, 'modelType');
     let internal;
     if(type === 'backed') {
@@ -55,7 +59,7 @@ export default EmberObject.extend({
         this._onCreated(internal, false);
       }
     } else {
-      internal = this._createTransientInternalModel(normalizedName, data);
+      internal = this._createTransientInternalModel(normalizedFactoryName, data);
       this._onCreated(internal, false);
     }
     return internal;
@@ -77,6 +81,12 @@ export default EmberObject.extend({
 
   _pushBackedModel(storage) {
     return this._pushBackedInternalModel(storage).internal.model(true);
+  },
+
+  modelNameForName(name) {
+    let modelName = this._context.adapter.modelName(name);
+    isString('adapter.modelName result', modelName);
+    return modelName;
   },
 
   push(storage) {
