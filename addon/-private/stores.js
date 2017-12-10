@@ -20,8 +20,6 @@ class StoresContext extends Context {
     let identity = this._identity;
     if(!identity) {
       identity = this.create('models:stores-identity');
-      // TODO: something weird is going one there
-      identity.notifyPropertyChange('content');
       this._identity = identity;
     }
     return identity;
