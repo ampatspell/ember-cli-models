@@ -1,12 +1,12 @@
 import Route from '@ember/routing/route';
-import { database } from 'ember-cli-models/computed';
+import { inject as service } from '@ember/service';
 
 export default Route.extend({
 
-  database: database('remote', 'main'),
+  state: service(),
 
   model() {
-    return this.get('database').model('state').start();
+    return this.get('state').start();
   }
 
 });

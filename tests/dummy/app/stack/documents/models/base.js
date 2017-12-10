@@ -15,7 +15,7 @@ export default Model.extend(StateMixin, {
   id:  attr('id'),
   rev: attr('rev'),
 
-  state:   reads('state'),
+  state: reads('state'),
 
   serialized: reads('serialized'),
 

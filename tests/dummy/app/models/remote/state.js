@@ -1,17 +1,18 @@
 import { computed } from '@ember/object';
-import Model, { database, store, stores } from 'ember-cli-models/model/transient';
+import Model, { database } from 'ember-cli-models/model/transient';
 
 export default Model.extend({
 
   database: database(),
-  store: store(),
-  stores: stores(),
 
   // temporary
   changes: computed(function() {
-    window.state = this;
-    let database = this.get('database');
-    return database.model('changes');
+    return this.get('database').model('state/changes');
+  }).readOnly(),
+
+  // temporary
+  design: computed(function() {
+    return this.get('database').model('state/design');
   }).readOnly(),
 
   async start() {

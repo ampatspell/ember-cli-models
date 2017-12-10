@@ -2,4 +2,13 @@
   <div>{{stores}}</div>
   <div>{{store}}</div>
   <div>{{database}}</div>
+  <div>{{state}}</div>
 </div>
+
+<div class="row">
+  <button onclick={{action 'setup'}}>Setup database</button>
+</div>
+
+{{#if setup}}
+  <div class="row">{{ui-block/json setup}}</div>
+{{/if}}

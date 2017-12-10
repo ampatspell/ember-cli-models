@@ -1,3 +1,9 @@
+{{#if author.isError}}
+  <div class="row">
+    {{author.error.message}}
+  </div>
+{{/if}}
+
 <div class="row">
   <div>Name</div>
   <div>{{input value=author.name}}</div>
@@ -9,9 +15,13 @@
 </div>
 
 <div class="row">
-  <button onclick={{action 'save'}}>Save</button>
+  <button onclick={{action 'save'}}>{{if author.isNew 'Save' 'Update'}}</button>
 </div>
 
 <div class="row">
   {{ui-block/json author.serialized}}
+</div>
+
+<div class="row">
+  {{ui-block/json author.state}}
 </div>
