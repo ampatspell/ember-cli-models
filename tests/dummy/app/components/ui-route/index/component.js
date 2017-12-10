@@ -11,7 +11,7 @@ export default Component.extend({
   database: database('local', 'main'),
 
   actions: {
-    select(mdoel) {
+    select(model) {
       this.set('selected', model);
     }
   }
