@@ -18,7 +18,7 @@ export default DatabaseAdapter.extend({
     return definition;
   },
 
-  build(modelName, props) {
+  storage(modelName, props) {
     return this.get('_factory').create(assign({}, props, { type: modelName }));
   }
 

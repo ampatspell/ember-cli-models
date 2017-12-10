@@ -1,6 +1,7 @@
 import { A } from '@ember/array';
 import EmberObject, { computed } from '@ember/object';
 import ArrayObserver from '../util/array-observer';
+import { isInstance } from '../util/assert';
 
 const storage = fn => function(array) {
   let manager = this.database._context.internalModelManager;
@@ -45,6 +46,16 @@ export default EmberObject.extend({
 
   stop() {
     this._stopObservingContent();
+  },
+
+  storage() {
+  },
+
+  build(modelName, props) {
+    let storage = this.storage(modelName, props);
+    isInstance('storage result', storage);
+    this.get('content').addObject(storage);
+    return storage;
   },
 
   push:   storage('push'),
