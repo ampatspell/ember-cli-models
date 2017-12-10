@@ -3,6 +3,8 @@ import { module } from 'qunit';
 import { resolve } from 'rsvp';
 import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
+import EmberObject from '@ember/object';
+import { assign } from '@ember/polyfills';
 import Stores from 'ember-cli-models/stores';
 import StoreAdapter from 'ember-cli-models/adapter/store';
 import DatabaseAdapter from 'ember-cli-models/adapter/database';
@@ -16,6 +18,9 @@ const DatabaseNoopAdapter = DatabaseAdapter.extend({
       observe: [ 'type' ],
       name: storage => storage.get('type')
     };
+  },
+  storage(name, props) {
+    return EmberObject.create(assign(props, { type: name }));
   }
 });
 
