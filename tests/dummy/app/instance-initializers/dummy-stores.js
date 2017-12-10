@@ -1,4 +1,4 @@
-import Stores from '../stores';
+import Stores from '../stack/stores';
 
 export default {
   name: 'dummy:stores',

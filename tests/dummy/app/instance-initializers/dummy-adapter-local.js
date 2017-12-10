@@ -1,12 +1,12 @@
-import Storage from '../adapters/local/storage';
-import StoreAdapter from '../adapters/local/store';
-import DatabaseAdapter from '../adapters/local/database';
+import Storage from '../stack/local/storage';
+import StoreAdapter from '../stack/local/store';
+import DatabaseAdapter from '../stack/local/database';
 
 export default {
   name: 'dummy:adapter-local',
   initialize(app) {
-    app.register('models:adapter/local/storage', Storage);
-    app.register('models:adapter/local/store', StoreAdapter);
-    app.register('models:adapter/local/database', DatabaseAdapter);
+    app.register('models:stack/local/storage', Storage);
+    app.register('models:stack/local/store/adapter', StoreAdapter);
+    app.register('models:stack/local/database/adapter', DatabaseAdapter);
   }
 }

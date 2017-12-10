@@ -1,5 +1,5 @@
 import Stores from 'ember-cli-models/stores';
-import environment from './config/environment';
+import environment from '../config/environment';
 
 const COUCHDB_URL = environment.COUCHDB_URL;
 

@@ -11,7 +11,7 @@ const definition = {
 export default DatabaseAdapter.extend({
 
   _factory: computed(function() {
-    return getOwner(this).factoryFor('models:adapter/local/storage');
+    return getOwner(this).factoryFor('models:stack/local/storage');
   }).readOnly(),
 
   modelDefinitionForStorage() {

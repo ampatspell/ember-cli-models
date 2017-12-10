@@ -5,7 +5,7 @@ import StoreAdapter from 'ember-cli-models/adapter/store';
 export default StoreAdapter.extend({
 
   stores: computed(function() {
-    return getOwner(this).lookup('models:adapter/documents/stores');
+    return getOwner(this).lookup('models:stack/documents/stores');
   }).readOnly(),
 
   documents: computed(function() {
