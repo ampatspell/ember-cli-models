@@ -93,3 +93,43 @@ $font-family: 'Raleway', sans-serif;
     font-weight: 600;
   }
 }
+
+.ui-block-master-detail {
+  display: flex;
+  flex-direction: row;
+  margin: 0 -25px;
+  > .master {
+    width: 200px;
+    border-right: 1px solid #eee;
+  }
+  > .detail {
+    flex: 1;
+    padding: 0 10px;
+  }
+}
+
+.ui-block-div {
+  &.has-action {
+    cursor: pointer;
+  }
+}
+
+.ui-block-rows {
+  > .row {
+    padding: 10px 25px;
+    margin: 0;
+    border-bottom: 1px solid #eee;
+    &:first-child {
+      border-top: 1px solid #eee;
+    }
+    > .title {
+      line-height: 16px;
+    }
+    > .subtitle {
+      font-size: 11px;
+    }
+  }
+  > .footer {
+    padding: 10px 25px;
+  }
+}
