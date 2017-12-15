@@ -10,6 +10,7 @@
 
 ``` javascript
 // create transient model
+
 export default Model.extend({
 
   database: database('remote', 'main'),
@@ -34,6 +35,10 @@ export default Model.extend({
 
 ## Create transient models
 
+* create based on array
+* destroy removed
+* requires database where each model should be created
+
 ``` javascript
 // create transient models
 export default Model.extend({
@@ -42,6 +47,18 @@ export default Model.extend({
 
   // transient-models
   wrappedBlogs: models({
+    owner: [ 'blogs' ],
+    create(state) {
+      let source = state.get('blogs');
+      let database = state.get('database');
+      return {
+        source,
+        database,
+        name: 'state/blogs',
+        props: {
+        }
+      }
+    },
 
   })
 
@@ -51,6 +68,7 @@ export default Model.extend({
 ## Lookup backed
 
 ``` javascript
+
 // lookup backed model
 export default Model.extend({
 
