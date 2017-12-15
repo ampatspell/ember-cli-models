@@ -10,27 +10,31 @@
 
 ``` javascript
 // create transient model
-
 export default Model.extend({
 
   database: database('remote', 'main'),
 
   // transient-model
-  changes: model({
-    owner: [ 'database' ],
-    create(state) {
-      let database = state.get('database');
-      return {
-        database,
-        name: 'state/changes',
-        props: {
-          state
-        };
-      }
+  changes: model('database', function() {
+    let database = this.get('database');
+
+    let name = 'state/changes';
+    let props = {
+      state: this
+    };
+
+    return {
+      database,
+      name,
+      props
     }
-  })
+  }),
 
 });
+```
+
+``` javascript
+new TransientInternalModel(context, 'state/changes', { state });
 ```
 
 ## Create transient models
@@ -45,21 +49,19 @@ export default Model.extend({
 
   blogs: null, // array
 
-  // transient-models
-  wrappedBlogs: models({
-    owner: [ 'blogs' ],
-    create(state) {
-      let source = state.get('blogs');
-      let database = state.get('database');
-      return {
-        source,
-        database,
-        name: 'state/blogs',
-        props: {
-        }
-      }
-    },
+  // transient models array proxy
+  blogModels: models('blogs', 'database', function() {
+    let { blogs: source, database } = this.getProperties('blogs', 'database');
 
+    let name = 'state/blogs';
+    let props = { parent: this };
+
+    return {
+      source,
+      database,
+      name,
+      props
+    }
   })
 
 });
@@ -75,20 +77,16 @@ export default Model.extend({
   id: 'thing:foo',
 
   // filter-first
-  blog: model({
-    source: {
-      owner: [ 'database' ],
-      array(owner) {
-        return owner.get('database.identity');
-      }
-    },
-    filter: {
+  blog: model('database', function() {
+    let database = this.get('database');
+    return {
+      database,
       owner: [ 'id' ],
       model: [ 'id' ],
       matches(model, owner) {
         return owner.get('id') === model.get('id');
       }
-    },
+    };
   })
 
 });
