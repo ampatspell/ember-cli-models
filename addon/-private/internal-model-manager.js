@@ -2,7 +2,7 @@ import EmberObject, { get } from '@ember/object';
 import { A } from '@ember/array';
 import { typeOf } from '@ember/utils';
 import Push from './model/push';
-import { isString } from './util/assert';
+import { assert, isString } from './util/assert';
 import normalizeIdentifier from './util/normalize-identifier';
 
 const normalizeData = data => typeof data === 'undefined' ? {} : data;
@@ -43,13 +43,16 @@ export default EmberObject.extend({
     return this._context.internalModelFactory.createTransientInternalModel(this._context, modelName, props);
   },
 
-  _createInternalModel(name, data) {
+  _createInternalModel(name, data, expectedType) {
     data = normalizeData(data);
     let normalizedName = normalizeIdentifier(name);
     let context = this._context;
     let modelName = this.modelNameForName(name);
     let { normalizedName: normalizedFactoryName, factory } = context.modelClassFactory.lookup(modelName);
     let type = get(factory.class, 'modelType');
+    if(expectedType) {
+      assert(`model '${normalizedFactoryName}' is expected to be ${expectedType}`, expectedType === type);
+    }
     let internal;
     if(type === 'backed') {
       let storage = context.adapter.build(normalizedName, data);
@@ -101,6 +104,10 @@ export default EmberObject.extend({
       return true;
     }
     return false;
+  },
+
+  internalTransientModel(modelName, props) {
+    return this._createInternalModel(modelName, props, 'transient');
   },
 
   model(modelName, data) {
