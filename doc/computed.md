@@ -42,25 +42,19 @@ export default Model.extend({
 
   // filter-first
   blog: model({
-    owner: [ 'database', 'id' ],
-    model: [ 'id' ],
-    array(owner) {
-      return owner.get('database.identity');
+    source: {
+      owner: [ 'database' ],
+      array(owner) {
+        return owner.get('database.identity');
+      }
     },
-    matches(model, owner) {
-      return owner.get('id') === model.get('id');
-    }
-  }),
-
-  blogs: models({
-    owner: [ 'database', 'type' ],
-    model: [ 'type' ],
-    array(owner) {
-      return owner.get('database.identity');
+    filter: {
+      owner: [ 'id' ],
+      model: [ 'id' ],
+      matches(model, owner) {
+        return owner.get('id') === model.get('id');
+      }
     },
-    matches(model, owner) {
-      return owner.get('type') === model.get('type');
-    }
   })
 
 });
