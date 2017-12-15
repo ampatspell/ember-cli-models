@@ -21,13 +21,6 @@ export default Model.extend({
   async start() {
     await this.get('changes').start();
     return this;
-  },
-
-  willDestroy() {
-    // temporary
-    this._super(...arguments);
-    let changes = this.get('changes');
-    changes.destroy();
   }
 
 });
