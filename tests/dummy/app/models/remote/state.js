@@ -1,19 +1,22 @@
 import { computed } from '@ember/object';
 import Model, { database } from 'ember-cli-models/model/transient';
+import createTransientModel from 'ember-cli-models/-private/computed/transient-model';
+
+const state = name => createTransientModel('database', function() {
+  let database = this.get('database');
+  return {
+    database,
+    name,
+    props: { state: this }
+  };
+});
 
 export default Model.extend({
 
   database: database(),
 
-  // temporary
-  changes: computed(function() {
-    return this.get('database').model('state/changes');
-  }).readOnly(),
-
-  // temporary
-  design: computed(function() {
-    return this.get('database').model('state/design');
-  }).readOnly(),
+  changes: state('state/changes'),
+  design:  state('state/design'),
 
   async start() {
     await this.get('changes').start();
@@ -21,6 +24,7 @@ export default Model.extend({
   },
 
   willDestroy() {
+    // temporary
     this._super(...arguments);
     let changes = this.get('changes');
     changes.destroy();
