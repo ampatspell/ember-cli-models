@@ -18,15 +18,31 @@ export default Model.extend({
   changes: model({
     owner: [ 'database' ],
     create(state) {
+      let database = state.get('database');
       return {
+        database,
         name: 'state/changes',
-        store: 'remote', // or null if database is provided
-        database: 'main', // or state.get('database')
         props: {
           state
         };
       }
     }
+  })
+
+});
+```
+
+## Create transient models
+
+``` javascript
+// create transient models
+export default Model.extend({
+
+  blogs: null, // array
+
+  // transient-models
+  wrappedBlogs: models({
+
   })
 
 });
