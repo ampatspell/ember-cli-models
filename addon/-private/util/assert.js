@@ -51,4 +51,8 @@ export {
   isOneOf
 }
 
+export {
+  isDatabase
+} from './assert-additions';
+
 export default assert;
