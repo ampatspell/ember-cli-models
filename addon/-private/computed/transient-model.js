@@ -1,6 +1,6 @@
 import destroyable from '../util/destroyable-computed';
 import { lookupStores } from './globals';
-import { isFunction, isObject, isInstance } from '../util/assert';
+import { isFunction, isObject, isString, isDatabase } from '../util/assert';
 
 export default (...args) => {
   let fn = args.pop();
@@ -10,13 +10,15 @@ export default (...args) => {
     create() {
       let stores = lookupStores(this);
       let result = fn.call(this, this, stores);
+
       if(!result) {
         return;
       }
 
       isObject('result', result);
       let { database, name, props } = result;
-      isInstance('database', database);
+      isDatabase('result.database', database);
+      isString('result.name', name);
 
       return database._context.internalModelManager.internalTransientModel(name, props);
     },
