@@ -1,11 +1,8 @@
 import destroyable from '../util/internal-destroyable-computed';
-import { lookupStores } from './globals';
+import stores from '../util/lookup-stores';
 import { isFunction, isObject, isString, isDatabase } from '../util/assert';
 
-const invoke = (owner, fn) => {
-  let stores = lookupStores(owner);
-  return fn.call(owner, owner, stores);
-};
+const invoke = (owner, fn) => fn.call(owner, owner, stores(owner));
 
 const validate = result => {
   isObject('result', result);

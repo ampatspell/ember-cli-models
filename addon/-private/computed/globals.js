@@ -1,7 +1,5 @@
 import { computed } from '@ember/object';
-import { getOwner } from '@ember/application';
-
-export const lookupStores = owner => getOwner(owner).lookup('models:stores');
+import lookupStores from '../util/lookup-stores';
 
 const withStores = fn => computed(function() {
   return fn(lookupStores(this));
