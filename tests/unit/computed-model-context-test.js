@@ -1,3 +1,4 @@
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model, { stores, store, database } from 'ember-cli-models/model/backed';
@@ -30,4 +31,12 @@ test('lookup another database', function(assert) {
 test('lookup another store', function(assert) {
   let duck = this.subject({ store: 'remote' });
   assert.ok(duck.get('store') === this.stores.store('remote'));
+});
+
+test('lookup after model destroy', function(assert) {
+  let duck = this.subject();
+  run(() => duck.destroy());
+  assert.ok(duck.get('stores') === undefined);
+  assert.ok(duck.get('store') === undefined);
+  assert.ok(duck.get('database') === undefined);
 });
