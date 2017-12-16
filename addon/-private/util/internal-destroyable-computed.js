@@ -12,5 +12,5 @@ export default (...args) => {
     destroy(internal) {
       internal.destroy();
     }
-  })
-}
+  });
+};
