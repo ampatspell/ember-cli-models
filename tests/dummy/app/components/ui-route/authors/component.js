@@ -5,6 +5,8 @@ export default Component.extend({
   classNameBindings: [ ':ui-route-authors' ],
   layout,
 
+  authors: null,
+
   actions: {
     select(author) {
       this.get('router').transitionTo('authors.author', author);
