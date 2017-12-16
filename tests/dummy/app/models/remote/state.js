@@ -3,10 +3,11 @@ import createTransientModel from 'ember-cli-models/-private/computed/transient-m
 
 const state = name => createTransientModel('database', function() {
   let database = this.get('database');
+  let props = { state: this };
   return {
     database,
     name,
-    props: { state: this }
+    props
   };
 });
 
