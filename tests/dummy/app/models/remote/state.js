@@ -5,7 +5,7 @@ const state = name => model('database', function() {
   let props = { state: this };
   return {
     database,
-    name,
+    name: `state/${name}`,
     props
   };
 });
@@ -14,8 +14,9 @@ export default Model.extend({
 
   database: database(),
 
-  changes: state('state/changes'),
-  design:  state('state/design'),
+  changes: state('changes'),
+  design:  state('design'),
+  blogs:   state('blogs'),
 
   async start() {
     await this.get('changes').start();

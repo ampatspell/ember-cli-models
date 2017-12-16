@@ -1,13 +1,13 @@
 import Route from '@ember/routing/route';
-import { database } from 'ember-cli-models/computed';
+import { inject as service } from '@ember/service';
 
 export default Route.extend({
 
   // temporary
-  database: database('remote', 'main'),
+  state: service(),
 
   model() {
-    return this.get('database').find({ ddoc: 'author', view: 'by-id' });
+    return this.get('state.blogs').loadAllAuthors();
   }
 
 });
