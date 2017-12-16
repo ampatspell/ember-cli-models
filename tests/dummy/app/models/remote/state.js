@@ -1,7 +1,6 @@
-import Model, { database } from 'ember-cli-models/model/transient';
-import createTransientModel from 'ember-cli-models/-private/computed/transient-model';
+import Model, { database, model } from 'ember-cli-models/model/transient';
 
-const state = name => createTransientModel('database', function() {
+const state = name => model('database', function() {
   let database = this.get('database');
   let props = { state: this };
   return {

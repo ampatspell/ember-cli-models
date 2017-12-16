@@ -1,8 +1,7 @@
-import Model from 'ember-cli-models/model/transient';
-import createTransientModel from 'ember-cli-models/-private/computed/transient-model';
+import Model, { model } from 'ember-cli-models/model/transient';
 import LifecycleMixin from '../-lifecycle-mixin';
 
-export const dummy = () => createTransientModel((owner, stores) => ({
+export const dummy = () => model((owner, stores) => ({
   database: stores.database('remote', 'main'),
   name: 'dummy'
 }));

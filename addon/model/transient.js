@@ -1,3 +1,11 @@
 export { default } from '../-private/model/transient-model';
 
-export * from '../-private/computed/model-context';
+export {
+  default as model
+} from '../-private/computed/transient-model';
+
+export {
+  stores,
+  store,
+  database
+} from '../-private/computed/model-context';

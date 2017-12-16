@@ -1,3 +1,7 @@
 export { default } from '../-private/model/backed-model';
 
-export * from '../-private/computed/model-context';
+export {
+  stores,
+  store,
+  database
+} from '../-private/computed/model-context';
