@@ -1,4 +1,3 @@
-import { computed } from '@ember/object';
 import destroyable from '../util/destroyable-computed';
 import { lookupStores } from './globals';
 import { isFunction, isObject, isInstance } from '../util/assert';
