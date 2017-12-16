@@ -28,6 +28,10 @@ export default Component.extend({
     async save() {
       await this.get('author').save();
       this.get('router').transitionTo('authors');
+    },
+    async cancel() {
+      // TODO: rollback
+      this.get('router').transitionTo('authors');
     }
   }
 

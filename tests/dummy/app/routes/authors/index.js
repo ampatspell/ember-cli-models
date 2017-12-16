@@ -3,6 +3,7 @@ import { database } from 'ember-cli-models/computed';
 
 export default Route.extend({
 
+  // temporary
   database: database('remote', 'main'),
 
   model() {

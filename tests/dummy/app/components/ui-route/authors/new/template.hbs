@@ -15,7 +15,8 @@
 </div>
 
 <div class="row">
-  <button onclick={{action 'save'}}>{{if author.isNew 'Save' 'Update'}}</button>
+  <button {{action 'save'}}>{{if author.isNew 'Save' 'Update'}}</button>
+  <button {{action 'cancel'}}>Cancel</button>
 </div>
 
 <div class="row">
