@@ -2,7 +2,7 @@ import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model, { stores, store, database } from 'ember-cli-models/model/backed';
 
-module('computed-model', {
+module('computed-model-context', {
   beforeEach() {
     this.subject = (opts={}) => {
       this.register('model:duck', Model.extend({
