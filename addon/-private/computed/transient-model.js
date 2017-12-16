@@ -1,32 +1,29 @@
-import destroyable from '../util/destroyable-computed';
+import destroyable from '../util/internal-destroyable-computed';
 import { lookupStores } from './globals';
 import { isFunction, isObject, isString, isDatabase } from '../util/assert';
+
+const invoke = (owner, fn) => {
+  let stores = lookupStores(owner);
+  return fn.call(owner, owner, stores);
+};
+
+const validate = result => {
+  isObject('result', result);
+  let { database, name } = result;
+  isDatabase('result.database', database);
+  isString('result.name', name);
+  return result;
+};
 
 export default (...args) => {
   let fn = args.pop();
   isFunction('last argument', fn);
-
-  return destroyable(...args, {
-    create() {
-      let stores = lookupStores(this);
-      let result = fn.call(this, this, stores);
-
-      if(!result) {
-        return;
-      }
-
-      isObject('result', result);
-      let { database, name, props } = result;
-      isDatabase('result.database', database);
-      isString('result.name', name);
-
-      return database._context.internalModelManager.internalTransientModel(name, props);
-    },
-    get(internal) {
-      return internal.model(true);
-    },
-    destroy(internal) {
-      internal.destroy();
+  return destroyable(...args, function() {
+    let result = invoke(this, fn);
+    if(!result) {
+      return;
     }
+    let { database, name, props } = validate(result);
+    return database._context.internalModelManager.internalTransientModel(name, props);
   }).readOnly();
 };
