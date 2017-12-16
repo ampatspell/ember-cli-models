@@ -1,5 +1,6 @@
 import { computed } from '@ember/object';
 import destroyable from '../util/destroyable-computed';
+import { lookupStores } from './globals';
 import { isFunction, isObject, isInstance } from '../util/assert';
 
 export default (...args) => {
@@ -8,7 +9,8 @@ export default (...args) => {
 
   return destroyable(...args, {
     create() {
-      let result = fn.call(this, this);
+      let stores = lookupStores(this);
+      let result = fn.call(this, this, stores);
       if(!result) {
         return;
       }
