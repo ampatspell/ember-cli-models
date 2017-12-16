@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import layout from './template';
 import { stores, store, database } from 'ember-cli-models/computed';
 import { inject as service } from '@ember/service';
+import { dummy } from 'dummy/models/remote/dummy';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route-index' ],
@@ -12,6 +13,7 @@ export default Component.extend({
   database: database('remote', 'main'),
 
   state: service(),
+  dummy: dummy(),
 
   actions: {
     async setup() {
