@@ -24,6 +24,13 @@ test('lookup returns extended factory', function(assert) {
   assert.equal(get(Model.class, 'modelName'), 'duck');
 });
 
+test('model instance has modelName and modelType', function(assert) {
+  let { factory } = this.factory.lookup('duck');
+  let model = factory.create();
+  assert.equal(model.get('modelName'), 'duck');
+  assert.equal(model.get('modelType'), 'transient');
+});
+
 test('lookup throws for unregistered factory', function(assert) {
   try {
     this.factory.lookup('hamster');
