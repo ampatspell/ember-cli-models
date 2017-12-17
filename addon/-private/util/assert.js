@@ -52,7 +52,10 @@ export {
 }
 
 export {
-  isDatabase
+  isDatabase_,
+  isDatabase,
+  isArrayArrayProxyOrHasIdentity_,
+  isArrayArrayProxyOrHasIdentity
 } from './assert-additions';
 
 export default assert;
