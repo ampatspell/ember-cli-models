@@ -1,0 +1,26 @@
+{{#ui-block/master-detail as |md|}}
+  {{#md.master}}
+
+    <div class="row">
+      {{#ui-block/rows as |rows|}}
+        {{#each authors as |author|}}
+          {{#rows.row action=(action 'select' author)}}
+            <div class="title">{{author.name}}</div>
+            <div class="subtitle">{{if author.email author.email 'no email'}}</div>
+          {{/rows.row}}
+        {{/each}}
+      {{/ui-block/rows}}
+    </div>
+
+    <div class="row">
+      {{link-to 'Add new author' 'authors.new'}}
+    </div>
+
+  {{/md.master}}
+  {{#md.detail}}
+
+    {{yield}}
+
+  {{/md.detail}}
+{{/ui-block/master-detail}}
+

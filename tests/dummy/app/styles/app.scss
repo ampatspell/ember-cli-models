@@ -51,6 +51,10 @@ $font-family: 'Raleway', sans-serif;
 
 .row {
   margin-bottom: 10px;
+  &.placeholder {
+    color: #bbb;
+    font-weight: 600;
+  }
 }
 
 .ui-block-json {
@@ -97,6 +101,20 @@ $font-family: 'Raleway', sans-serif;
 .ui-block-div {
   &.has-action {
     cursor: pointer;
+  }
+}
+
+.ui-block-master-detail {
+  display: flex;
+  flex-direction: row;
+  > .master {
+    width: 250px;
+    padding: 0 25px 0 0;
+    border-right: 1px solid #eee;
+  }
+  > .detail {
+    flex: 1;
+    padding: 0 25px;
   }
 }
 
