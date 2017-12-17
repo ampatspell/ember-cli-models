@@ -5,10 +5,18 @@ import Model from 'ember-cli-models/model/transient';
 import { database, filter } from 'ember-cli-models/model/computed';
 import FilterFind from 'ember-cli-models/-private/model/filter-find';
 
+const Duck = Model.extend({
+  type: 'duck'
+});
+
+const Hamster = Model.extend({
+  type: 'hamster'
+});
+
 module('computed-filter', {
   beforeEach() {
-    this.register('model:duck', Model.extend());
-    this.register('model:hamster', Model.extend());
+    this.register('model:duck', Duck);
+    this.register('model:hamster', Hamster);
     this.subject = () => {
 
       let config = function() {
@@ -37,13 +45,9 @@ test('state exists', function(assert) {
   let state = this.subject();
   assert.ok(state);
   assert.ok(state.get('database'));
-
   let one = this.database.model('duck', { id: 'one' });
-  let two = this.database.model('duck', { id: 'two' });
-
   let identity = this.database.get('identity');
   assert.ok(identity.includes(one));
-  assert.ok(identity.includes(two));
 });
 
 test('filter exists', function(assert) {
@@ -60,4 +64,15 @@ test('filter exists', function(assert) {
 
   assert.ok(internal.isDestroyed);
   assert.ok(!internal._model);
+});
+
+test('filter contains pre-existing models', function(assert) {
+  let yellow = this.database.model('duck', { id: 'yellow' });
+  let green = this.database.model('duck', { id: 'green' });
+  let hamster = this.database.model('hamster', { id: 'cute' });
+  assert.deepEqual(this.database.get('identity').mapBy('id'), [ 'yellow', 'green', 'cute' ]);
+
+  let state = this.subject();
+  let ducks = state.get('ducks');
+  assert.deepEqual(ducks.mapBy('id'), [ 'yellow', 'green' ]);
 });

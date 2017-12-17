@@ -37,13 +37,9 @@ test('state exists', function(assert) {
   let state = this.subject();
   assert.ok(state);
   assert.ok(state.get('database'));
-
   let one = this.database.model('duck', { id: 'one' });
-  let two = this.database.model('duck', { id: 'two' });
-
   let identity = this.database.get('identity');
   assert.ok(identity.includes(one));
-  assert.ok(identity.includes(two));
 });
 
 test('find exists', function(assert) {
