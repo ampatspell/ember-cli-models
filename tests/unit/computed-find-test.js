@@ -3,6 +3,7 @@ import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/transient';
 import { database, find } from 'ember-cli-models/model/computed';
+import FilterFirst from 'ember-cli-models/-private/model/filter-first';
 
 module('computed-find', {
   beforeEach() {
@@ -47,13 +48,15 @@ test('state exists', function(assert) {
 
 test('find exists', function(assert) {
   let state = this.subject();
-  let ducks = state.get('duck');
-  assert.ok(ducks);
-  let internal = ducks._internal;
-  assert.ok(internal);
-  assert.ok(internal._model === ducks);
+  let duck = state.get('duck');
+  assert.ok(duck);
+  assert.ok(FilterFirst.detectInstance(duck));
 
-  run(() => ducks.destroy());
+  let internal = duck._internal;
+  assert.ok(internal);
+  assert.ok(internal._model === duck);
+
+  run(() => duck.destroy());
 
   assert.ok(internal.isDestroyed);
   assert.ok(!internal._model);

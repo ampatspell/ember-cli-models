@@ -3,6 +3,7 @@ import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/transient';
 import { database, filter } from 'ember-cli-models/model/computed';
+import FilterFind from 'ember-cli-models/-private/model/filter-find';
 
 module('computed-filter', {
   beforeEach() {
@@ -49,6 +50,8 @@ test('filter exists', function(assert) {
   let state = this.subject();
   let ducks = state.get('ducks');
   assert.ok(ducks);
+  assert.ok(FilterFind.detectInstance(ducks));
+
   let internal = ducks._internal;
   assert.ok(internal);
   assert.ok(internal._model === ducks);
