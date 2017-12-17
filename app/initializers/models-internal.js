@@ -6,6 +6,8 @@ import ModelClassFactory from 'ember-cli-models/-private/model-class-factory';
 import InternalModelFactory from 'ember-cli-models/-private/internal-model-factory';
 import InternalModelManager from 'ember-cli-models/-private/internal-model-manager';
 import InternalModelIdentity from 'ember-cli-models/-private/internal-model-identity';
+import InternalFilterManager from 'ember-cli-models/-private/internal-filter-manager';
+import InternalFilterFactory from 'ember-cli-models/-private/internal-filter-factory';
 import ModelFactory from 'ember-cli-models/-private/model-factory';
 import DatabaseIdentity from 'ember-cli-models/-private/identity/database';
 import StoreIdentity from 'ember-cli-models/-private/identity/store';
@@ -22,6 +24,8 @@ export default {
     container.register('models:internal-model-factory', InternalModelFactory);
     container.register('models:internal-model-manager', InternalModelManager);
     container.register('models:internal-model-identity', InternalModelIdentity);
+    container.register('models:internal-filter-manager', InternalFilterManager);
+    container.register('models:internal-filter-factory', InternalFilterFactory);
     container.register('models:model-factory', ModelFactory);
     container.register('models:database-identity', DatabaseIdentity);
     container.register('models:store-identity', StoreIdentity);

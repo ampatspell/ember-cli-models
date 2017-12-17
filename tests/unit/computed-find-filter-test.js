@@ -6,11 +6,20 @@ import { database, filter } from 'ember-cli-models/model/computed';
 module('computed-find-filter', {
   beforeEach() {
     this.register('model:duck', Model.extend());
+    this.register('model:hamster', Model.extend());
     this.subject = () => {
       this.register('model:state', Model.extend({
         database: database(),
+        type: 'duck',
         ducks: filter('database', function() {
-
+          return {
+            source: this.get('database'),
+            owner: [ 'type' ],
+            model: [ 'type' ],
+            matches(model, owner) {
+              return model.get('type') === owner.get('type');
+            }
+          }
         }),
       }));
       return this.database.model('state');
