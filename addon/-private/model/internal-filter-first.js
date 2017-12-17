@@ -6,4 +6,8 @@ export default class InternalFilterFirst extends InternalFilter {
     super(context, opts);
   }
 
+  _createModel() {
+    return this.context.filterFactory.createFirstModel(this);
+  }
+
 }

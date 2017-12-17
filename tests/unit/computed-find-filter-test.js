@@ -1,27 +1,33 @@
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/transient';
-import { database, filter } from 'ember-cli-models/model/computed';
+import { database, filter, find } from 'ember-cli-models/model/computed';
 
 module('computed-find-filter', {
   beforeEach() {
     this.register('model:duck', Model.extend());
     this.register('model:hamster', Model.extend());
     this.subject = () => {
+
+      let config = function() {
+        return  {
+          source: this.get('database'),
+          owner: [ 'type' ],
+          model: [ 'type' ],
+          matches(model, owner) {
+            return model.get('type') === owner.get('type');
+          }
+        };
+      };
+
       this.register('model:state', Model.extend({
         database: database(),
         type: 'duck',
-        ducks: filter('database', function() {
-          return {
-            source: this.get('database'),
-            owner: [ 'type' ],
-            model: [ 'type' ],
-            matches(model, owner) {
-              return model.get('type') === owner.get('type');
-            }
-          }
-        }),
+        ducks: filter('database', config),
+        duck: find('database', config)
       }));
+
       return this.database.model('state');
     };
   }
@@ -42,6 +48,14 @@ test('state exists', function(assert) {
 
 test('find exists', function(assert) {
   let state = this.subject();
-  let ducks = state.get('ducks');
+  let ducks = state.get('duck');
   assert.ok(ducks);
+  let internal = ducks._internal;
+  assert.ok(internal);
+  assert.ok(internal._model === ducks);
+
+  run(() => ducks.destroy());
+
+  assert.ok(internal.isDestroyed);
+  assert.ok(!internal._model);
 });

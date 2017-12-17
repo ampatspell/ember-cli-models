@@ -6,4 +6,8 @@ export default class InternalFilterFind extends InternalFilter {
     super(context, opts);
   }
 
+  _createModel() {
+    return this.context.filterFactory.createFindModel(this);
+  }
+
 }

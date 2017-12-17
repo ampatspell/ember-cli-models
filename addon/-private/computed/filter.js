@@ -57,5 +57,5 @@ const base = (args, create) => {
   });
 };
 
-export const find   = (...args) => base(args, (manager, args) => manager.internalFind(args));
-export const filter = (...args) => base(args, (manager, args) => manager.internalFirst(args));
+export const find   = (...args) => base(args, (manager, args) => manager.internalFirst(args));
+export const filter = (...args) => base(args, (manager, args) => manager.internalFind(args));
