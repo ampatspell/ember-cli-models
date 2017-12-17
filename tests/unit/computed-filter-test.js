@@ -2,9 +2,9 @@ import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/transient';
-import { database, filter, find } from 'ember-cli-models/model/computed';
+import { database, filter } from 'ember-cli-models/model/computed';
 
-module('computed-find-filter', {
+module('computed-filter', {
   beforeEach() {
     this.register('model:duck', Model.extend());
     this.register('model:hamster', Model.extend());
@@ -25,7 +25,6 @@ module('computed-find-filter', {
         database: database(),
         type: 'duck',
         ducks: filter('database', config),
-        duck: find('database', config)
       }));
 
       return this.database.model('state');
@@ -46,9 +45,9 @@ test('state exists', function(assert) {
   assert.ok(identity.includes(two));
 });
 
-test('find exists', function(assert) {
+test('filter exists', function(assert) {
   let state = this.subject();
-  let ducks = state.get('duck');
+  let ducks = state.get('ducks');
   assert.ok(ducks);
   let internal = ducks._internal;
   assert.ok(internal);
