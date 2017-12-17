@@ -1,4 +1,5 @@
-import Model, { model } from 'ember-cli-models/model/transient';
+import Model from 'ember-cli-models/model/transient';
+import { model } from 'ember-cli-models/model/computed';
 import LifecycleMixin from '../-lifecycle-mixin';
 
 export const dummy = () => model((owner, stores) => ({

@@ -1,4 +1,5 @@
-import Model, { database } from 'ember-cli-models/model/transient';
+import Model from 'ember-cli-models/model/transient';
+import { database } from 'ember-cli-models/model/computed';
 
 export default Model.extend({
 

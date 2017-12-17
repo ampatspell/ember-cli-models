@@ -1,4 +1,5 @@
-import Model, { database, model } from 'ember-cli-models/model/transient';
+import Model from 'ember-cli-models/model/transient';
+import { database, model } from 'ember-cli-models/model/computed';
 
 const state = name => model('database', function() {
   let database = this.get('database');

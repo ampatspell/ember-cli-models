@@ -2,7 +2,8 @@ import { assign } from '@ember/polyfills';
 import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
-import Model, { database, model } from 'ember-cli-models/model/transient';
+import Model from 'ember-cli-models/model/transient';
+import { database, model } from 'ember-cli-models/model/computed';
 
 module('computed-transient-model', {
   beforeEach() {

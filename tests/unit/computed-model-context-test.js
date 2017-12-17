@@ -1,7 +1,8 @@
 import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
-import Model, { stores, store, database } from 'ember-cli-models/model/backed';
+import Model from 'ember-cli-models/model/backed';
+import { stores, store, database } from 'ember-cli-models/model/computed';
 
 module('computed-model-context', {
   beforeEach() {
