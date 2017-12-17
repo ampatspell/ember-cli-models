@@ -22,5 +22,5 @@ export default (...args) => {
     }
     let { database, name, props } = validate(result);
     return database._context.internalModelManager.internalTransientModel(name, props);
-  }).readOnly();
+  });
 };
