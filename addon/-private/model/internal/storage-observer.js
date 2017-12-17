@@ -10,7 +10,16 @@ export default class StorageObserver {
     this._delegate = delegate;
     this._definition = this._lookupDefinition();
     this._modelName = this._lookupModelName();
-    this._observer = new ObjectObserver(storage, this._definition.observe, key => this._storageValueForKeyDidChange(key));
+    this._observer = new ObjectObserver({
+      object: storage,
+      observe: this._definition.observe,
+      delegate: {
+        target: this,
+        updated(object, key) {
+          this._storageValueForKeyDidChange(key);
+        }
+      }
+    });
   }
 
   _notifyDelegate(name) {

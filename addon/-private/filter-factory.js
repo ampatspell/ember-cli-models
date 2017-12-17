@@ -11,7 +11,7 @@ export default EmberObject.extend({
   },
 
   createFindModel(_internal) {
-    let content = _internal.content;
+    let content = _internal.content(true);
     return this._create('find', { _internal, content });
   },
 

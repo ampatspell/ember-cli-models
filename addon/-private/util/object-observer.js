@@ -1,3 +1,5 @@
+import { maybe as maybeCall } from './function-call';
+
 const withKeys = (object, keys, cb) => {
   if(!keys || keys.length === 0) {
     return;
@@ -23,11 +25,19 @@ export const stopObservingObjects = (objects, keys, target, method) => {
 
 export default class ObjectObserver {
 
-  constructor(object, observe, delegate) {
+  // object: EmberObject
+  // observe: [ 'id', 'type' ]
+  // delegate: { target: null, updated(object, key) }
+  constructor({ object, observe, delegate }) {
     this._object = object;
     this._observe = observe;
     this._delegate = delegate;
     this._startObserving();
+  }
+
+  _notifyDelegate(name, ...args) {
+    let delegate = this._delegate;
+    maybeCall(delegate.target, delegate[name], ...args);
   }
 
   _startObserving() {
@@ -39,7 +49,7 @@ export default class ObjectObserver {
   }
 
   _objectValueForKeyDidChange(object, key) {
-    this._delegate(key);
+    this._notifyDelegate('updated', object, key);
   }
 
   destroy() {

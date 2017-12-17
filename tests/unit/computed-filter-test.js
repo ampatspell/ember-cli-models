@@ -22,17 +22,17 @@ module('computed-filter', {
       let config = function() {
         return  {
           source: this.get('database'),
-          owner: [ 'type' ],
+          owner: [ 'modelType' ],
           model: [ 'type' ],
           matches(model, owner) {
-            return model.get('type') === owner.get('type');
+            return model.get('type') === owner.get('modelType');
           }
         };
       };
 
       this.register('model:state', Model.extend({
         database: database(),
-        type: 'duck',
+        modelType: 'duck',
         ducks: filter('database', config),
       }));
 
@@ -67,12 +67,68 @@ test('filter exists', function(assert) {
 });
 
 test('filter contains pre-existing models', function(assert) {
-  let yellow = this.database.model('duck', { id: 'yellow' });
-  let green = this.database.model('duck', { id: 'green' });
-  let hamster = this.database.model('hamster', { id: 'cute' });
+  this.database.model('duck', { id: 'yellow' });
+  this.database.model('duck', { id: 'green' });
+  this.database.model('hamster', { id: 'cute' });
   assert.deepEqual(this.database.get('identity').mapBy('id'), [ 'yellow', 'green', 'cute' ]);
 
   let state = this.subject();
   let ducks = state.get('ducks');
   assert.deepEqual(ducks.mapBy('id'), [ 'yellow', 'green' ]);
+});
+
+test('filter adds newly created models', function(assert) {
+  let state = this.subject();
+  let ducks = state.get('ducks');
+  assert.deepEqual(ducks.mapBy('id'), []);
+
+  this.database.model('duck', { id: 'yellow' });
+  assert.deepEqual(ducks.mapBy('id'), [ 'yellow' ]);
+
+  this.database.model('hamster', { id: 'cute' });
+  assert.deepEqual(ducks.mapBy('id'), [ 'yellow' ]);
+
+  this.database.model('duck', { id: 'green' });
+  assert.deepEqual(ducks.mapBy('id'), [ 'yellow', 'green' ]);
+});
+
+test('filter removes destroyed models', function(assert) {
+  let state = this.subject();
+  let ducks = state.get('ducks');
+  assert.deepEqual(ducks.mapBy('id'), []);
+
+  let yellow = this.database.model('duck', { id: 'yellow' });
+  assert.deepEqual(ducks.mapBy('id'), [ 'yellow' ]);
+
+  run(() => yellow.destroy());
+
+  assert.deepEqual(ducks.mapBy('id'), []);
+});
+
+test('filter removes updated models', function(assert) {
+  let state = this.subject();
+  let ducks = state.get('ducks');
+  assert.deepEqual(ducks.mapBy('id'), []);
+
+  let yellow = this.database.model('duck', { id: 'yellow' });
+  assert.deepEqual(ducks.mapBy('id'), [ 'yellow' ]);
+
+  yellow.set('type', 'foof');
+
+  assert.deepEqual(ducks.mapBy('id'), []);
+});
+
+test('filter is remached on owner prop change', function(assert) {
+  this.database.model('duck', { id: 'yellow' });
+  this.database.model('duck', { id: 'green' });
+  this.database.model('hamster', { id: 'cute' });
+
+  let state = this.subject();
+  let ducks = state.get('ducks');
+
+  assert.deepEqual(ducks.mapBy('id'), [ 'yellow', 'green' ]);
+
+  state.set('modelType', 'hamster');
+
+  assert.deepEqual(ducks.mapBy('id'), [ 'cute' ]);
 });
