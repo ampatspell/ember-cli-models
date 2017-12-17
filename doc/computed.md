@@ -76,7 +76,7 @@ export default Model.extend({
 
   id: 'thing:foo',
 
-  // filter-first
+  // find and filter
   blog: model('database', function() {
     let database = this.get('database');
     return {
