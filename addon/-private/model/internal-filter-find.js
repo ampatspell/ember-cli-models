@@ -1,32 +1,7 @@
 import { A } from '@ember/array';
 import InternalFilter from './internal-filter';
-import ArrayObserver from '../util/array-observer';
-import ObjectObserver from '../util/object-observer';
 
 export default class InternalFilterFind extends InternalFilter {
-
-  constructor(context, opts) {
-    super(context, opts);
-    this._content = null;
-    this._source = null;
-    this._owner = null;
-  }
-
-  _createContent() {
-    let content = A(this._rematch());
-    this._startObservingSource();
-    this._startObservingOwner();
-    return content;
-  }
-
-  content(create) {
-    let content = this._content;
-    if(!content && create) {
-      content = this._createContent();
-      this._content = content;
-    }
-    return content;
-  }
 
   _createModel() {
     return this.context.filterFactory.createFindModel(this);
@@ -34,11 +9,11 @@ export default class InternalFilterFind extends InternalFilter {
 
   //
 
-  _matches(model) {
-    let { source, owner } = this.opts;
-    let object = owner.object;
-    return source.matches(model, object);
+  _createContent() {
+    return A(this._rematch());
   }
+
+  //
 
   _match(models) {
     return models.filter(model => this._matches(model));
@@ -57,34 +32,12 @@ export default class InternalFilterFind extends InternalFilter {
     this.content().removeObjects(models);
   }
 
-  _sourceArrayUpdated(object) {
+  _sourceArrayUpdated(model) {
     let content = this.content();
-    if(this._matches(object)) {
-      content.addObject(object);
+    if(this._matches(model)) {
+      content.addObject(model);
     } else {
-      content.removeObject(object);
-    }
-  }
-
-  _startObservingSource() {
-    let { object: array, observe } = this.opts.source;
-    this._source = new ArrayObserver({
-      array,
-      observe,
-      delegate: {
-        target:  this,
-        added:   this._sourceArrayAdded,
-        removed: this._sourceArrayRemoved,
-        updated: this._sourceArrayUpdated
-      }
-    });
-  }
-
-  _stopObservingSource() {
-    let source = this._source;
-    if(source) {
-      source.destroy();
-      this._source = null;
+      content.removeObject(model);
     }
   }
 
@@ -105,34 +58,6 @@ export default class InternalFilterFind extends InternalFilter {
 
     content.removeObjects(remove);
     content.pushObjects(models);
-  }
-
-  _startObservingOwner() {
-    let { object, observe } = this.opts.owner;
-    this._owner = new ObjectObserver({
-      object,
-      observe,
-      delegate: {
-        target: this,
-        updated: this._ownerUpdated
-      }
-    });
-  }
-
-  _stopObservingOwner() {
-    let owner = this._owner;
-    if(owner) {
-      owner.destroy();
-      this._owner = null;
-    }
-  }
-
-  //
-
-  destroy() {
-    this._stopObservingSource();
-    this._stopObservingOwner();
-    super.destroy();
   }
 
 }

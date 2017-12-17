@@ -16,7 +16,8 @@ export default EmberObject.extend({
   },
 
   createFirstModel(_internal) {
-    return this._create('first', { _internal });
+    let content = _internal.content(true);
+    return this._create('first', { _internal, content });
   }
 
 });
