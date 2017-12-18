@@ -6,8 +6,8 @@ const constructorProp = key => computed(function() {
 }).readOnly();
 
 const modelName = () => constructorProp('modelName');
-const modelType = () => prop('modelType');
 const modelClassType = () => constructorProp('modelClassType');
+const modelType = () => prop('modelType')
 
 const Model = EmberObject.extend(BaseMixin, {
 

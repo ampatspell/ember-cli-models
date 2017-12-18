@@ -156,6 +156,7 @@ test('push storage returns Push', function(assert) {
 
   assert.ok(result);
   assert.ok(result.modelName);
+  assert.ok(result.modelType);
   assert.ok(!result._internal._model);
 
   let model = result.model;

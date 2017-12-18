@@ -4,10 +4,10 @@ import { prop } from './base';
 
 const state = name => computed(function() {
   return this._internal && this._internal.state[name];
-});
+}).readOnly();
 
-const storage = () => prop('storage').readOnly();
-const isDeleted = () => state('isDeleted').readOnly();
+const storage = () => prop('storage');
+const isDeleted = () => state('isDeleted');
 
 export default Model.extend({
 

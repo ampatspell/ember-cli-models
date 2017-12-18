@@ -9,22 +9,16 @@ const byType = opts => {
     if(!source) {
       return;
     }
-    // temporary
-    let modelName;
-    if(source.modelName) {
-      modelName = source.modelNameForType(opts.type);
-    } else {
-      modelName = opts.type;
-    }
+    let modelType = opts.type;
     return {
       source,
       owner: [],
-      model: [ 'modelName', 'isNew' ],
+      model: [ 'modelType', 'isNew' ],
       matches(model) {
         if(opts.new === false && model.get('isNew') === true) {
           return;
         }
-        return model.get('modelName') === modelName;
+        return model.get('modelType') === modelType;
       }
     };
   });
