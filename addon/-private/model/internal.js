@@ -10,11 +10,11 @@ export default class Internal {
   }
 
   model(create) {
-    if(this.isDestroyed) {
-      return;
-    }
     let model = this._model;
     if(!model && create) {
+      if(this.isDestroyed) {
+        return;
+      }
       model = this._createModel();
       this._model = model;
     }
