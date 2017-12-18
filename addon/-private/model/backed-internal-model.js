@@ -46,7 +46,7 @@ export default class BackedInternalModel extends InternalModel {
   }
 
   _modelNameDidChange() {
-    this.destroyModel(true);
+    this.recreateModel();
   }
 
   modelName(create) {

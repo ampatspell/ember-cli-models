@@ -18,8 +18,8 @@ export default class InternalModel extends Internal {
     return this.context.modelFactory.createModel(this, ...arguments);
   }
 
-  modelWillDestroyWithRecreate(recreate) {
-    this.context.internalModelManager._internalModelWillDestroy(this, !recreate);
+  modelWillDestroyPermanently() {
+    this.context.internalModelManager._internalModelWillDestroy(this, true);
   }
 
 }

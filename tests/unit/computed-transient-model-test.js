@@ -7,10 +7,11 @@ import { database, model } from 'ember-cli-models/model/computed';
 
 module('computed-transient-model', {
   beforeEach() {
-    this.register('model:changeset', Model.extend());
+    this.register('model:changeset', Model.extend({ id: 'changeset' }));
     this.subject = opts => {
       opts = assign({ database: 'database', name: 'changeset' }, opts);
       this.register('model:duck', Model.extend({
+        id: 'duck',
         database: database(),
         changeset: model(opts.database, function() {
           if(opts.noop) {
@@ -94,4 +95,20 @@ test('missing name throws', function(assert) {
       "reason": "result.name must be string"
     });
   }
+});
+
+test('destroy duck removes duck and changeset from identity', function(assert) {
+  let identity = this.database.get('identity');
+
+  let duck = this.subject();
+  let changeset = duck.get('changeset');
+
+  assert.deepEqual(identity.mapBy('id'), [ 'duck', 'changeset' ]);
+
+  run(() => duck.destroy());
+
+  assert.ok(duck.isDestroyed);
+  assert.ok(changeset.isDestroyed);
+
+  assert.deepEqual(identity.mapBy('id'), []);
 });

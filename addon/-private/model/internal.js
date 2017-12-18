@@ -21,24 +21,30 @@ export default class Internal {
     return model;
   }
 
-  destroyModel(recreate) {
+  recreateModel() {
     let model = this._model;
     if(!model) {
       return;
     }
+
     this._model = null;
-    model[__recreate] = recreate;
+    model[__recreate] = true;
+
     model.destroy();
   }
 
-  modelWillDestroyWithRecreate() {
+  modelWillDestroyPermanently() {
   }
 
   modelWillDestroy(model) {
     let recreate = model[__recreate];
-    this.modelWillDestroyWithRecreate(recreate);
+
+    if(!recreate) {
+      this.modelWillDestroyPermanently();
+    }
 
     model._internal = null;
+
     if(this._model === model) {
       this._model = null;
     }
@@ -53,7 +59,10 @@ export default class Internal {
       return;
     }
     this.isDestroyed = true;
-    this.destroyModel();
+    let model = this._model;
+    if(model) {
+      model.destroy();
+    }
   }
 
 }
