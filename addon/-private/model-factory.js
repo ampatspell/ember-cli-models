@@ -8,7 +8,7 @@ export default EmberObject.extend({
 
   createModel(_internal, expectedModelClass, modelName, props) {
     let { factory } = this._context.modelClassFactory.lookup(modelName);
-    assert(`model '${modelName}' must be ${get(expectedModelClass, 'modelType')} model`, expectedModelClass.detect(factory.class));
+    assert(`model '${modelName}' must be ${get(expectedModelClass, 'modelClassType')} model`, expectedModelClass.detect(factory.class));
     return factory.create(assign({}, props, { _internal }));
   }
 

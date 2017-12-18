@@ -19,6 +19,6 @@ export default Model.extend({
 
 }).reopenClass({
 
-  modelType: 'backed'
+  modelClassType: 'backed'
 
 });

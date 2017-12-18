@@ -43,18 +43,18 @@ export default EmberObject.extend({
     return this._context.internalModelFactory.createTransientInternalModel(this._context, modelName, props);
   },
 
-  _createInternalModel(name, data, expectedModelType) {
+  _createInternalModel(name, data, expectedModelClassType) {
     data = normalizeData(data);
     let normalizedName = normalizeIdentifier(name);
     let context = this._context;
     let modelName = this.modelNameForType(name);
     let { normalizedName: normalizedFactoryName, factory } = context.modelClassFactory.lookup(modelName);
-    let type = get(factory.class, 'modelType');
-    if(expectedModelType) {
-      assert(`model '${normalizedFactoryName}' is expected to be ${expectedModelType}`, expectedModelType === type);
+    let modelClassType = get(factory.class, 'modelClassType');
+    if(expectedModelClassType) {
+      assert(`model '${normalizedFactoryName}' is expected to be ${expectedModelClassType}`, expectedModelClassType === modelClassType);
     }
     let internal;
-    if(type === 'backed') {
+    if(modelClassType === 'backed') {
       let storage = context.adapter.build(normalizedName, data);
       internal = context.internalModelIdentity.byStorage(storage);
       if(!internal) {
