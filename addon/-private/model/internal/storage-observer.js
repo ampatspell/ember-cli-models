@@ -31,14 +31,14 @@ export default class StorageObserver {
     let definition = this._context.adapter.modelDefinitionForStorage(this._storage);
     isObject('definition', definition);
     isArray('definition.observe', definition.observe);
-    isFunction('definition.name', definition.name);
+    isFunction('definition.type', definition.type);
     return definition;
   }
 
   _lookupModelName() {
-    let name = this._definition.name(this._storage);
-    assert(`definition.name must return model name`, !!name);
-    return this._context.internalModelManager.modelNameForName(name);
+    let type = this._definition.type(this._storage);
+    assert(`definition.type must return type`, !!type);
+    return this._context.internalModelManager.modelNameForType(type);
   }
 
   get modelName() {

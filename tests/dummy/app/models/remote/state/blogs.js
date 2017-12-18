@@ -12,7 +12,7 @@ const byType = opts => {
     // temporary
     let modelName;
     if(source.modelName) {
-      modelName = source.modelName(opts.type);
+      modelName = source.modelNameForType(opts.type);
     } else {
       modelName = opts.type;
     }

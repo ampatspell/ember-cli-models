@@ -23,7 +23,7 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
   modelDefinitionForStorage() {
     return {
       observe: [ 'type' ],
-      name: storage => storage.get('type')
+      type: storage => storage.get('type')
     };
   },
 
@@ -218,7 +218,7 @@ test('model name is required', function(assert) {
   } catch(err) {
     assert.deepEqual(err.toJSON(), {
       "error": "assertion",
-      "reason": "definition.name must return model name"
+      "reason": "definition.type must return type"
     });
   }
 });

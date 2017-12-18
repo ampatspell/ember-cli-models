@@ -3,7 +3,7 @@ import { assign } from '@ember/polyfills';
 
 const definition = {
   observe: [ 'id', 'type' ],
-  name(storage) {
+  type(storage) {
     let { id, type } = storage.getProperties('id', 'type');
     if(id && id.startsWith('_design/')) {
       return 'design';
@@ -20,15 +20,15 @@ export default Base.extend({
     return definition;
   },
 
-  modelName(name) {
-    return `remote/${name}`;
+  modelNameForType(type) {
+    return `remote/${type}`;
   },
 
-  build(name, props) {
-    if(name === 'design') {
+  build(type, props) {
+    if(type === 'design') {
       return this.doc(props);
     }
-    return this.doc(assign({}, props, { type: name }));
+    return this.doc(assign({}, props, { type }));
   }
 
 });

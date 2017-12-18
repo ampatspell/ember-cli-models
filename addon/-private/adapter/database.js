@@ -51,12 +51,12 @@ export default EmberObject.extend({
   storage() {
   },
 
-  modelName(name) {
-    return name;
+  modelNameForType(type) {
+    return type;
   },
 
-  build(name, props) {
-    let storage = this.storage(name, props);
+  build(type, props) {
+    let storage = this.storage(type, props);
     isInstance('storage result', storage);
     this.get('content').addObject(storage);
     return storage;
