@@ -54,6 +54,11 @@ export default class BackedInternalModel extends InternalModel {
     return observer && observer.modelName;
   }
 
+  get modelType() {
+    console.log('backed-internal-model modelType not implemented');
+    return 'TODO';
+  }
+
   _createModel() {
     let modelName = this.modelName(true);
     if(!modelName) {

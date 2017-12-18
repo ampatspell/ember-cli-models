@@ -39,8 +39,8 @@ export default EmberObject.extend({
     return this._context.internalModelFactory.createBackedInternalModel(this._context, storage);
   },
 
-  _createTransientInternalModel(modelName, props) {
-    return this._context.internalModelFactory.createTransientInternalModel(this._context, modelName, props);
+  _createTransientInternalModel(modelName, modelType, props) {
+    return this._context.internalModelFactory.createTransientInternalModel(this._context, modelName, modelType, props);
   },
 
   _createInternalModel(name, data, expectedModelClassType) {
@@ -62,7 +62,7 @@ export default EmberObject.extend({
         this._onCreated(internal, false);
       }
     } else {
-      internal = this._createTransientInternalModel(normalizedFactoryName, data);
+      internal = this._createTransientInternalModel(normalizedFactoryName, normalizedName, data);
       this._onCreated(internal, false);
     }
     return internal;

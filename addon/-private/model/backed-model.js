@@ -1,9 +1,6 @@
 import { computed } from '@ember/object';
 import Model from './model';
-
-const prop = name => computed(function() {
-  return this._internal && this._internal[name];
-});
+import { prop } from './base';
 
 const state = name => computed(function() {
   return this._internal && this._internal.state[name];
