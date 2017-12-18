@@ -2,81 +2,65 @@ import InternalFilter from './internal-filter';
 
 export default class InternalFilterFirst extends InternalFilter {
 
-  update(content) {
-    if(this._content === content) {
-      return;
-    }
-    this._content = content;
-    let model = this.model(false);
-    if(model) {
-      model.set('content', content);
-    }
-  }
-
-  _createContent() {
-    return this._rematch();
+  constructor() {
+    super(...arguments);
+    this._content = null;
   }
 
   _createModel() {
     return this.context.filterFactory.createFirstModel(this);
   }
 
-  _match(models) {
-    return models.find(model => this._matches(model));
+  _didCreateFilter() {
+    this._rematch();
+  }
+
+  content(create) {
+    this.filter(create);
+    return this._content;
+  }
+
+  _update(array) {
+    let content = array[0];
+
+    if(this._content === content) {
+      return;
+    }
+
+    this._content = content;
+
+    let model = this.model(false);
+    if(model) {
+      model.set('content', content);
+    }
   }
 
   _rematch() {
-    let source = this.opts.source.object;
-    return this._match(source) || null;
+    this._update(this.filter().content);
   }
 
-  _sourceArrayAdded(models) {
-    let content = this.content(false);
-    if(content) {
-      return;
-    }
-    let model = this._match(models);
-    if(!model) {
-      return;
-    }
-    this.update(model);
-  }
-
-  _sourceArrayRemoved(models) {
-    let content = this.content(false);
+  _filterDidAdd(models) {
+    let content = this._content;
     if(!content) {
-      return;
-    }
-    if(!models.includes(content)) {
-      return;
-    }
-    let next = this._rematch();
-    this.update(next);
-  }
-
-  _sourceArrayUpdated(model) {
-    let content = this.content(false);
-    if(content) {
-      if(this._matches(content)) {
-        return;
-      }
-      if(content === model) {
-        this.update(this._rematch());
-      } else {
-        if(this._matches(model)) {
-          this.update(model);
-        }
-      }
-    } else {
-      if(this._matches(model)) {
-        this.update(model);
-      }
+      this._update(models);
     }
   }
 
-  _ownerUpdated() {
-    let model = this._rematch();
-    this.update(model);
+  _filterDidRemove(models) {
+    let content = this._content;
+    if(models.includes(content)) {
+      this._rematch();
+    }
   }
+
+  _filterDidReplace(removed, added) {
+    let content = this._content;
+    if(removed.includes(content)) {
+      this._rematch();
+    } else if(!content) {
+      this._update(added);
+    }
+  }
+
 
 }

@@ -1,6 +1,5 @@
 import Internal from './internal';
-import ArrayObserver from '../util/array-observer';
-import ObjectObserver from '../util/object-observer';
+import ArrayFilter from '../util/array-filter';
 
 export default class InternalFilter extends Internal {
 
@@ -8,98 +7,41 @@ export default class InternalFilter extends Internal {
     super(context, opts);
     this._source = null;
     this._owner = null;
-    this._content = null;
+    this._filter = null;
   }
 
-  content(create) {
-    let content = this._content;
-    if(!content && create) {
-      content = this._createContent();
-      this._startObserving();
-      this._content = content;
-    }
-    return content;
-  }
-
-  _matches(model) {
-    if(model.isDestroying) {
-      return false;
-    }
-    let { source, owner } = this.opts;
-    let object = owner.object;
-    return source.matches(model, object);
-  }
-
-  //
-
-  _startObservingSource() {
-    if(this._source) {
-      return;
-    }
-
-    let { object: array, observe } = this.opts.source;
-
-    this._source = new ArrayObserver({
+  _createFilter() {
+    let { source: array, owner } = this.opts;
+    return new ArrayFilter({
       array,
-      observe,
+      owner,
       delegate: {
-        target:  this,
-        added:   this._sourceArrayAdded,
-        removed: this._sourceArrayRemoved,
-        updated: this._sourceArrayUpdated
+        target:   this,
+        added:    this._filterDidAdd,
+        removed:  this._filterDidRemove,
+        replaced: this._filterDidReplace
       }
     });
   }
 
-  _stopObservingSource() {
-    let source = this._source;
-    if(source) {
-      source.destroy();
-      this._source = null;
+  _didCreateFilter() {
+  }
+
+  filter(create) {
+    let filter = this._filter;
+    if(!filter && create) {
+      filter = this._createFilter();
+      this._filter = filter;
+      this._didCreateFilter();
     }
-  }
-
-  //
-
-  _startObservingOwner() {
-    if(this._object) {
-      return;
-    }
-
-    let { object, observe } = this.opts.owner;
-
-    this._owner = new ObjectObserver({
-      object,
-      observe,
-      delegate: {
-        target: this,
-        updated: this._ownerUpdated
-      }
-    });
-  }
-
-  _stopObservingOwner() {
-    let owner = this._owner;
-    if(owner) {
-      owner.destroy();
-      this._owner = null;
-    }
-  }
-
-  //
-
-  _startObserving() {
-    this._startObservingSource();
-    this._startObservingOwner();
-  }
-
-  _stopObserving() {
-    this._stopObservingSource();
-    this._stopObservingOwner();
+    return filter;
   }
 
   destroy() {
-    this._stopObserving();
+    let filter = this._filter;
+    if(filter) {
+      filter.destroy();
+    }
     super.destroy();
   }
 
