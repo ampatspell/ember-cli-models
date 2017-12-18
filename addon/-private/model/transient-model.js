@@ -4,6 +4,6 @@ export default Model.extend({
 
 }).reopenClass({
 
-  modelType: 'transient'
+  modelClassType: 'transient'
 
 });

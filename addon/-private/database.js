@@ -53,8 +53,8 @@ export default EmberObject.extend(DatabaseContextMixin, {
     return this._context.internalModelManager.compact();
   },
 
-  modelName(name) {
-    return this.get('adapter').modelName(name);
+  modelNameForType(type) {
+    return this.get('adapter').modelNameForType(type);
   },
 
   toStringExtension() {

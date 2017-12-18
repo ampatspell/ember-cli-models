@@ -22,7 +22,7 @@ const MockDatabaseAdapter = DatabaseAdapter.extend({
   modelDefinitionForStorage() {
     return {
       observe: [ 'type' ],
-      name: storage => storage.get('type')
+      type: storage => storage.get('type')
     };
   },
 

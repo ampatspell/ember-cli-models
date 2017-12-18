@@ -39,22 +39,22 @@ export default EmberObject.extend({
     return this._context.internalModelFactory.createBackedInternalModel(this._context, storage);
   },
 
-  _createTransientInternalModel(modelName, props) {
-    return this._context.internalModelFactory.createTransientInternalModel(this._context, modelName, props);
+  _createTransientInternalModel(modelName, modelType, props) {
+    return this._context.internalModelFactory.createTransientInternalModel(this._context, modelName, modelType, props);
   },
 
-  _createInternalModel(name, data, expectedType) {
+  _createInternalModel(name, data, expectedModelClassType) {
     data = normalizeData(data);
     let normalizedName = normalizeIdentifier(name);
     let context = this._context;
-    let modelName = this.modelNameForName(name);
+    let modelName = this.modelNameForType(name);
     let { normalizedName: normalizedFactoryName, factory } = context.modelClassFactory.lookup(modelName);
-    let type = get(factory.class, 'modelType');
-    if(expectedType) {
-      assert(`model '${normalizedFactoryName}' is expected to be ${expectedType}`, expectedType === type);
+    let modelClassType = get(factory.class, 'modelClassType');
+    if(expectedModelClassType) {
+      assert(`model '${normalizedFactoryName}' is expected to be ${expectedModelClassType}`, expectedModelClassType === modelClassType);
     }
     let internal;
-    if(type === 'backed') {
+    if(modelClassType === 'backed') {
       let storage = context.adapter.build(normalizedName, data);
       internal = context.internalModelIdentity.byStorage(storage);
       if(!internal) {
@@ -62,7 +62,7 @@ export default EmberObject.extend({
         this._onCreated(internal, false);
       }
     } else {
-      internal = this._createTransientInternalModel(normalizedFactoryName, data);
+      internal = this._createTransientInternalModel(normalizedFactoryName, normalizedName, data);
       this._onCreated(internal, false);
     }
     return internal;
@@ -86,9 +86,9 @@ export default EmberObject.extend({
     return this._pushBackedInternalModel(storage).internal.model(true);
   },
 
-  modelNameForName(name) {
-    let modelName = this._context.adapter.modelName(name);
-    isString('adapter.modelName result', modelName);
+  modelNameForType(type) {
+    let modelName = this._context.adapter.modelNameForType(type);
+    isString('adapter.modelNameForType result', modelName);
     return modelName;
   },
 

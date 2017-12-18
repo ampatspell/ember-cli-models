@@ -8,8 +8,8 @@ export default EmberObject.extend({
     return new BackedInternalModel(context, storage, props);
   },
 
-  createTransientInternalModel(context, modelName, props) {
-    return new TransientInternalModel(context, modelName, props);
+  createTransientInternalModel(context, modelName, modelType, props) {
+    return new TransientInternalModel(context, modelName, modelType, props);
   },
 
 });

@@ -1,4 +1,9 @@
+import { computed } from '@ember/object';
 import Mixin from '@ember/object/mixin';
+
+export const prop = name => computed(function() {
+  return this._internal && this._internal[name];
+}).readOnly();
 
 export const BaseMixin = Mixin.create({
 

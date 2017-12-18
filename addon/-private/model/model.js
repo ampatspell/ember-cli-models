@@ -1,25 +1,25 @@
 import EmberObject, { get, computed } from '@ember/object';
-import { BaseMixin } from './base';
+import { BaseMixin, prop } from './base';
 
 const constructorProp = key => computed(function() {
   return get(this.constructor, key);
 }).readOnly();
 
 const modelName = () => constructorProp('modelName');
-const modelType = () => constructorProp('modelType');
+const modelClassType = () => constructorProp('modelClassType');
+const modelType = () => prop('modelType')
 
 const Model = EmberObject.extend(BaseMixin, {
 
-  _internal: null,
-
   modelName: modelName(),
-  modelType: modelType()
+  modelType: modelType(),
+  modelClassType: modelClassType()
 
 });
 
 Model.reopenClass({
   modelName: null,
-  modelType: 'base'
+  modelClassType: 'base'
 });
 
 export default Model;

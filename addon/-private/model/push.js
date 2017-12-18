@@ -1,3 +1,11 @@
+const info = (push, key) => {
+  let info = push._internal.modelInfo(true);
+  if(!info) {
+    return;
+  }
+  return info[key];
+};
+
 export default class Push {
 
   constructor(internal) {
@@ -5,7 +13,11 @@ export default class Push {
   }
 
   get modelName() {
-    return this._internal.modelName(true);
+    return info(this, 'modelName');
+  }
+
+  get modelType() {
+    return info(this, 'modelType');
   }
 
   get model() {

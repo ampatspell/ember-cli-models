@@ -37,7 +37,7 @@ export default class BackedInternalModel extends InternalModel {
         storage: this.storage,
         delegate: {
           target: this,
-          modelNameDidChange: this._modelNameDidChange
+          modelInfoDidChange: this._modelInfoDidChange
         }
       });
       this._observer = observer;
@@ -45,22 +45,27 @@ export default class BackedInternalModel extends InternalModel {
     return observer;
   }
 
-  _modelNameDidChange() {
+  _modelInfoDidChange() {
     this.recreateModel();
   }
 
-  modelName(create) {
+  modelInfo(create) {
     let observer = this.observer(create);
-    return observer && observer.modelName;
+    return observer && observer.modelInfo;
+  }
+
+  get modelType() {
+    let info = this.modelInfo();
+    return info && info.modelType;
   }
 
   _createModel() {
-    let modelName = this.modelName(true);
-    if(!modelName) {
+    let info = this.modelInfo(true);
+    if(!info) {
       return;
     }
     let props = this.opts.props;
-    return this.__createModel(BackedModel, modelName, props);
+    return this.__createModel(BackedModel, info.modelName, props);
   }
 
   destroy() {

@@ -3,8 +3,12 @@ import TransientModel from './transient-model';
 
 export default class TransientInternalModel extends InternalModel {
 
-  constructor(context, modelName, props) {
-    super(context, { modelName, props });
+  constructor(context, modelName, modelType, props) {
+    super(context, { modelName, modelType, props });
+  }
+
+  get modelType() {
+    return this.opts.modelType;
   }
 
   _createModel() {

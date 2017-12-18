@@ -9,7 +9,7 @@ export default class StorageObserver {
     this._storage = storage;
     this._delegate = delegate;
     this._definition = this._lookupDefinition();
-    this._modelName = this._lookupModelName();
+    this.modelInfo = this._lookupModelInfo();
     this._observer = new ObjectObserver({
       object: storage,
       observe: this._definition.observe,
@@ -31,27 +31,34 @@ export default class StorageObserver {
     let definition = this._context.adapter.modelDefinitionForStorage(this._storage);
     isObject('definition', definition);
     isArray('definition.observe', definition.observe);
-    isFunction('definition.name', definition.name);
+    isFunction('definition.type', definition.type);
     return definition;
   }
 
-  _lookupModelName() {
-    let name = this._definition.name(this._storage);
-    assert(`definition.name must return model name`, !!name);
-    return this._context.internalModelManager.modelNameForName(name);
-  }
-
-  get modelName() {
-    return this._modelName;
+  _lookupModelInfo() {
+    let modelType = this._definition.type(this._storage);
+    assert(`definition.type must return type`, !!modelType);
+    let modelName = this._context.internalModelManager.modelNameForType(modelType);
+    if(!modelName) {
+      return;
+    }
+    return {
+      modelType,
+      modelName
+    };
   }
 
   _storageValueForKeyDidChange() {
-    let modelName = this._lookupModelName();
-    if(modelName === this._modelName) {
+    let info = this._lookupModelInfo();
+    let curr = this.modelInfo;
+    if(info === curr) {
       return;
     }
-    this._modelName = modelName;
-    this._notifyDelegate('modelNameDidChange');
+    if(info && curr && info.modelName === curr.modelName) {
+      return;
+    }
+    this.modelInfo = info;
+    this._notifyDelegate('modelInfoDidChange');
   }
 
   destroy() {
