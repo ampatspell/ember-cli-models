@@ -53,6 +53,10 @@ export default EmberObject.extend(DatabaseContextMixin, {
     return this._context.internalModelManager.compact();
   },
 
+  modelName(name) {
+    return this.get('adapter').modelName(name);
+  },
+
   toStringExtension() {
     let store = this.get('store.identifier');
     let identifier = this.get('identifier');

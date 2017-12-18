@@ -23,12 +23,22 @@ const prefixed = prefix => {
   });
 };
 
+const fallback = (key, fallbackValue) => computed(key, function() {
+  let value = this.get(key);
+  if(value) {
+    return value;
+  }
+  return fallbackValue;
+});
+
 export default Model.extend({
 
   id: prefixed('author:'),
 
   name: attr('name'),
   email: attr('email'),
+
+  screenName: fallback('name', 'Unnamed'),
 
   willCreate() {
     let id = this.get('name').toLowerCase().replace(/ /g, '-');
