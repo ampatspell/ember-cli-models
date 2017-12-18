@@ -6,6 +6,9 @@ export default Component.extend({
   layout,
 
   actions: {
+    edit() {
+      this.get('router').transitionTo('authors.author.edit', this.get('author'));
+    },
     async delete() {
       await this.get('author').delete();
       this.get('router').transitionTo('authors');
