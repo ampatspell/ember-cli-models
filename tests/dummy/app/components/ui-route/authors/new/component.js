@@ -8,13 +8,10 @@ export default Component.extend({
   author: null,
 
   actions: {
-    async save() {
-      let author = this.get('author');
-      await author.save();
+    saved(author) {
       this.get('router').transitionTo('authors.author', author);
     },
-    async cancel() {
-      // TODO: rollback
+    cancelled() {
       this.get('router').transitionTo('authors');
     }
   }

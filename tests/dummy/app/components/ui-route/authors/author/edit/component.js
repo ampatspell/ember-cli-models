@@ -7,16 +7,10 @@ export default Component.extend({
   author: null,
 
   actions: {
-    async save() {
-      // temporary
-      let author = this.get('author');
-      await author.save();
+    async saved(author) {
       this.get('router').transitionTo('authors.author', author);
     },
-    async cancel() {
-      // temporary
-      let author = this.get('author');
-      await author.reload();
+    async cancelled(author) {
       this.get('router').transitionTo('authors.author', author);
     }
   }

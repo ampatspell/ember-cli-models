@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="heading">{{if author.isNew 'New author' 'Edit author'}}</div>
+</div>
+
+{{#if author.isError}}
+  <div class="row">
+    {{author.error.message}}
+  </div>
+{{/if}}
+
+<div class="row">
+  <div>Name</div>
+  <div>{{input value=author.name}}</div>
+</div>
+
+<div class="row">
+  <div>Email</div>
+  <div>{{input value=author.email}}</div>
+</div>
+
+<div class="row">
+  <button {{action 'save'}}>{{if author.isNew 'Save' 'Update'}}</button>
+  <button {{action 'cancel'}}>Cancel</button>
+</div>
+
+<div class="row">
+  {{ui-block/json author.serialized}}
+</div>
+
+<div class="row">
+  {{ui-block/json author.state}}
+</div>
