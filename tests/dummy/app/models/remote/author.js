@@ -1,5 +1,4 @@
 import Model, { attr, prefixed, fallback } from './model';
-import { computed } from '@ember/object';
 
 export default Model.extend({
 

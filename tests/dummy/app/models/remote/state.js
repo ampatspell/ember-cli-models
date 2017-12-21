@@ -1,6 +1,6 @@
 import Model from 'ember-cli-models/model/transient';
 // import { database as lookupDatabase } from 'ember-cli-models/util';
-import { database, model, find } from 'ember-cli-models/model/computed';
+import { database, model } from 'ember-cli-models/model/computed';
 
 // export const state = () => find(function() {
 //   let source = lookupDatabase(this, 'remote', 'main');
