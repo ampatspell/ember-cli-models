@@ -20,8 +20,10 @@ const ddocs = {
 };
 
 const docs = [
-  { _id: 'author:ampatspell', type: 'author', name: 'ampatspell' },
-  { _id: 'author:zeeba',      type: 'author', name: 'zeeba' }
+  { _id: 'author:ampatspell',    type: 'author', name: 'ampatspell' },
+  { _id: 'author:zeeba',         type: 'author', name: 'zeeba' },
+  { _id: 'blog:amateurinmotion', type: 'blog',   name: 'amateurinmotion', editors: [ 'author:ampatspell', 'author:zeeba' ] },
+  { _id: 'blog:ducks',           type: 'blog',   name: 'ducks',           editors: [ 'author:zeeba' ] },
 ];
 
 export default Model.extend({
