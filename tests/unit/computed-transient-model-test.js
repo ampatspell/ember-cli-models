@@ -3,8 +3,7 @@ import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/transient';
-import { database } from 'ember-cli-models/computed';
-import { model } from 'ember-cli-models/model/computed';
+import { database, model } from 'ember-cli-models/computed';
 
 module('computed-transient-model', {
   beforeEach() {
