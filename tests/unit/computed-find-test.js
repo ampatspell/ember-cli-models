@@ -2,8 +2,7 @@ import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/transient';
-import { database } from 'ember-cli-models/computed';
-import { find } from 'ember-cli-models/model/computed';
+import { database, find } from 'ember-cli-models/computed';
 import FilterFirst from 'ember-cli-models/-private/model/filter-first';
 
 const Duck = Model.extend({
