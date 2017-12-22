@@ -1,7 +1,7 @@
 import Model from 'ember-cli-models/model/backed';
 import StateMixin from './-state-mixin';
 import { readOnly } from '@ember/object/computed';
-import { database } from 'ember-cli-models/model/computed';
+import { database } from 'ember-cli-models/computed';
 import { attr } from './computed';
 
 const forward = key => function() {

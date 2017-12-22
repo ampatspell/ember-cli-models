@@ -1,5 +1,6 @@
 import Model from 'ember-cli-models/model/transient';
-import { database, model } from 'ember-cli-models/model/computed';
+import { database } from 'ember-cli-models/computed';
+import { model } from 'ember-cli-models/model/computed';
 import { find } from './-computed';
 
 export const state = () => find(function() {

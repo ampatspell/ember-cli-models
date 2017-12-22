@@ -1,7 +1,7 @@
 import { all } from 'rsvp';
 import { readOnly } from '@ember/object/computed';
 import Model from 'ember-cli-models/model/transient';
-import { database } from 'ember-cli-models/model/computed';
+import { database } from 'ember-cli-models/computed';
 
 /* global emit */
 const ddocs = {
