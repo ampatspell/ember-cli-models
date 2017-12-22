@@ -1,8 +1,8 @@
 import destroyable from '../util/internal-destroyable-computed';
-import stores from '../util/lookup-stores';
+import lookupStores from '../util/lookup-stores';
 import { isFunction, isObject, isArray, isArrayArrayProxyOrHasIdentity } from '../util/assert';
 
-const invoke = (owner, fn) => fn.call(owner, owner);
+const invoke = (owner, fn, stores) => fn.call(owner, owner, stores);
 
 // {
 //   source: <database|store|stores|...>,
@@ -47,12 +47,13 @@ const base = (args, create) => {
   let fn = args.pop();
   isFunction('last argument', fn);
   return destroyable(...args, function() {
-    let result = invoke(this, fn);
+    let stores = lookupStores(this);
+    let result = invoke(this, fn, stores);
     if(!result) {
       return;
     }
     let args = validate(this, result);
-    let manager = stores(this)._context.internalFilterManager;
+    let manager = stores._context.internalFilterManager;
     return create(manager, args);
   });
 };
