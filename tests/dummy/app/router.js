@@ -15,6 +15,8 @@ Router.map(function() {
     });
   });
 
+  this.route('wip');
+
 });
 
 export default Router;
