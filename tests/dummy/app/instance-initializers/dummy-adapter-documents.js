@@ -1,8 +1,8 @@
-import Stores from '../stack/documents/stores';
-import Store from '../stack/documents/store';
-import Database from '../stack/documents/database';
-import StoreAdapter from '../stack/documents/adapter/store';
-import DatabaseAdapter from '../stack/documents/adapter/database';
+import Stores from '../stack/documents/-private/stores';
+import Store from '../stack/documents/-private/store';
+import Database from '../stack/documents/-private/database';
+import StoreAdapter from '../stack/documents/-private/adapter/store';
+import DatabaseAdapter from '../stack/documents/-private/adapter/database';
 
 export default {
   name: 'dummy:adapter-documents',

@@ -1,9 +1,5 @@
 import { computed } from '@ember/object';
-
-import Model from '../../stack/documents/models/model';
-export * from '../../stack/documents/models/model';
-
-import { database } from 'ember-cli-models/model/computed';
+export { attr } from './-private/models/computed';
 
 export const fallback = (key, fallbackValue) => computed(key, function() {
   let value = this.get(key);
@@ -34,7 +30,3 @@ export const prefixed = prefix => {
     }
   });
 };
-
-export default Model.extend({
-  database: database()
-});

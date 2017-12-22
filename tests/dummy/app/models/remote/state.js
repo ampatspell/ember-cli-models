@@ -12,12 +12,10 @@ export const state = () => find(function() {
 });
 
 const nested = name => model('database', function() {
-  let database = this.get('database');
-  let props = { state: this };
   return {
-    database,
+    database: this.get('database'),
     name: `state/${name}`,
-    props
+    props: { state: this }
   };
 });
 

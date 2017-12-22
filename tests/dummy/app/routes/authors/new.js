@@ -7,10 +7,11 @@ export default Route.extend({
   state: service(),
 
   model() {
-    return this.get('state.blogs').buildAuthor();
+    return this.get('state.blogs.authors').build();
   },
 
   deactivate() {
+    // temporary
     this._super(...arguments);
     let model = this.currentModel;
     if(model.get('isNew')) {

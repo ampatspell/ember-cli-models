@@ -1,19 +1,22 @@
 import Model from 'ember-cli-models/model/backed';
 import StateMixin from './-state-mixin';
-import { alias, readOnly } from '@ember/object/computed';
+import { readOnly } from '@ember/object/computed';
+import { database } from 'ember-cli-models/model/computed';
+import { attr } from './computed';
 
 const forward = key => function() {
   let storage = this.get('storage');
   return storage[key].call(storage, ...arguments);
 }
 
-export const attr = key => alias(`storage.${key}`);
-export const reads = key => readOnly(`storage.${key}`);
+const reads = key => readOnly(`storage.${key}`);
 
 export default Model.extend(StateMixin, {
 
   id:  attr('id'),
   rev: attr('rev'),
+
+  database: database(),
 
   state: reads('state'),
 

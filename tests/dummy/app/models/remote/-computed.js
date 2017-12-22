@@ -1,14 +1,55 @@
-import { find as _find } from 'ember-cli-models/model/computed';
+import { find as _find, filter as _filter } from 'ember-cli-models/model/computed';
 import { assign } from '@ember/polyfills';
 
-export const find = fn => _find(function(owner, stores) {
+const withDefaults = fn => function(owner, stores) {
   let opts = fn.call(this, ...arguments);
   if(!opts) {
     return;
   }
-  return assign({
-    source: stores.database('remote', 'main'),
+  opts = assign({ owner: [], model: [] }, opts);
+  if(!opts.source) {
+    opts.source = owner.get('database') || stores.database('remote', 'main');
+  }
+  return opts;
+};
+
+export const find = fn => _find(withDefaults(fn));
+export const filter = fn => _filter(withDefaults(fn));
+
+// Lookups models by by ids
+//
+// { key: 'blog_posts', type: 'post' }
+//
+// owner: {
+//   ...
+//   blog_posts: [ 'post:1', 'post:2' ],
+// }
+export const hasManyPersisted = opts => filter(function() {
+  return {
+    owner: [ `storage.${opts.key}.[]` ],
+    model: [ 'storage.id' ],
+    matches(model, owner) {
+      if(model.get('modelType') !== opts.type) {
+        return;
+      }
+      let array = owner.get(`storage.${opts.key}`);
+      if(!array) {
+        return;
+      }
+      return array.includes(model.get('storage.id'));
+    }
+  }
+});
+
+//
+// { key: 'editors', type: 'blog' }
+export const manyToManyInverse = opts => filter(function() {
+  return {
     owner: [],
-    model: [],
-  }, opts);
+    model: [ 'modelType', `${opts.key}.[]` ],
+    matches(model, owner) {
+      let { modelType, [opts.key]: array } = model.getProperties('modelType', opts.key);
+      return modelType === opts.type && array.includes(owner);
+    }
+  };
 });
