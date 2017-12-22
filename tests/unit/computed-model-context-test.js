@@ -2,16 +2,17 @@ import { run } from '@ember/runloop';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import Model from 'ember-cli-models/model/backed';
-import { stores, store, database } from 'ember-cli-models/model/computed';
+import { stores, store, database } from 'ember-cli-models/computed';
 
 module('computed-model-context', {
   beforeEach() {
     this.subject = (opts={}) => {
-      this.register('model:duck', Model.extend({
+      let props = {
         stores: stores(),
-        store: store(opts.store),
-        database: database(opts.database)
-      }));
+        store: opts.store ? store(opts.store) : store(),
+        database: opts.database ? database(opts.database) : database()
+      };
+      this.register('model:duck', Model.extend(props));
       return this.database.model('duck');
     };
   }

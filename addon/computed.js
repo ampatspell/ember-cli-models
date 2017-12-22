@@ -1,1 +1,5 @@
-export * from './-private/computed/globals';
+export {
+  stores,
+  store,
+  database
+} from './-private/computed/stack';
