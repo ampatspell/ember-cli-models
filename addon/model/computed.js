@@ -7,8 +7,8 @@ export {
   filter
 } from '../-private/computed/filter';
 
-export {
-  stores,
-  store,
-  database
-} from '../-private/computed/model-context';
+// export {
+//   stores,
+//   store,
+//   database
+// } from '../-private/computed/model-context';
