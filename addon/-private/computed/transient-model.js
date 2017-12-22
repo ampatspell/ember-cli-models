@@ -12,7 +12,7 @@ const validate = result => {
   return result;
 };
 
-export default (...args) => {
+export const model = (...args) => {
   let fn = args.pop();
   isFunction('last argument', fn);
   return destroyable(...args, function() {

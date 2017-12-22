@@ -1,4 +1,4 @@
-import { find as _find, filter as _filter } from 'ember-cli-models/model/computed';
+import { find as _find, filter as _filter } from 'ember-cli-models/computed';
 import { assign } from '@ember/polyfills';
 
 const withDefaults = fn => function(owner, stores) {

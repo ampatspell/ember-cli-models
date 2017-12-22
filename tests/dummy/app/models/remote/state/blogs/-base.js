@@ -1,6 +1,5 @@
 import Model from 'ember-cli-models/model/transient';
-import { database } from 'ember-cli-models/computed';
-import { filter } from 'ember-cli-models/model/computed';
+import { database, filter } from 'ember-cli-models/computed';
 
 const all = () => filter('database', function() {
   let source = this.get('database');
