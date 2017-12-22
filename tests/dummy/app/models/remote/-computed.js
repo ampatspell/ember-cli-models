@@ -16,7 +16,7 @@ const withDefaults = fn => function(owner, stores) {
 export const find = fn => _find(withDefaults(fn));
 export const filter = fn => _filter(withDefaults(fn));
 
-// Lookups models by by ids
+// Lookups models by by storage ids
 //
 // { key: 'blog_posts', type: 'post' }
 //
@@ -41,6 +41,11 @@ export const hasManyPersisted = opts => filter(function() {
   }
 });
 
+// Lookups models which includes owner in an array
+//
+// model: {
+//   editors: [ <model/blog>, <model>,... ]
+// }
 //
 // { key: 'editors', type: 'blog' }
 export const manyToManyInverse = opts => filter(function() {
