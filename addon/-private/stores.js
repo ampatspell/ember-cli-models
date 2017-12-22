@@ -6,6 +6,7 @@ import normalizeIdentifier from './util/normalize-identifier';
 import { assert, isObject, isString } from './util/assert';
 import { omit } from './util/object';
 import factoryFor from './util/factory-for';
+import ExistingMixin from './existing-mixin';
 
 class StoresContext extends Context {
   constructor(owner) {
@@ -34,7 +35,7 @@ class StoresContext extends Context {
 
 const ContextMixin = makeContextMixin(StoresContext);
 
-export default EmberObject.extend(ContextMixin, {
+export default EmberObject.extend(ContextMixin, ExistingMixin, {
 
   identity: identity(),
 
