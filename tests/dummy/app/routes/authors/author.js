@@ -7,7 +7,7 @@ export default Route.extend({
   state: service(),
 
   model(params) {
-    return this.get('state.blogs').loadAuthorByPermalink(params.author_id);
+    return this.get('state.blogs.authors').loadByPermalink(params.author_id);
   }
 
 });

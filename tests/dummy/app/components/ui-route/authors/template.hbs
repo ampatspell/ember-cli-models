@@ -3,10 +3,16 @@
 
     <div class="row">
       {{#ui-block/rows as |rows|}}
-        {{#each authors as |author|}}
+        {{#each authors.all as |author|}}
           {{#rows.row action=(action 'select' author)}}
             <div class="title">{{author.screenName}} {{if author.isNew '(NEW)'}}</div>
             <div class="subtitle">{{if author.email author.email 'no email'}}</div>
+            <div class="subtitle">
+              {{if author.blogs.length
+                  (concat author.blogs.length ' ' (pluralize 'blog' 'blogs' author.blogs.length))
+                  'No blogs'
+              }}
+            </div>
           {{/rows.row}}
         {{/each}}
       {{/ui-block/rows}}

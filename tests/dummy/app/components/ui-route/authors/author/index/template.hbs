@@ -3,6 +3,18 @@
   <div>{{author.email}}</div>
 </div>
 
+{{#if author.blogs}}
+  <div class="row">
+    {{#each author.blogs as |blog|}}
+      <div>{{blog.name}}</div>
+    {{/each}}
+  </div>
+{{else}}
+  <div class="row">
+    No blogs
+  </div>
+{{/if}}
+
 <div class="row">
   {{ui-block/json author.serialized}}
 </div>

@@ -14,6 +14,19 @@ const ddocs = {
           }
           emit(doc._id);
         }
+      },
+      'by-id-with-blogs': {
+        map(doc) {
+          if(doc.type === 'author') {
+            emit(doc._id);
+          } else if(doc.type === 'blog') {
+            if(doc.editors && doc.editors.length) {
+              for(var i = 0; i < doc.editors.length; i++) {
+                emit(doc.editors[i], { _id: doc._id });
+              }
+            }
+          }
+        }
       }
     }
   }

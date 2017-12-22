@@ -7,7 +7,7 @@ export default Route.extend({
   state: service(),
 
   model() {
-    return this.get('state.blogs').loadAllAuthors();
+    return this.get('state.blogs.authors').loadAll();
   }
 
 });
