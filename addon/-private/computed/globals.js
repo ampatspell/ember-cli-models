@@ -1,8 +1,8 @@
 import { computed } from '@ember/object';
-import lookupStores from '../util/lookup-stores';
+import { getStores } from '../util/get-stores';
 
 const withStores = fn => computed(function() {
-  return fn(lookupStores(this));
+  return fn(getStores(this));
 });
 
 export const stores = () => withStores(stores => stores);

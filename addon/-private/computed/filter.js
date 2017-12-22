@@ -1,5 +1,5 @@
 import destroyable from '../util/internal-destroyable-computed';
-import lookupStores from '../util/lookup-stores';
+import { getStores } from '../util/get-stores';
 import { isFunction, isObject, isArray, isArrayArrayProxyOrHasIdentity } from '../util/assert';
 
 const invoke = (owner, fn, stores) => fn.call(owner, owner, stores);
@@ -47,7 +47,7 @@ const base = (args, create) => {
   let fn = args.pop();
   isFunction('last argument', fn);
   return destroyable(...args, function() {
-    let stores = lookupStores(this);
+    let stores = getStores(this);
     let result = invoke(this, fn, stores);
     if(!result) {
       return;
