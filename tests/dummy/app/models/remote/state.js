@@ -1,18 +1,15 @@
 import Model from 'ember-cli-models/model/transient';
-// import { database as lookupDatabase } from 'ember-cli-models/util';
 import { database, model } from 'ember-cli-models/model/computed';
+import { find } from './-computed';
 
-// export const state = () => find(function() {
-//   let source = lookupDatabase(this, 'remote', 'main');
-//   return {
-//     source,
-//     owner: [],
-//     model: [],
-//     matches(model) {
-//       return model.get('modelType') === 'state';
-//     }
-//   };
-// });
+export const state = () => find(function() {
+  return {
+    model: [ 'modelType' ],
+    matches(model) {
+      return model.get('modelType') === 'state';
+    }
+  };
+});
 
 const nested = name => model('database', function() {
   let database = this.get('database');
