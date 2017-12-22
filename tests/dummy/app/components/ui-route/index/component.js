@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import layout from './template';
 import { stores, store, database } from 'ember-cli-models/computed';
-import { state } from 'dummy/models/remote/state';
+import { state } from 'dummy/models/state';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route-index' ],

@@ -1,6 +1,6 @@
 import Model from 'dummy/stack/documents/model';
 import { attr, prefixed, fallback } from 'dummy/stack/documents/computed';
-import { manyToManyInverse } from './-computed';
+import { manyToManyInverse } from '../-computed';
 
 export default Model.extend({
 

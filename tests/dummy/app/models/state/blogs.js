@@ -5,7 +5,7 @@ const nested = name => model(function() {
   let database = this.get('database');
   return {
     database,
-    name: `state/blogs/${name}`
+    name: `blogs/${name}`
   };
 });
 
