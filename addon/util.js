@@ -1,7 +1,13 @@
 import lookupStores from './-private/util/lookup-stores';
 
-export const stores = owner => lookupStores(owner);
+export {
+  lookupStores as getStores
+};
 
-export const store = (owner, identifier) => lookupStores(owner).store(identifier);
+export const getStore = (owner, identifier) => {
+  return lookupStores(owner).store(identifier);
+};
 
-export const database = (owner, storeIdentifier, databaseIdentifier) => lookupStores(owner).database(storeIdentifier, databaseIdentifier);
+export const getDatabase = (owner, storeIdentifier, databaseIdentifier) => {
+  return lookupStores(owner).database(storeIdentifier, databaseIdentifier);
+};
