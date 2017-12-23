@@ -52,9 +52,9 @@ const base = (args, create) => {
     if(!result) {
       return;
     }
-    let args = validate(this, result);
+    let opts = validate(this, result);
     let manager = stores._context.internalFilterManager;
-    return create(manager, args);
+    return create(manager, opts);
   });
 };
 
