@@ -1,15 +1,8 @@
 import Model from 'ember-cli-models/model/transient';
 import { database, model } from 'ember-cli-models/computed';
-import { find } from './-computed';
+import { find, findByModelType } from './-computed';
 
-export const state = () => find(function() {
-  return {
-    model: [ 'modelType' ],
-    matches(model) {
-      return model.get('modelType') === 'state';
-    }
-  };
-});
+export const state = () => findByModelType({ type: 'state' });
 
 const nested = name => model('database', function() {
   return {

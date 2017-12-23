@@ -1,10 +1,9 @@
 import Model from 'ember-cli-models/model/transient';
 import { database, model } from 'ember-cli-models/computed';
 
-const nested = name => model(function() {
-  let database = this.get('database');
+const nested = name => model('database', function() {
   return {
-    database,
+    database: this.get('database'),
     name: `blogs/${name}`
   };
 });

@@ -16,6 +16,16 @@ const withDefaults = fn => function(owner, stores) {
 export const find = fn => _find(withDefaults(fn));
 export const filter = fn => _filter(withDefaults(fn));
 
+export const findByModelType = opts => find(function(owner, stores) {
+  return {
+    source: stores.database('remote', 'main'),
+    model: [ 'modelType' ],
+    matches(model) {
+      return model.get('modelType') === opts.type;
+    }
+  }
+});
+
 // Lookups models by by storage ids
 //
 // { key: 'blog_posts', type: 'post' }
