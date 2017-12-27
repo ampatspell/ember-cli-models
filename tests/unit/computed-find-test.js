@@ -50,6 +50,43 @@ test('state exists', function(assert) {
   assert.ok(identity.includes(one));
 });
 
+test('find returns model', function(assert) {
+  this.database.model('duck', { id: 'yellow' });
+  let state = this.subject();
+  let duck = state.get('duck');
+  assert.ok(duck);
+  assert.ok(Duck.detectInstance(duck));
+});
+
+test('find returns undefined', function(assert) {
+  let state = this.subject();
+  let duck = state.get('duck');
+  assert.equal(duck, undefined);
+});
+
+test('find returns model later', function(assert) {
+  let state = this.subject();
+  let duck = state.get('duck');
+  assert.equal(duck, undefined);
+  this.database.model('duck', { id: 'yellow' });
+  duck = state.get('duck');
+  assert.ok(duck);
+  assert.equal(duck.get('id'), 'yellow');
+});
+
+test('find returns undefined later', function(assert) {
+  this.database.model('duck', { id: 'yellow' });
+  let state = this.subject();
+  let duck = state.get('duck');
+  assert.ok(duck);
+  assert.equal(duck.get('id'), 'yellow');
+
+  run(() => duck.destroy());
+
+  duck = state.get('duck');
+  assert.equal(duck, undefined);
+});
+
 test('find exists', function(assert) {
   let state = this.subject();
   let duck = state.get('duck');
