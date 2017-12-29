@@ -47,6 +47,9 @@ const base = (args, create) => {
   let fn = args.pop();
   isFunction('last argument', fn);
   return destroyable(...args, {
+    reusable() {
+      return false;
+    },
     create() {
       let stores = getStores(this);
       let result = invoke(this, fn, stores);

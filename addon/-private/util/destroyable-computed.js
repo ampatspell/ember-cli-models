@@ -79,16 +79,20 @@ export const cacheFor = (owner, key) => {
   return hash.value;
 }
 
+// ...deps, { reusable, create, get, destroy }
 export default (...args) => {
   let opts = args.pop();
   return computed(...args, function(key) {
     let { value, destroy } = _cacheFor(this, key);
 
-    if(value) {
+    if(value && !opts.reusable.call(this, value)) {
       _destroyCached(this, key, value, destroy);
+      value = null;
     }
 
-    value = opts.create.call(this, key);
+    if(!value) {
+      value = opts.create.call(this, key);
+    }
 
     if(!value) {
       return;
@@ -96,10 +100,6 @@ export default (...args) => {
 
     _store(this, key, value, opts.destroy);
 
-    if(opts.get) {
-      return opts.get.call(this, value, key);
-    }
-
-    return value;
+    return opts.get.call(this, value, key);
   });
 }

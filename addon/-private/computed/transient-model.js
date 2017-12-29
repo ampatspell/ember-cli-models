@@ -12,6 +12,10 @@ const validate = result => {
   return result;
 };
 
+const reusable = () => false;
+const get = internal => internal.model(true);
+const destroy = internal => internal.destroy();
+
 export const model = (...args) => {
   let fn = args.pop();
   isFunction('last argument', fn);
@@ -24,11 +28,8 @@ export const model = (...args) => {
       let { database, name, props } = validate(result);
       return database._context.internalModelManager.internalTransientModel(name, props);
     },
-    get(internal) {
-      return internal.model(true);
-    },
-    destroy(internal) {
-      internal.destroy();
-    }
+    get,
+    reusable,
+    destroy
   });
 };
