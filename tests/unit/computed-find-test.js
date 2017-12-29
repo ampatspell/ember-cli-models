@@ -50,7 +50,7 @@ test('state exists', function(assert) {
   assert.ok(identity.includes(one));
 });
 
-test('find returns model', function(assert) {
+test('no-proxy: find returns model', function(assert) {
   this.database.model('duck', { id: 'yellow' });
   let state = this.subject();
   let duck = state.get('duck');
@@ -58,13 +58,13 @@ test('find returns model', function(assert) {
   assert.ok(Duck.detectInstance(duck));
 });
 
-test('find returns undefined', function(assert) {
+test('no-proxy: find returns undefined', function(assert) {
   let state = this.subject();
   let duck = state.get('duck');
   assert.equal(duck, undefined);
 });
 
-test('find returns model later', function(assert) {
+test('no-proxy: find returns model later', function(assert) {
   let state = this.subject();
   let duck = state.get('duck');
   assert.equal(duck, undefined);
@@ -74,7 +74,7 @@ test('find returns model later', function(assert) {
   assert.equal(duck.get('id'), 'yellow');
 });
 
-test('find returns undefined later', function(assert) {
+test('no-proxy: find returns undefined later', function(assert) {
   this.database.model('duck', { id: 'yellow' });
   let state = this.subject();
   let duck = state.get('duck');
