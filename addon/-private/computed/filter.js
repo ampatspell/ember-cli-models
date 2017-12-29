@@ -1,4 +1,4 @@
-import destroyable from '../util/internal-destroyable-computed';
+import destroyable from '../util/destroyable-computed';
 import { getStores } from '../util/get-stores';
 import { isFunction, isObject, isArray, isArrayArrayProxyOrHasIdentity } from '../util/assert';
 
@@ -46,15 +46,23 @@ const validate = (object, result) => {
 const base = (args, create) => {
   let fn = args.pop();
   isFunction('last argument', fn);
-  return destroyable(...args, function() {
-    let stores = getStores(this);
-    let result = invoke(this, fn, stores);
-    if(!result) {
-      return;
+  return destroyable(...args, {
+    create() {
+      let stores = getStores(this);
+      let result = invoke(this, fn, stores);
+      if(!result) {
+        return;
+      }
+      let opts = validate(this, result);
+      let manager = stores._context.internalFilterManager;
+      return create(manager, opts);
+    },
+    get(internal) {
+      return internal.model(true);
+    },
+    destroy(internal) {
+      internal.destroy();
     }
-    let opts = validate(this, result);
-    let manager = stores._context.internalFilterManager;
-    return create(manager, opts);
   });
 };
 
