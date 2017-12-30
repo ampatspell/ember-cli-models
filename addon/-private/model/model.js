@@ -20,7 +20,12 @@ const Model = EmberObject.extend(BaseMixin, {
 Model.reopenClass({
   modelName: null,
   modelClassType: 'base',
-  debugColumns: [ 'modelName', 'modelType', 'modelClassType' ]
+  debugColumns: [ 'modelName', 'modelType', 'modelClassType' ],
+
+  toString() {
+    return 'model';
+  }
+
 });
 
 export default Model;

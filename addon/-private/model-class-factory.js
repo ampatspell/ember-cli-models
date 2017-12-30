@@ -24,7 +24,12 @@ export default EmberObject.extend({
       prepare: (Model, normalizedModelName) => {
         assert(`model '${normalizedModelName}' must be ember-cli-models/model`, this.isModelClass(Model));
         let Extended = Model.extend();
-        Extended.reopenClass({ modelName: normalizedModelName });
+        Extended.reopenClass({
+          modelName: normalizedModelName,
+          toString() {
+            return normalizedModelName
+          }
+        });
         return Extended;
       }
     })

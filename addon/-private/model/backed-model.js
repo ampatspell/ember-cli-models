@@ -16,6 +16,10 @@ export default Model.extend({
 
 }).reopenClass({
 
-  modelClassType: 'backed'
+  modelClassType: 'backed',
+
+  toString() {
+    return 'backed-model';
+  }
 
 });

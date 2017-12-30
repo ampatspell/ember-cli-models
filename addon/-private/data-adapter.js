@@ -21,6 +21,8 @@ const stores = () => computed(function() {
 
 export default DataAdapter.extend({
 
+  attributeLimit: 100,
+
   stores: stores(),
 
   _nameToClass(name) {
@@ -57,7 +59,12 @@ export default DataAdapter.extend({
   },
 
   columnsForType(typeClass) {
-    let debug = A(get(typeClass, 'debugColumns') || []);
+    let debug = A();
+    while(typeClass) {
+      let columns = get(typeClass, 'debugColumns') || [];
+      debug.push(...columns.filter(column => !debug.includes(column)));
+      typeClass = typeClass && typeClass.superclass;
+    }
     return debug.map(key => ({ name: key, desc: keyToColumDescription(key) }));
   },
 
