@@ -1,4 +1,4 @@
-import Model from 'dummy/stack/documents/model';
+import Model from 'dummy/stack/documents/document-model';
 import { attr, prefixed, fallback } from 'dummy/stack/documents/computed';
 import { manyToManyInverse } from '../-computed';
 
