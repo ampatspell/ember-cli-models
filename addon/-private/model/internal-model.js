@@ -1,6 +1,7 @@
 import Internal from './internal';
+import ModelMixin from './internal/model-mixin';
 
-export default class InternalModel extends Internal {
+export default class InternalModel extends ModelMixin(Internal) {
 
   get database() {
     return this.context.owner;

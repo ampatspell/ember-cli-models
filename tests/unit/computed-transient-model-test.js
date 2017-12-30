@@ -112,3 +112,25 @@ test('destroy duck removes duck and changeset from identity', function(assert) {
 
   assert.deepEqual(identity.mapBy('id'), []);
 });
+
+test('changeset is recreated on database change', function(assert) {
+  let duck = this.subject();
+
+  let firstChangeset = duck.get('changeset');
+  let firstInternal = firstChangeset._internal;
+  assert.ok(firstChangeset);
+  assert.ok(firstInternal);
+
+  duck.set('database', this.store.database('another'));
+
+  let secondChangeset = run(() => duck.get('changeset'));
+  let secondInternal = secondChangeset._internal;
+  assert.ok(secondChangeset);
+  assert.ok(secondInternal);
+
+  assert.ok(secondChangeset !== firstChangeset);
+  assert.ok(secondInternal !== firstInternal);
+
+  assert.ok(firstChangeset.isDestroyed);
+  assert.ok(firstInternal.isDestroyed);
+});

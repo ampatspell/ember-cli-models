@@ -5,8 +5,6 @@ export default class InternalFilter extends Internal {
 
   constructor(context, opts) {
     super(context, opts);
-    this._source = null;
-    this._owner = null;
     this._filter = null;
   }
 

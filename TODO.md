@@ -1,4 +1,6 @@
 # TODO
 
 * what was compact about?
-* remove proxy from `find` computed property results
+* optional destroy for models instantiated in route's `model` hook (`isNew`)
+* loaders (single & compound)
+* ember-cli-documents adapter as a separate addon

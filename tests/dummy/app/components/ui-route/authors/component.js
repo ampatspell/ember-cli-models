@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import layout from './template';
-import { inject as service } from '@ember/service';
+import { state } from 'dummy/models/state';
 import { readOnly } from '@ember/object/computed';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route-authors' ],
   layout,
 
-  state: service(),
+  state: state(),
   authors: readOnly('state.blogs.authors'),
 
   actions: {

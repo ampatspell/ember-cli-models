@@ -7,12 +7,13 @@ export default class InternalFilterFirst extends InternalFilter {
     this._content = null;
   }
 
-  _createModel() {
-    return this.context.filterFactory.createFirstModel(this);
+  _didCreateFilter() {
+    this._rematch(false);
   }
 
-  _didCreateFilter() {
-    this._rematch();
+  _notifyOwnerPropertyChange() {
+    let { object, key } = this.opts.owner;
+    object.notifyPropertyChange(key);
   }
 
   content(create) {
@@ -20,7 +21,7 @@ export default class InternalFilterFirst extends InternalFilter {
     return this._content;
   }
 
-  _update(array) {
+  _update(array, notify=true) {
     let content = array[0];
 
     if(this._content === content) {
@@ -29,14 +30,13 @@ export default class InternalFilterFirst extends InternalFilter {
 
     this._content = content;
 
-    let model = this.model(false);
-    if(model) {
-      model.set('content', content);
+    if(notify) {
+      this._notifyOwnerPropertyChange();
     }
   }
 
-  _rematch() {
-    this._update(this.filter().content);
+  _rematch(notify=true) {
+    this._update(this.filter().content, notify);
   }
 
   _filterDidAdd(models) {
@@ -61,6 +61,5 @@ export default class InternalFilterFirst extends InternalFilter {
       this._update(added);
     }
   }
-
 
 }

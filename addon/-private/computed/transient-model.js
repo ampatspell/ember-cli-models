@@ -1,4 +1,4 @@
-import destroyable from '../util/internal-destroyable-computed';
+import destroyable from '../util/destroyable-computed';
 import { getStores } from '../util/get-stores';
 import { isFunction, isObject, isString, isDatabase } from '../util/assert';
 
@@ -12,15 +12,24 @@ const validate = result => {
   return result;
 };
 
+const reusable = () => false;
+const get = internal => internal.model(true);
+const destroy = internal => internal.destroy();
+
 export const model = (...args) => {
   let fn = args.pop();
   isFunction('last argument', fn);
-  return destroyable(...args, function() {
-    let result = invoke(this, fn);
-    if(!result) {
-      return;
-    }
-    let { database, name, props } = validate(result);
-    return database._context.internalModelManager.internalTransientModel(name, props);
+  return destroyable(...args, {
+    create() {
+      let result = invoke(this, fn);
+      if(!result) {
+        return;
+      }
+      let { database, name, props } = validate(result);
+      return database._context.internalModelManager.internalTransientModel(name, props);
+    },
+    get,
+    reusable,
+    destroy
   });
 };
