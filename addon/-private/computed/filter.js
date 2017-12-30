@@ -20,7 +20,7 @@ const invoke = (owner, fn, stores) => fn.call(owner, owner, stores);
 //   owner: { object, observe }
 // }
 
-const validate = (object, result) => {
+const validate = (object, key, result) => {
   isObject('result', result);
 
   let { source, owner, model, matches } = result;
@@ -37,31 +37,32 @@ const validate = (object, result) => {
       matches: matches
     },
     owner: {
+      key: key,
       object: object,
       observe: owner
     }
   };
 };
 
-const base = (args, create) => {
+const base = (args, { create, get }) => {
   let fn = args.pop();
   isFunction('last argument', fn);
   return destroyable(...args, {
     reusable() {
-      return false;
+      return true;
     },
-    create() {
+    create(key) {
       let stores = getStores(this);
       let result = invoke(this, fn, stores);
       if(!result) {
         return;
       }
-      let opts = validate(this, result);
+      let opts = validate(this, key, result);
       let manager = stores._context.internalFilterManager;
       return create(manager, opts);
     },
     get(internal) {
-      return internal.model(true);
+      return get(internal);
     },
     destroy(internal) {
       internal.destroy();
@@ -69,5 +70,12 @@ const base = (args, create) => {
   });
 };
 
-export const find   = (...args) => base(args, (manager, args) => manager.internalFirst(args));
-export const filter = (...args) => base(args, (manager, args) => manager.internalFind(args));
+export const find = (...args) => base(args, {
+  create: (manager, args) => manager.internalFirst(args),
+  get: internal => internal.content(true)
+});
+
+export const filter = (...args) => base(args, {
+  create: (manager, args) => manager.internalFind(args),
+  get: internal => internal.model(true)
+});
