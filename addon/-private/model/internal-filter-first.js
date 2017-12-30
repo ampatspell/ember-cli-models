@@ -12,7 +12,7 @@ export default class InternalFilterFirst extends InternalFilter {
   }
 
   _didCreateFilter() {
-    this._rematch();
+    this._rematch(false);
   }
 
   _notifyOwnerPropertyChange() {
@@ -25,7 +25,7 @@ export default class InternalFilterFirst extends InternalFilter {
     return this._content;
   }
 
-  _update(array) {
+  _update(array, notify=true) {
     let content = array[0];
 
     if(this._content === content) {
@@ -33,11 +33,14 @@ export default class InternalFilterFirst extends InternalFilter {
     }
 
     this._content = content;
-    this._notifyOwnerPropertyChange();
+
+    if(notify) {
+      this._notifyOwnerPropertyChange();
+    }
   }
 
-  _rematch() {
-    this._update(this.filter().content);
+  _rematch(notify=true) {
+    this._update(this.filter().content, notify);
   }
 
   _filterDidAdd(models) {
