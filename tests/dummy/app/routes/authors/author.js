@@ -1,10 +1,10 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { state } from 'dummy/models/state';
 
 export default Route.extend({
 
   // temporary
-  state: service(),
+  state: state(),
 
   model(params) {
     return this.get('state.blogs.authors').loadByPermalink(params.author_id);
