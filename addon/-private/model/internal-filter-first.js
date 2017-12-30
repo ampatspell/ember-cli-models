@@ -8,11 +8,16 @@ export default class InternalFilterFirst extends InternalFilter {
   }
 
   _createModel() {
-    return this.context.filterFactory.createFirstModel(this);
+    throw new Error(`filter-first does not have a model`);
   }
 
   _didCreateFilter() {
     this._rematch();
+  }
+
+  _notifyOwnerPropertyChange() {
+    let { object, key } = this.opts.owner;
+    object.notifyPropertyChange(key);
   }
 
   content(create) {
@@ -28,11 +33,7 @@ export default class InternalFilterFirst extends InternalFilter {
     }
 
     this._content = content;
-
-    let model = this.model(false);
-    if(model) {
-      model.set('content', content);
-    }
+    this._notifyOwnerPropertyChange();
   }
 
   _rematch() {
