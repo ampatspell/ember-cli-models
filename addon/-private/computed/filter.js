@@ -20,7 +20,9 @@ const invoke = (owner, fn, stores) => fn.call(owner, owner, stores);
 //   owner: { object, observe }
 // }
 
-const validate = (object, key, result) => {
+const dependencies = (object, keys) => object.getProperties(keys);
+
+const validate = (object, key, result, keys) => {
   isObject('result', result);
 
   let { source, owner, model, matches } = result;
@@ -40,16 +42,28 @@ const validate = (object, key, result) => {
       key: key,
       object: object,
       observe: owner
-    }
+    },
+    deps: dependencies(object, keys)
   };
 };
+
+const reusable = (prev, curr) => {
+  for(let key in prev) {
+    if(prev[key] !== curr[key]) {
+      return false;
+    }
+  }
+  return true;
+}
 
 const base = (args, { create, get }) => {
   let fn = args.pop();
   isFunction('last argument', fn);
   return destroyable(...args, {
-    reusable() {
-      return true;
+    reusable(internal) {
+      let prev = internal.opts.deps;
+      let curr = dependencies(this, args);
+      return reusable(prev, curr);
     },
     create(key) {
       let stores = getStores(this);
@@ -57,7 +71,7 @@ const base = (args, { create, get }) => {
       if(!result) {
         return;
       }
-      let opts = validate(this, key, result);
+      let opts = validate(this, key, result, args);
       let manager = stores._context.internalFilterManager;
       return create(manager, opts);
     },
