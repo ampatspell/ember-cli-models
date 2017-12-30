@@ -7,6 +7,7 @@ import { assert, isObject, isString } from './util/assert';
 import { omit } from './util/object';
 import factoryFor from './util/factory-for';
 import ExistingMixin from './existing-mixin';
+import FilterByClass from './identity/by-class';
 
 class StoresContext extends Context {
   constructor(owner) {
@@ -28,7 +29,16 @@ class StoresContext extends Context {
     }
     return identity;
   }
+  get identityByClass() {
+    let identityByClass = this._identityByClass;
+    if(!identityByClass) {
+      identityByClass = new FilterByClass(this.identity);
+      this._identityByClass = identityByClass;
+    }
+    return identityByClass;
+  }
   destroy() {
+    this._identityByClass && this._identityByClass.destroy();
     this.stores.destroy();
   }
 }
