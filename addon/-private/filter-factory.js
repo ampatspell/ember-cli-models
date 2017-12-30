@@ -5,19 +5,10 @@ export default EmberObject.extend({
 
   _context: null,
 
-  _create(name, props) {
-    let factory = factoryFor(this, `models:filter-${name}`);
-    return factory.create(props);
-  },
-
   createFindModel(_internal) {
+    let factory = factoryFor(this, `models:filter-find`);
     let content = _internal.content(true);
-    return this._create('find', { _internal, content });
-  },
-
-  createFirstModel(_internal) {
-    let content = _internal.content(true);
-    return this._create('first', { _internal, content });
+    return factory.create({ _internal, content });
   }
 
 });
