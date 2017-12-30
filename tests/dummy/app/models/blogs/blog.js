@@ -11,4 +11,6 @@ export default Model.extend({
 
   editors: hasManyPersisted({ key: 'editors', type: 'author' })
 
+}).reopenClass({
+  debugColumns: [ 'id', 'name' ]
 });

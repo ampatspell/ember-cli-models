@@ -18,4 +18,6 @@ export default Model.extend({
     this.set('storage.id', `author:${id}`);
   }
 
+}).reopenClass({
+  debugColumns: [ 'id', 'name', 'email' ]
 });
