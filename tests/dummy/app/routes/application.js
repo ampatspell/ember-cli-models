@@ -3,7 +3,7 @@ import { database } from 'ember-cli-models/computed';
 
 export default Route.extend({
 
-  database: database('remote', 'main'),
+  database: database('local', 'main'),
 
   model() {
     return this.get('database').model('state').start();

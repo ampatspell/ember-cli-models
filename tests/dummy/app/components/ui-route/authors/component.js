@@ -8,7 +8,7 @@ export default Component.extend({
   layout,
 
   state: state(),
-  authors: readOnly('state.blogs.authors'),
+  authors: readOnly('state.authors'),
 
   actions: {
     select(author) {

@@ -1,6 +1,6 @@
-import Model from 'dummy/stack/documents/model';
+import Model from 'dummy/stack/documents/document-model';
 import { attr, prefixed, fallback } from 'dummy/stack/documents/computed';
-import { manyToManyInverse } from '../-computed';
+import { manyToManyInverse } from './-computed';
 
 export default Model.extend({
 
@@ -18,4 +18,6 @@ export default Model.extend({
     this.set('storage.id', `author:${id}`);
   }
 
+}).reopenClass({
+  debugColumns: [ 'id', 'name', 'email' ]
 });

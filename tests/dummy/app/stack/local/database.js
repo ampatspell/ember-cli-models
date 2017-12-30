@@ -5,7 +5,7 @@ import { assign } from '@ember/polyfills';
 
 const definition = {
   observe: [ 'type' ],
-  name: storage => storage.get('type')
+  type: storage => storage.get('type')
 };
 
 export default DatabaseAdapter.extend({

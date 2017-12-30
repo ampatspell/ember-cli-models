@@ -41,4 +41,14 @@ export default Model.extend(StateMixin, {
     return await this.get('storage').save();
   },
 
+  _documentId: readOnly('storage.id'),
+
+}).reopenClass({
+
+  debugColumns: [ '_documentId' ],
+
+  toString() {
+    return 'document-model';
+  }
+
 });

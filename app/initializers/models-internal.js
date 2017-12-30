@@ -14,6 +14,7 @@ import DatabaseIdentity from 'ember-cli-models/-private/identity/database';
 import StoreIdentity from 'ember-cli-models/-private/identity/store';
 import StoresIdentity from 'ember-cli-models/-private/identity/stores';
 import FilterFind from 'ember-cli-models/-private/model/filter-find';
+import DataAdapter from 'ember-cli-models/-private/data-adapter';
 
 export default {
   name: 'ember-cli-models:internal',
@@ -34,5 +35,6 @@ export default {
     container.register('models:store-identity', StoreIdentity);
     container.register('models:stores-identity', StoresIdentity);
     container.register('models:filter-find', FilterFind);
+    container.register('data-adapter:main', DataAdapter);
   }
 };

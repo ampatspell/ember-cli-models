@@ -1,6 +1,6 @@
-import Model from 'dummy/stack/documents/model';
+import Model from 'dummy/stack/documents/document-model';
 import { attr, fallback } from 'dummy/stack/documents/computed';
-import { hasManyPersisted } from '../-computed';
+import { hasManyPersisted } from './-computed';
 
 export default Model.extend({
 
@@ -11,4 +11,6 @@ export default Model.extend({
 
   editors: hasManyPersisted({ key: 'editors', type: 'author' })
 
+}).reopenClass({
+  debugColumns: [ 'id', 'name' ]
 });
