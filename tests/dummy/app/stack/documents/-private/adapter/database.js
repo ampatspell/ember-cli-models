@@ -14,10 +14,6 @@ const definition = {
   }
 };
 
-const types = {
-  blogs: [ 'blog', 'author' ]
-};
-
 export default Base.extend({
 
   modelDefinitionForStorage() {
@@ -25,10 +21,7 @@ export default Base.extend({
   },
 
   modelNameForType(type) {
-    if(types.blogs.includes(type)) {
-      return `blogs/${type}`;
-    }
-    return type;
+    return `remote/${type}`;
   },
 
   build(type, props) {

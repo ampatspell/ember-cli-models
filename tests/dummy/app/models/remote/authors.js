@@ -1,6 +1,6 @@
-import Base from './-base';
+import Collection from './-collection';
 
-export default Base.extend({
+export default Collection.extend({
 
   type: 'author',
 
