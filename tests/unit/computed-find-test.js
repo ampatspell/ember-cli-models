@@ -258,3 +258,19 @@ test('find content is replaced with another model on owner prop change', functio
   prop = state.get('duck');
   assert.equal(prop.get('id'), 'green');
 });
+
+test('find internal is replaced on database change', function(assert) {
+  let first = this.store.database('main').model('duck', { id: 'cute' });
+  let second = this.store.database('second').model('duck', { id: 'cute' });
+
+  let state = this.subject();
+  let duck;
+
+  duck = state.get('duck');
+  assert.ok(duck === first);
+
+  state.set('database', this.store.database('second'));
+
+  duck = state.get('duck');
+  assert.ok(duck === second);
+});
