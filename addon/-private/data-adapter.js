@@ -41,9 +41,10 @@ export default DataAdapter.extend({
     }
 
     let name = get(typeClass, __models_data_adapter_name);
+
     if(name) {
       let components = name.split('/');
-      if(components[components.length - 1].indexOf('-') === 0) {
+      if(components.find(component => component.startsWith('-'))) {
         return;
       }
     }
