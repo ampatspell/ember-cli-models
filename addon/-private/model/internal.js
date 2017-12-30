@@ -1,6 +1,4 @@
-import ModelMixin from './internal/model-mixin';
-
-export default ModelMixin(class Internal {
+export default class Internal {
 
   constructor(context, opts) {
     this.context = context;
@@ -12,4 +10,4 @@ export default ModelMixin(class Internal {
     this.isDestroyed = true;
   }
 
-});
+}

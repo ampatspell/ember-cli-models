@@ -7,11 +7,6 @@ export default class InternalFilterFirst extends InternalFilter {
     this._content = null;
   }
 
-  // TODO: remove model
-  _createModel() {
-    throw new Error(`filter-first does not have a model`);
-  }
-
   _didCreateFilter() {
     this._rematch(false);
   }
@@ -66,6 +61,5 @@ export default class InternalFilterFirst extends InternalFilter {
       this._update(added);
     }
   }
-
 
 }
