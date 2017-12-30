@@ -56,6 +56,8 @@ const reusable = (prev, curr) => {
   return true;
 }
 
+const destroy = internal => internal.destroy();
+
 const base = (args, { create, get }) => {
   let fn = args.pop();
   isFunction('last argument', fn);
@@ -75,12 +77,8 @@ const base = (args, { create, get }) => {
       let manager = stores._context.internalFilterManager;
       return create(manager, opts);
     },
-    get(internal) {
-      return get(internal);
-    },
-    destroy(internal) {
-      internal.destroy();
-    }
+    get,
+    destroy
   });
 };
 
