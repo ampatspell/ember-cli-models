@@ -31,14 +31,11 @@ export default Class => class ModelMixin extends Class {
     model.destroy();
   }
 
-  modelWillDestroyPermanently() {
-  }
-
   modelWillDestroy(model) {
     let recreate = model[__recreate];
 
     if(!recreate) {
-      this.modelWillDestroyPermanently();
+      this.modelWillDestroyPermanently && this.modelWillDestroyPermanently();
     }
 
     model._internal = null;
