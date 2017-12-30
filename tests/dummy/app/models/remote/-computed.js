@@ -1,4 +1,4 @@
-import { find, filter } from '../-computed';
+import { filter } from '../-computed';
 
 // Lookups models by by storage ids
 //

@@ -1,5 +1,6 @@
 import Model from 'ember-cli-models/model/transient';
 import { database, filter } from 'ember-cli-models/computed';
+import { readOnly } from '@ember/object/computed';
 
 const all = () => filter('database', function() {
   let source = this.get('database');
@@ -28,6 +29,10 @@ export default Model.extend({
   database: database(),
   all: all(),
 
-  type: null
+  type: null,
 
+  _count: readOnly('all.length'),
+
+}).reopenClass({
+  debugColumns: [ 'type', '_count' ]
 });
