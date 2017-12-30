@@ -7,6 +7,7 @@ export default class InternalFilterFirst extends InternalFilter {
     this._content = null;
   }
 
+  // TODO: remove model
   _createModel() {
     throw new Error(`filter-first does not have a model`);
   }
