@@ -1,22 +1,17 @@
 import Model from 'ember-cli-models/model/transient';
-import { database, model } from 'ember-cli-models/computed';
-import { findByModelType } from './-computed';
+import { findByType } from './-computed-local';
+import { model } from './-computed-remote';
 
-export const state = () => findByModelType({ store: 'local', database: 'main', type: 'state' });
+export const state = () => findByType({ type: 'state' });
 
 const remote = name => model(function() {
   return {
-    database: this.get('remote'),
     name,
     props: { state: this }
   };
 });
 
 export default Model.extend({
-
-  database: database(),
-
-  remote: database('remote', 'main'),
 
   changes: remote('state/changes'),
   design:  remote('state/design'),
