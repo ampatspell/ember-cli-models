@@ -1,15 +1,15 @@
 import { withDatabase } from './-computed';
 
 const {
+  prop,
   findByType,
   filterByType,
-  model,
-  prop
+  model
 } = withDatabase({ store: 'local', database: 'main' });
 
 export {
+  prop,
   findByType,
   filterByType,
-  model,
-  prop
+  model
 };
