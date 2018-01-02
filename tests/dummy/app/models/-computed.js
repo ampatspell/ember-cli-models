@@ -1,6 +1,6 @@
 import { assign } from '@ember/polyfills';
 import { find as _find, filter as _filter, model as _model } from 'ember-cli-models/computed';
-import { prop, getKey, getValue } from './-prop';
+import { prop, getKey, getValue } from 'ember-cli-models/prop';
 
 // opts: { store, database }
 const sourceFromOptions = (owner, stores, opts) => {
