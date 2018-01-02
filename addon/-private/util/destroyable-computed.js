@@ -1,4 +1,5 @@
 import { computed } from '@ember/object';
+import { A } from '@ember/array';
 
 // usage:
 //
@@ -82,6 +83,7 @@ export const cacheFor = (owner, key) => {
 // ...deps, { reusable, create, get, destroy }
 export default (...args) => {
   let opts = args.pop();
+  args = A(args).compact();
   return computed(...args, function(key) {
     let { value, destroy } = _cacheFor(this, key);
 

@@ -1,5 +1,6 @@
 import { assign } from '@ember/polyfills';
-import { find as _find, model as _model } from 'ember-cli-models/computed';
+import { find as _find, filter as _filter, model as _model } from 'ember-cli-models/computed';
+import { getKey, getValue } from './-prop';
 
 // opts: { store, database }
 const sourceFromOptions = (owner, stores, opts) => {
@@ -13,9 +14,29 @@ export const findByType = opts => {
     return {
       source: sourceFromOptions(owner, stores, opts),
       model: [ 'modelType' ],
-      owner: [],
-      matches(model) {
-        return model.get('modelType') === opts.type;
+      owner: [ getKey(opts.type) ],
+      matches(model, owner) {
+        let type = getValue(opts.type, owner);
+        return model.get('modelType') === type;
+      }
+    };
+  });
+}
+
+// opts: { store, database, type, new }
+export const filterByType = opts => {
+  return _filter(function(owner, stores) {
+    return {
+      source: sourceFromOptions(owner, stores, opts),
+      owner: [ getKey(opts.type), getKey(opts.new) ],
+      model: [ 'modelType', 'isNew' ],
+      matches(model, owner) {
+        let isNew = getValue(opts.new, owner);
+        if(isNew !== undefined && model.get('isNew') !== isNew) {
+          return;
+        }
+        let type = getValue(opts.type, owner);
+        return model.get('modelType') === type;
       }
     };
   });
@@ -38,7 +59,8 @@ export const model = (opts, fn) => {
 export const withDatabase = database => {
   const mergeDatabase = opts => assign({}, database, opts);
   return {
-    findByType: opts => findByType(mergeDatabase(opts)),
-    model:      fn => model(mergeDatabase(), fn)
+    findByType:   opts => findByType(mergeDatabase(opts)),
+    filterByType: opts => filterByType(mergeDatabase(opts)),
+    model:        fn   => model(mergeDatabase(), fn),
   };
 }

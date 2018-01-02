@@ -1,6 +1,7 @@
 import destroyable from '../util/destroyable-computed';
 import { getStores } from '../util/get-stores';
 import { isFunction, isObject, isArray, isArrayArrayProxyOrHasIdentity } from '../util/assert';
+import { A } from '@ember/array';
 
 const invoke = (owner, fn, stores) => fn.call(owner, owner, stores);
 
@@ -31,6 +32,9 @@ const validate = (object, key, result, keys) => {
   isArray('result.owner', owner);
   isArray('result.model', model);
   isFunction('result.matches', matches);
+
+  owner = A(owner).compact();
+  model = A(model).compact();
 
   return {
     source: {
