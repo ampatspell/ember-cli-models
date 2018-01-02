@@ -1,6 +1,6 @@
 import Model from 'dummy/stack/documents/document-model';
 import { attr, fallback } from 'dummy/stack/documents/computed';
-import { hasManyPersisted } from './-computed';
+import { hasManyPersisted } from '../-computed-remote';
 
 export default Model.extend({
 

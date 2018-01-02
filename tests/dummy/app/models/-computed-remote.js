@@ -1,15 +1,19 @@
-import { withDatabase } from './-computed-base';
+import { withDatabase } from './-computed';
 
 const {
+  prop,
   findByType,
   filterByType,
   model,
-  prop
+  hasManyPersisted,
+  manyToManyInverse
 } = withDatabase({ store: 'remote', database: 'main' });
 
 export {
+  prop,
   findByType,
   filterByType,
   model,
-  prop
+  hasManyPersisted,
+  manyToManyInverse
 };

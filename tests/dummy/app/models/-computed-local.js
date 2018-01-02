@@ -1,4 +1,4 @@
-import { withDatabase } from './-computed-base';
+import { withDatabase } from './-computed';
 
 const {
   findByType,
