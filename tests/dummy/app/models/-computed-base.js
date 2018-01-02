@@ -1,6 +1,6 @@
 import { assign } from '@ember/polyfills';
 import { find as _find, filter as _filter, model as _model } from 'ember-cli-models/computed';
-import { getKey, getValue } from './-prop';
+import { prop, getKey, getValue } from './-prop';
 
 // opts: { store, database }
 const sourceFromOptions = (owner, stores, opts) => {
@@ -59,6 +59,7 @@ export const model = (opts, fn) => {
 export const withDatabase = database => {
   const mergeDatabase = opts => assign({}, database, opts);
   return {
+    prop,
     findByType:   opts => findByType(mergeDatabase(opts)),
     filterByType: opts => filterByType(mergeDatabase(opts)),
     model:        fn   => model(mergeDatabase(), fn),

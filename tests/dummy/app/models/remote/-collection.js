@@ -1,8 +1,7 @@
 import Model from 'ember-cli-models/model/transient';
-import { database, filter } from 'ember-cli-models/computed';
+import { database } from 'ember-cli-models/computed';
 import { readOnly } from '@ember/object/computed';
-import { filterByType } from '../-computed-remote';
-import { prop } from '../-prop';
+import { filterByType, prop } from '../-computed-remote';
 
 export default Model.extend({
 

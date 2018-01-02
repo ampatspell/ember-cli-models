@@ -1,26 +1,7 @@
 import { get } from '@ember/object';
 
 class Property {
-}
-
-class StringProperty extends Property {
-  constructor(value) {
-    super();
-    this.value = value;
-  }
-
-  getKey() {
-  }
-
-  getValue() {
-    return this.value;
-  }
-
-}
-
-class OwnerProperty extends Property {
   constructor(key) {
-    super();
     this.key = key;
   }
 
@@ -34,7 +15,7 @@ class OwnerProperty extends Property {
 
 }
 
-export const prop = key => new OwnerProperty(key);
+export const prop = key => new Property(key);
 
 export const getKey = arg => {
   if(arg instanceof Property) {

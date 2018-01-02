@@ -3,11 +3,13 @@ import { withDatabase } from './-computed-base';
 const {
   findByType,
   filterByType,
-  model
+  model,
+  prop
 } = withDatabase({ store: 'local', database: 'main' });
 
 export {
   findByType,
   filterByType,
-  model
+  model,
+  prop
 };
