@@ -5,7 +5,10 @@
   <div>{{state}}</div>
 </div>
 
-{{loader}}
+<div class="row">
+  {{loader}}
+  {{loader.autoload}}
+</div>
 
 <div class="row">
   <button onclick={{action 'setup'}}>Setup database</button>
