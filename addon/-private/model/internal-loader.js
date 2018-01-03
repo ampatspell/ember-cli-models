@@ -9,7 +9,6 @@ const normalizeOptions = opts => {
   return opts;
 };
 
-// // temporary
 // _performOperation() {
 //   let opts = this.opts;
 //   let { object } = opts.owner;
@@ -26,7 +25,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
 
   constructor(context, opts) {
     super(context, normalizeOptions(opts));
-    this.state = new LoaderState();
+    this.state = new LoaderState(this);
     this._observer = null;
     this._autoload = null;
   }

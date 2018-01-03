@@ -2,7 +2,6 @@ import State from './state';
 import { assign } from '@ember/polyfills';
 
 const defaults = {
-  isLoadable: false,
   isLoaded:   false,
   isLoading:  false,
   isMore:     false,
@@ -10,13 +9,20 @@ const defaults = {
   error:      null
 };
 
-export const keys = Object.keys(defaults);
+const aliases = [ 'isLoadable' ];
+
+export const keys = [ ...Object.keys(defaults), ...aliases ];
 
 export default class LoaderState extends State {
 
-  constructor(state) {
+  constructor(loader, state) {
     super();
+    this._loader = loader;
     assign(this, defaults, state);
+  }
+
+  get isLoadable() {
+    return true;
   }
 
   onCreated(changed) {
