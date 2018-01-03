@@ -9,16 +9,14 @@ export default Model.extend({
   loader: loader(function(owner, stores) {
     return {
       recurrent: false,
-      database: stores.database('remote', 'main'),
       owner: [],
-      query(owner, state) { // also array of queries
-        return { ddoc: 'author', view: 'by-id-with-blogs' };
-      },
-      loaded(state_, results) { // recurrent
-        return {
-          more: false,
-          state: { ... }
-        }
+      perform(state) {
+        let db = stores.database('remote', 'main');
+        return db.find({ ddoc: 'author', view: 'by-id-with-blogs' }).then(docs => {
+          return {
+            state: { ... }
+          };
+        });
       }
     };
   })
