@@ -1,7 +1,7 @@
 # Loader
 
 * one-shot loader
-* paginated loader
+* paginated loader (recurrent)
 
 ``` javascript
 export default Model.extend({
@@ -53,7 +53,6 @@ export default Loader.extend({
 
   load() {},
   reload() {},
-
   loadMore() {}, // recurrent
 
   autoload: autoload(),
