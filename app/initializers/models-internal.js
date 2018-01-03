@@ -8,12 +8,16 @@ import InternalModelManager from 'ember-cli-models/-private/internal-model-manag
 import InternalModelIdentity from 'ember-cli-models/-private/internal-model-identity';
 import InternalFilterManager from 'ember-cli-models/-private/internal-filter-manager';
 import InternalFilterFactory from 'ember-cli-models/-private/internal-filter-factory';
+import InternalLoaderManager from 'ember-cli-models/-private/internal-loader-manager';
+import InternalLoaderFactory from 'ember-cli-models/-private/internal-loader-factory';
 import ModelFactory from 'ember-cli-models/-private/model-factory';
 import FilterFactory from 'ember-cli-models/-private/filter-factory';
+import LoaderFactory from 'ember-cli-models/-private/loader-factory';
 import DatabaseIdentity from 'ember-cli-models/-private/identity/database';
 import StoreIdentity from 'ember-cli-models/-private/identity/store';
 import StoresIdentity from 'ember-cli-models/-private/identity/stores';
 import FilterFind from 'ember-cli-models/-private/model/filter-find';
+import Loader from 'ember-cli-models/-private/model/loader';
 import DataAdapter from 'ember-cli-models/-private/data-adapter';
 
 export default {
@@ -29,12 +33,16 @@ export default {
     container.register('models:internal-model-identity', InternalModelIdentity);
     container.register('models:internal-filter-manager', InternalFilterManager);
     container.register('models:internal-filter-factory', InternalFilterFactory);
+    container.register('models:internal-loader-manager', InternalLoaderManager);
+    container.register('models:internal-loader-factory', InternalLoaderFactory);
     container.register('models:model-factory', ModelFactory);
     container.register('models:filter-factory', FilterFactory);
+    container.register('models:loader-factory', LoaderFactory);
     container.register('models:database-identity', DatabaseIdentity);
     container.register('models:store-identity', StoreIdentity);
     container.register('models:stores-identity', StoresIdentity);
     container.register('models:filter-find', FilterFind);
+    container.register('models:loader', Loader);
     container.register('data-adapter:main', DataAdapter);
   }
 };

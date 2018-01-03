@@ -19,7 +19,10 @@ class StoresContext extends Context {
     this.internalModelFactory = this.create('models:internal-model-factory');
     this.internalFilterFactory = this.create('models:internal-filter-factory');
     this.internalFilterManager = this.create('models:internal-filter-manager');
+    this.internalLoaderFactory = this.create('models:internal-loader-factory');
+    this.internalLoaderManager = this.create('models:internal-loader-manager');
     this.filterFactory = this.create('models:filter-factory');
+    this.loaderFactory = this.create('models:loader-factory');
   }
   get identity() {
     let identity = this._identity;

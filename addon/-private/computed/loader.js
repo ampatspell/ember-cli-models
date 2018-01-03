@@ -1,18 +1,46 @@
 import destroyable from '../util/destroyable-computed';
 import { getStores } from '../util/get-stores';
-import { isObject, isBoolean, isDatabase, isArray, isFunction } from '../util/assert';
+import { isObject, isBoolean, isArray, isFunction } from '../util/assert';
 
-const invoke = (owner, fn) => fn.call(owner, owner, getStores(owner));
+const invoke = (owner, fn, stores) => fn.call(owner, owner, stores);
 
-const validate = result => {
+// {
+//   recurrent: false,
+//   owner: [ 'ddoc', 'view' ],
+//   perform(state, owner) {
+//     let { ddoc, view } = owner.getProperties('ddoc', 'view');
+//     return stores.database('remote', 'main').find({ ddoc, view }).then(docs => {
+//       return {
+//         isMore: false,
+//         state: { ... }
+//       }
+//     });
+//   }
+// }
+//
+// to
+//
+// {
+//   operation: { recurrent, perform },
+//   owner: { object, observe }
+// }
+
+const validate = (object, result) => {
   isObject('result', result);
-  let { recurrent, database, owner, query, loaded } = result;
+  let { recurrent, owner, perform } = result;
   isBoolean('result.recurrent', recurrent);
-  isDatabase('result.database', database);
   isArray('result.owner', owner);
-  isFunction('result.query', query);
-  isFunction('result.loaded', loaded);
-  return result;
+  isFunction('result.perform', perform);
+  return {
+    operation: {
+      recurrent,
+      perform,
+    },
+    owner: {
+      object: object,
+      observe: owner
+    }
+  };
 };
 
 const reusable = () => false;
@@ -24,13 +52,13 @@ export const loader = (...args) => {
   isFunction('last argument', fn);
   return destroyable(...args, {
     create() {
-      let result = invoke(this, fn);
+      let stores = getStores(this);
+      let result = invoke(this, fn, stores);
       if(!result) {
         return;
       }
-      let { database, recurrent, owner, query, loaded } = validate(result);
-      console.log(database+'', recurrent, owner, query, loaded);
-      // return database._context.internalModelManager.internalTransientModel(name, props);
+      let opts = validate(this, result);
+      return stores._context.internalLoaderManager.internalLoader(opts);
     },
     get,
     reusable,
