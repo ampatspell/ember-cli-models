@@ -1,4 +1,4 @@
-export default class State {
+export default class BackedModelState {
 
   constructor() {
     this.isDeleted = false;

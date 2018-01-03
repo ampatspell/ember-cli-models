@@ -1,14 +1,14 @@
 import InternalModel from './internal-model';
 import BackedModel from './backed-model';
 import StorageObserver from './internal/storage-observer';
-import State from './internal/state';
+import BackedModelState from './internal/backed-model-state';
 import withPropertyChanges from './internal/with-property-changes';
 
 export default class BackedInternalModel extends InternalModel {
 
   constructor(context, storage, props) {
     super(context, { props });
-    this.state = new State();
+    this.state = new BackedModelState();
     this.storage = storage;
   }
 
