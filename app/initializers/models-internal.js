@@ -18,6 +18,7 @@ import StoreIdentity from 'ember-cli-models/-private/identity/store';
 import StoresIdentity from 'ember-cli-models/-private/identity/stores';
 import FilterFind from 'ember-cli-models/-private/model/filter-find';
 import Loader from 'ember-cli-models/-private/model/loader';
+import LoaderAutoload from 'ember-cli-models/-private/model/autoload';
 import DataAdapter from 'ember-cli-models/-private/data-adapter';
 
 export default {
@@ -43,6 +44,7 @@ export default {
     container.register('models:stores-identity', StoresIdentity);
     container.register('models:filter-find', FilterFind);
     container.register('models:loader', Loader);
+    container.register('models:loader/autoload', LoaderAutoload);
     container.register('data-adapter:main', DataAdapter);
   }
 };
