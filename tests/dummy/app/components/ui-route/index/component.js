@@ -12,17 +12,22 @@ export default Component.extend({
   database: database('remote', 'main'),
   state: state(),
 
+  ddoc: null,
+  view: null,
+
   loader: loader(function(owner, stores) {
     return {
       recurrent: false,
-      database: stores.database('remote', 'main'),
-      owner: [],
-      query() {
-      },
-      loaded() {
+      owner: [ 'ddoc', 'view' ],
+      perform() {
       }
     };
   }),
+
+  init() {
+    this._super(...arguments);
+    window.component = this;
+  },
 
   actions: {
     async setup() {
