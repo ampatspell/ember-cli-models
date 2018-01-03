@@ -8,6 +8,11 @@
 <div class="row">
   {{loader}}
   {{loader.autoload}}
+  {{#if autoload}}
+    loader.autoload.isLoading={{loader.autoload.isLoading}}
+  {{else}}
+    loader.isLoading={{loader.isLoading}} <span {{action 'enableAutoload'}}>[autoload]</span>
+  {{/if}}
 </div>
 
 <div class="row">

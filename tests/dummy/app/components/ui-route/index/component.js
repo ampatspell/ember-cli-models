@@ -14,6 +14,7 @@ export default Component.extend({
 
   ddoc: null,
   view: null,
+  autoload: false,
 
   loader: loader(function(owner, stores) {
     return {
@@ -38,6 +39,9 @@ export default Component.extend({
   },
 
   actions: {
+    enableAutoload() {
+      this.set('autoload', true);
+    },
     async setup() {
       let setup = await this.get('state.design').recreate();
       this.set('setup', setup);
