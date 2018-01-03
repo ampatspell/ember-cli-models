@@ -12,3 +12,7 @@ export {
   find,
   filter
 } from './-private/computed/filter';
+
+export {
+  loader
+} from './-private/computed/loader';
