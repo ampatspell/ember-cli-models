@@ -5,7 +5,7 @@ import { keys } from './internal/loader-state';
 
 const state = key => computed(`loader.${key}`, function() {
   let internal = this.get('loader')._internal;
-  return internal.stateProperty(key, true);
+  return internal.getStateProperty(key, true);
 }).readOnly();
 
 let StateMixin = Mixin.create(keys.reduce((props, key) => {

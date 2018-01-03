@@ -2,13 +2,25 @@ import Internal from './internal';
 import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
 import LoaderState from './internal/loader-state';
-import { resolve, reject } from 'rsvp';
 
 const normalizeOptions = opts => {
   let { operation } = opts;
   operation.state = undefined;
   return opts;
 };
+
+// // temporary
+// _performOperation() {
+//   let opts = this.opts;
+//   let { object } = opts.owner;
+//   let { state, perform } = opts.operation;
+//   return resolve(perform(state, object)).then(result => {
+//     let { isMore, state } = result;
+//     console.log(isMore, state);
+//   }, err => {
+//     return reject(err);
+//   });
+// }
 
 export default class InternalLoader extends ModelMixin(Internal) {
 
@@ -38,22 +50,31 @@ export default class InternalLoader extends ModelMixin(Internal) {
 
   //
 
-  stateProperty(key, autoload) {
-    console.log('stateProperty', key, autoload);
-    return this.state[key];
+  // ignore/cancel pending loads, return state to initial values
+  // called when owner props change
+  reset() {
+    console.log('reset');
   }
 
-  // temporary
-  _performOperation() {
-    let opts = this.opts;
-    let { object } = opts.owner;
-    let { state, perform } = opts.operation;
-    return resolve(perform(state, object)).then(result => {
-      let { isMore, state } = result;
-      console.log(isMore, state);
-    }, err => {
-      return reject(err);
-    });
+  // load if not yet loaded
+  load() {
+    console.log('load');
+  }
+
+  // reloads ignoring isLoaded state
+  reload() {
+    console.log('reload');
+  }
+
+  // only for recurrent. if isMore=false, doesn't load anything
+  loadMore() {
+    console.log('loadMore');
+  }
+
+  // kicks off autoload if not already loading
+  getStateProperty(key, autoload) {
+    console.log('getStateProperty', { key, autoload });
+    return this.state[key];
   }
 
   //
@@ -67,16 +88,12 @@ export default class InternalLoader extends ModelMixin(Internal) {
         observe,
         delegate: {
           target: this,
-          updated: this._ownerPropertyDidChange
+          updated: this.reset
         }
       });
       this._observer = observer;
     }
     return observer;
-  }
-
-  _ownerPropertyDidChange(object, key) {
-    // TODO: reset state
   }
 
   //
