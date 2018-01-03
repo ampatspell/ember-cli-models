@@ -1,6 +1,7 @@
 import Internal from './internal';
 import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
+import LoaderState from './internal/loader-state';
 import { resolve, reject } from 'rsvp';
 
 const normalizeOptions = opts => {
@@ -13,6 +14,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
 
   constructor(context, opts) {
     super(context, normalizeOptions(opts));
+    this.state = new LoaderState();
     this._observer = null;
     this._autoload = null;
   }
@@ -35,6 +37,11 @@ export default class InternalLoader extends ModelMixin(Internal) {
   }
 
   //
+
+  stateProperty(key, autoload) {
+    console.log('stateProperty', key, autoload);
+    return this.state[key];
+  }
 
   // temporary
   _performOperation() {

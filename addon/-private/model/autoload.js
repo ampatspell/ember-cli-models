@@ -1,18 +1,19 @@
 import EmberObject, { computed } from '@ember/object';
 import { readOnly } from '@ember/object/computed';
 import Mixin from '@ember/object/mixin';
+import { keys } from './internal/loader-state';
 
-const state = () => readOnly('loader.state');
+const state = key => computed(`loader.${key}`, function() {
+  let internal = this.get('loader')._internal;
+  return internal.stateProperty(key, true);
+}).readOnly();
 
-const autoloaded = key => computed(`loader.${key}`, function() {
-  return this.get('loader')._internal.stateProperty(key, true);
-});
-
-let StateMixin = Mixin.create({
-  state: state(),
-  isLoading: autoloaded('isLoading'),
-  isLoaded: autoloaded('isLoaded')
-});
+let StateMixin = Mixin.create(keys.reduce((props, key) => {
+  props[key] = state(key);
+  return props;
+}, {
+  state: readOnly('loader.state')
+}));
 
 export default EmberObject.extend(StateMixin, {
 
