@@ -1,6 +1,6 @@
 import EmberObject, { computed } from '@ember/object';
-import { readOnly } from '@ember/object/computed';
 import Mixin from '@ember/object/mixin';
+import { readOnly } from '@ember/object/computed';
 import { keys } from './internal/loader-state';
 
 const state = key => computed(`loader.${key}`, function() {
