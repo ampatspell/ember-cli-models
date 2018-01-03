@@ -17,6 +17,6 @@ let StateMixin = Mixin.create(keys.reduce((props, key) => {
 
 export default EmberObject.extend(StateMixin, {
 
-  loader: null,
+  loader: null
 
 });

@@ -2,6 +2,7 @@ import Internal from './internal';
 import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
 import LoaderState from './internal/loader-state';
+import withPropertyChanges from './internal/with-property-changes';
 
 const normalizeOptions = opts => {
   let { operation } = opts;
@@ -74,6 +75,15 @@ export default class InternalLoader extends ModelMixin(Internal) {
   getStateProperty(key, autoload) {
     console.log('getStateProperty', { key, autoload });
     return this.state[key];
+  }
+
+  //
+
+  // usage: this._withState(true, (state, changed) => state.onLoading(changed));
+  _withState(notify, cb) {
+    withPropertyChanges(this, notify, changed => {
+      cb(this.state, changed);
+    });
   }
 
   //

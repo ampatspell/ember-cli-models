@@ -25,12 +25,8 @@ export default class LoaderState extends State {
     return true;
   }
 
-  onCreated(changed) {
-    this._update({ isDeleted: false }, changed);
-  }
-
-  onDeleted(changed) {
-    this._update({ isDeleted: true }, changed);
+  onLoading(changed) {
+    this._update({ isLoading: true, isError: false, error: null }, changed);
   }
 
 }
