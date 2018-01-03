@@ -1,6 +1,7 @@
 import Internal from './internal';
 import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
+import { resolve, reject } from 'rsvp';
 
 const normalizeOptions = opts => {
   let { operation } = opts;
@@ -30,6 +31,19 @@ export default class InternalLoader extends ModelMixin(Internal) {
       this._observer = observer;
     }
     return observer;
+  }
+
+  // temporary
+  _performOperation() {
+    let opts = this.opts;
+    let { object } = opts.owner;
+    let { state, perform } = opts.operation;
+    return resolve(perform(state, object)).then(result => {
+      let { isMore, state } = result;
+      console.log(isMore, state);
+    }, err => {
+      return reject(err);
+    });
   }
 
   _ownerPropertyDidChange(object, key) {

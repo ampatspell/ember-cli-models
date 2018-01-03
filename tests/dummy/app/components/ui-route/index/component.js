@@ -20,6 +20,14 @@ export default Component.extend({
       recurrent: false,
       owner: [ 'ddoc', 'view' ],
       perform() {
+        return stores.database('remote', 'main').find({ all: true }).then(models => {
+          return {
+            isMore: false,
+            state: {
+              loaded: models.get('length')
+            }
+          };
+        });
       }
     };
   }),
