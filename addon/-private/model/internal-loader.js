@@ -27,8 +27,20 @@ export default class InternalLoader extends ModelMixin(Internal) {
   constructor(context, opts) {
     super(context, normalizeOptions(opts));
     this.state = new LoaderState(this);
-    this._observer = null;
+    this.observer = this._createObserver();
     this._autoload = null;
+  }
+
+  _createObserver() {
+    let { object, observe } = this.opts.owner;
+    return new ObjectObserver({
+      object,
+      observe,
+      delegate: {
+        target: this,
+        updated: this.reset
+      }
+    });
   }
 
   _createModel() {
@@ -84,25 +96,6 @@ export default class InternalLoader extends ModelMixin(Internal) {
     withPropertyChanges(this, notify, changed => {
       cb(this.state, changed);
     });
-  }
-
-  //
-
-  observer(create) {
-    let observer = this._observer;
-    if(!observer && create) {
-      let { object, observe } = this.opts.owner;
-      observer = new ObjectObserver({
-        object,
-        observe,
-        delegate: {
-          target: this,
-          updated: this.reset
-        }
-      });
-      this._observer = observer;
-    }
-    return observer;
   }
 
   //

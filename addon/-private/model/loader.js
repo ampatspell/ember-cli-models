@@ -1,18 +1,22 @@
 import EmberObject, { computed } from '@ember/object';
 import Mixin from '@ember/object/mixin';
 import { resolve } from 'rsvp';
-import { BaseMixin, prop } from './base';
+import { BaseMixin } from './base';
 import { keys } from './internal/loader-state';
 
 const state = key => computed(function() {
-  return this._internal.getStateProperty(key, false);
+  return this._internal && this._internal.getStateProperty(key, false);
+}).readOnly();
+
+const toJSON = () => computed(function() {
+  return this._internal && this._internal.state.toJSON();
 }).readOnly();
 
 const StateMixin = Mixin.create(keys.reduce((props, key) => {
   props[key] = state(key);
   return props;
 }, {
-  state: prop('state')
+  state: toJSON()
 }));
 
 const autoload = () => computed(function() {
