@@ -3,6 +3,7 @@ import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
 import LoaderState from './internal/loader-state';
 import withPropertyChanges from './internal/with-property-changes';
+import { defer } from 'rsvp';
 
 const normalizeOptions = opts => {
   let { operation } = opts;
@@ -10,17 +11,56 @@ const normalizeOptions = opts => {
   return opts;
 };
 
-// _performOperation() {
-//   let opts = this.opts;
-//   let { object } = opts.owner;
-//   let { state, perform } = opts.operation;
-//   return resolve(perform(state, object)).then(result => {
-//     let { isMore, state } = result;
-//     console.log(isMore, state);
-//   }, err => {
-//     return reject(err);
-//   });
-// }
+class Queue {
+  constructor(loader) {
+    this.loader = loader;
+    this.operations = [];
+  }
+
+  schedule(operation) {
+    this.operations.push(operation);
+    this._runNext();
+  }
+
+  _runNext() {
+    // nonsense
+    let op = this.operations.shift();
+    if(!op) {
+      return;
+    }
+    op.invoke();
+  }
+
+}
+
+class Operation {
+
+  constructor(loader) {
+    this.loader = loader;
+    this.deferred = defer();
+  }
+
+  _invoke() {
+    let opts = this.loader.opts;
+    let { object } = opts.owner;
+    let { state, perform } = opts.operation;
+    return perform(state, object);
+  }
+
+  invoke() {
+    let promise = this._invoke();
+    promise.then(() => {
+      this.deferred.resolve();
+    }, err => {
+      this.deferred.reject(err);
+    });
+  }
+
+  get promise() {
+    return this.deferred.promise;
+  }
+
+}
 
 export default class InternalLoader extends ModelMixin(Internal) {
 
@@ -28,6 +68,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
     super(context, normalizeOptions(opts));
     this.state = new LoaderState(this);
     this.observer = this._createObserver();
+    this.queue = new Queue(this);
     this._autoload = null;
   }
 
@@ -70,7 +111,9 @@ export default class InternalLoader extends ModelMixin(Internal) {
 
   // load if not yet loaded
   load() {
-    console.log('load');
+    let op = new Operation(this);
+    this.queue.schedule(op);
+    return op.promise;
   }
 
   // reloads ignoring isLoaded state

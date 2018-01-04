@@ -2,9 +2,15 @@ import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import EmberObject from '@ember/object';
 import { loader } from 'ember-cli-models/computed';
+import { resolve } from 'rsvp';
 
 module('computed-loader', {
   beforeEach() {
+    let ctx = this;
+    this.load = () => {
+      console.log('test load');
+      return resolve();
+    };
     this.subject = () => {
       this.register('app:subject', EmberObject.extend({
         loader: loader(function() {
@@ -12,6 +18,7 @@ module('computed-loader', {
             recurrent: false,
             owner: [],
             perform() {
+              return ctx.load();
             }
           };
         })
