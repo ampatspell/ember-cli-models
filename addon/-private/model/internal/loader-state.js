@@ -26,6 +26,10 @@ export default class LoaderState extends State {
     // return this._loader.isLoadable;
   }
 
+  onLoadScheduled(changed) {
+    this._update({ isLoading: true }, changed);
+  }
+
   onLoading(changed) {
     this._update({
       isLoading: true,

@@ -3,10 +3,9 @@ import Operation from '../../util/operation/operation';
 
 class LoaderOperation extends Operation {
 
-  constructor(loader, type, skip) {
+  constructor(loader, type) {
     super();
     this.type = type;
-    this.skip = skip;
     this.loader = loader;
   }
 
@@ -18,7 +17,7 @@ class LoaderOperation extends Operation {
   }
 
   _withState(notify, cb) {
-    this.loader._withState(notify, cb, this.skip);
+    this.loader._withState(notify, cb);
   }
 
   onLoading(notify) {
@@ -76,8 +75,8 @@ export class ReloadOperation extends LoaderOperation {
 
 export class AutoloadOperation extends LoaderOperation {
 
-  constructor(loader, skip) {
-    super(loader, 'autoload', skip);
+  constructor(loader) {
+    super(loader, 'autoload');
   }
 
 }
