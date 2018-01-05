@@ -17,6 +17,10 @@ Router.map(function() {
 
   this.route('wip');
 
+  this.route('internal', function() {
+    this.route('settle');
+  });
+
 });
 
 export default Router;
