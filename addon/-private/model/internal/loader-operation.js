@@ -21,18 +21,16 @@ class LoaderOperation extends Operation {
   }
 
   onLoading(notify) {
-    console.log('onLoading', this);
     this._withState(notify, (state, changed) => state.onLoading(changed));
   }
 
-  onLoaded(result) {
-    console.log('onLoaded', this);
+  onLoaded() {
+    // TODO: result -> isMore
     let isMore = false;
     this._withState(true, (state, changed) => state.onLoaded(changed, isMore));
   }
 
   onError(err) {
-    console.log('onError', this);
     this._withState(true, (state, changed) => state.onError(changed, err));
   }
 
