@@ -128,7 +128,6 @@ export default class InternalLoader extends ModelMixin(Internal) {
     return this._schedule(operation);
   }
 
-  // kicks off autoload if not already loading
   getStateProperty(key, autoload) {
     if(autoload) {
       this.autoloadForKey(key);
