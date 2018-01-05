@@ -1,11 +1,11 @@
-import { resolve, allSettled } from 'rsvp';
+import { resolve } from 'rsvp';
 import { A } from '@ember/array';
 import { settle } from '../promise';
 
 export default class SequentialQueue {
 
   constructor() {
-    this.operations = A();;
+    this.operations = A();
     this.operation = null;
     this._promise = resolve();
   }

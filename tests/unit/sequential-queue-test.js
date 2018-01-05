@@ -1,12 +1,8 @@
-import { next as _next, later as _later } from '@ember/runloop';
-import { resolve, Promise } from 'rsvp';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import SequentialQueue from 'ember-cli-models/-private/util/operation/sequential-queue';
 import FunctionOperation from 'ember-cli-models/-private/util/operation/function-operation';
-
-const next = () => new Promise(resolve => _next(() => resolve()));
-const later = delay => new Promise(resolve => _later(() => resolve(), delay));
+import { next, later } from 'ember-cli-models/-private/util/promise';
 
 module('sequential-queue', {
   beforeEach() {
