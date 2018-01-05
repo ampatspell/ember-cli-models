@@ -1,5 +1,5 @@
 import Model from 'ember-cli-models/model/transient';
-import { database, loader } from 'ember-cli-models/computed';
+import { database } from 'ember-cli-models/computed';
 import { readOnly } from '@ember/object/computed';
 import { filterByType, prop, view } from '../-computed-remote';
 
