@@ -19,7 +19,10 @@ module('computed-loader', {
             perform() {
               let id = this.get('id');
               log.push(`load ${id}`);
-              return next().then(() => {});
+              return resolve()
+                .then(() => next())
+                .then(() => next())
+                .then(() => {});
             }
           };
         })
@@ -71,4 +74,85 @@ test('load state', async function(assert) {
     "isLoading": false,
     "isMore": false
   });
+});
+
+test('two loads', async function(assert) {
+  let subject = this.subject();
+  let loader = subject.get('loader');
+
+  let one = loader._internal.load();
+  let two = loader._internal.load();
+
+  assert.ok(one === two);
+
+  await one;
+  await two;
+});
+
+test('autoload and load', async function(assert) {
+  let subject = this.subject();
+  let loader = subject.get('loader');
+
+  let one = loader._internal.autoloadForKey('isLoading');
+  let two = loader._internal.load();
+
+  assert.ok(one === two);
+
+  await one;
+  await two;
+});
+
+test('load and reload', async function(assert) {
+  let subject = this.subject();
+  let loader = subject.get('loader');
+
+  let one = loader._internal.load();
+  let two = loader._internal.reload();
+
+  assert.ok(one === two);
+
+  await one;
+  await two;
+});
+
+test('two reloads', async function(assert) {
+  let subject = this.subject();
+  let loader = subject.get('loader');
+
+  let one = loader._internal.reload();
+  let two = loader._internal.reload();
+
+  assert.ok(one === two);
+
+  await one;
+  await two;
+});
+
+test('load and two reloads', async function(assert) {
+  let subject = this.subject();
+  let loader = subject.get('loader');
+
+  let zero = loader._internal.load();
+  let one = loader._internal.reload();
+  let two = loader._internal.reload();
+
+  assert.ok(zero === one);
+  assert.ok(one === two);
+
+  await zero;
+  await one;
+  await two;
+});
+
+test('autoload and reload', async function(assert) {
+  let subject = this.subject();
+  let loader = subject.get('loader');
+
+  let one = loader._internal.autoloadForKey('isLoading');
+  let two = loader._internal.reload();
+
+  assert.ok(one === two);
+
+  await one;
+  await two;
 });
