@@ -122,3 +122,17 @@ test('run multiple', async function(assert) {
     "ok four"
   ]);
 });
+
+test('find operation', async function(assert) {
+  let queue = this.queue;
+  let op = this.fn(() => 'hey', { type: 'load' });
+
+  queue.schedule(op);
+
+  assert.ok(queue.operations.length === 1);
+
+  assert.ok(queue.find(op => op.info.type === 'load') === op);
+  assert.ok(queue.find(op => op.info.type === 'foo') === undefined);
+
+  await queue.settle();
+});

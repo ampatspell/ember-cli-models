@@ -10,6 +10,10 @@ export default class SequentialQueue {
     this._promise = resolve();
   }
 
+  find(fn) {
+    return this.operations.find(fn);
+  }
+
   schedule(operation) {
     this.operations.pushObject(operation);
     this._promise = settle(this._promise).then(() => this._invoke(operation));
