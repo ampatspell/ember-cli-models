@@ -122,10 +122,10 @@ export default class InternalLoader extends ModelMixin(Internal) {
       return;
     }
 
-    let operation = new AutoloadOperation(this);
-    this._schedule(operation);
-
     this._withState(true, (state, changed) => state.onLoadScheduled(changed), [ key ]);
+
+    let operation = new AutoloadOperation(this);
+    return this._schedule(operation);
   }
 
   // kicks off autoload if not already loading
