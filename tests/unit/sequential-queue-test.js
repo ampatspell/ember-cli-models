@@ -3,26 +3,15 @@ import { resolve, Promise } from 'rsvp';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import SequentialQueue from 'ember-cli-models/-private/util/operation/sequential-queue';
-import Operation from 'ember-cli-models/-private/util/operation/operation';
+import FunctionOperation from 'ember-cli-models/-private/util/operation/function-operation';
 
 const next = () => new Promise(resolve => _next(() => resolve()));
 const later = delay => new Promise(resolve => _later(() => resolve(), delay));
 
-class FunctionOperation extends Operation {
-  constructor(fn, info) {
-    super();
-    this.fn = fn;
-    this.info = info;
-  }
-  perform() {
-    return resolve(this.fn());
-  }
-}
-
 module('sequential-queue', {
   beforeEach() {
     this.queue = new SequentialQueue();
-    this.fn = (fn, info) => new FunctionOperation(fn, info);
+    this.fn = (fn, opts) => new FunctionOperation(fn, opts);
   }
 });
 
@@ -131,8 +120,8 @@ test('find operation', async function(assert) {
 
   assert.ok(queue.operations.length === 1);
 
-  assert.ok(queue.find(op => op.info.type === 'load') === op);
-  assert.ok(queue.find(op => op.info.type === 'foo') === undefined);
+  assert.ok(queue.find(op => op.opts.type === 'load') === op);
+  assert.ok(queue.find(op => op.opts.type === 'foo') === undefined);
 
   await queue.settle();
 });
