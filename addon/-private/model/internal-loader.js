@@ -3,7 +3,8 @@ import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
 import LoaderState from './internal/loader-state';
 import withPropertyChanges from './internal/with-property-changes';
-import { defer } from 'rsvp';
+import LoaderOperation from './internal/loader-operation';
+import SequentialQueue from '../util/operation/sequential-queue';
 
 const normalizeOptions = opts => {
   let { operation } = opts;
@@ -11,64 +12,13 @@ const normalizeOptions = opts => {
   return opts;
 };
 
-class Queue {
-  constructor(loader) {
-    this.loader = loader;
-    this.operations = [];
-  }
-
-  schedule(operation) {
-    this.operations.push(operation);
-    this._runNext();
-  }
-
-  _runNext() {
-    // nonsense
-    let op = this.operations.shift();
-    if(!op) {
-      return;
-    }
-    op.invoke();
-  }
-
-}
-
-class Operation {
-
-  constructor(loader) {
-    this.loader = loader;
-    this.deferred = defer();
-  }
-
-  _invoke() {
-    let opts = this.loader.opts;
-    let { object } = opts.owner;
-    let { state, perform } = opts.operation;
-    return perform(state, object);
-  }
-
-  invoke() {
-    let promise = this._invoke();
-    promise.then(() => {
-      this.deferred.resolve();
-    }, err => {
-      this.deferred.reject(err);
-    });
-  }
-
-  get promise() {
-    return this.deferred.promise;
-  }
-
-}
-
 export default class InternalLoader extends ModelMixin(Internal) {
 
   constructor(context, opts) {
     super(context, normalizeOptions(opts));
     this.state = new LoaderState(this);
     this.observer = this._createObserver();
-    this.queue = new Queue(this);
+    this.queue = new SequentialQueue();
     this._autoload = null;
   }
 
@@ -111,7 +61,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
 
   // load if not yet loaded
   load() {
-    let op = new Operation(this);
+    let op = new LoaderOperation(this, 'load');
     this.queue.schedule(op);
     return op.promise;
   }
