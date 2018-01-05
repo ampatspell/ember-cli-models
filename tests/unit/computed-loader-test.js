@@ -3,22 +3,23 @@ import { test } from '../helpers/qunit';
 import EmberObject from '@ember/object';
 import { loader } from 'ember-cli-models/computed';
 import { resolve } from 'rsvp';
+import { next } from 'ember-cli-models/-private/util/promise';
 
 module('computed-loader', {
   beforeEach() {
-    let ctx = this;
-    this.load = () => {
-      console.log('test load');
-      return resolve();
-    };
+    this.log = [];
+    let log = this.log;
     this.subject = () => {
       this.register('app:subject', EmberObject.extend({
+        id: 'duck',
         loader: loader(function() {
           return {
             recurrent: false,
-            owner: [],
+            owner: [ 'id' ],
             perform() {
-              return ctx.load();
+              let id = this.get('id');
+              log.push(`load ${id}`);
+              return next().then(() => {});
             }
           };
         })
@@ -48,6 +49,8 @@ test('load state', async function(assert) {
   });
 
   let promise = loader.load();
+
+  await next();
 
   assert.deepEqual(loader.get('state'), {
     "error": null,

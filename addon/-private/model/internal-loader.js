@@ -3,8 +3,13 @@ import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
 import LoaderState from './internal/loader-state';
 import withPropertyChanges from './internal/with-property-changes';
-import LoaderOperation from './internal/loader-operation';
 import SequentialQueue from '../util/operation/sequential-queue';
+import {
+  LoadOperation,
+  LoadMoreOperation,
+  ReloadOperation,
+  AutoloadOperation
+} from './internal/loader-operation';
 
 const normalizeOptions = opts => {
   let { operation } = opts;
@@ -17,8 +22,8 @@ export default class InternalLoader extends ModelMixin(Internal) {
   constructor(context, opts) {
     super(context, normalizeOptions(opts));
     this.state = new LoaderState(this);
-    this.observer = this._createObserver();
     this.queue = new SequentialQueue();
+    this.observer = this._createObserver();
     this._autoload = null;
   }
 
@@ -53,6 +58,11 @@ export default class InternalLoader extends ModelMixin(Internal) {
 
   //
 
+  _schedule(operation) {
+    this.queue.schedule(operation);
+    return operation.promise;
+  }
+
   // ignore/cancel pending loads, return state to initial values
   // called when owner props change
   reset() {
@@ -61,34 +71,45 @@ export default class InternalLoader extends ModelMixin(Internal) {
 
   // load if not yet loaded
   load() {
-    let op = new LoaderOperation(this, 'load');
-    this.queue.schedule(op);
-    return op.promise;
+    let operation = new LoadOperation(this);
+    return this._schedule(operation);
   }
 
   // reloads ignoring isLoaded state
   reload() {
-    console.log('reload');
+    let operation = new ReloadOperation(this);
+    return this._schedule(operation);
   }
 
   // only for recurrent. if isMore=false, doesn't load anything
   loadMore() {
-    console.log('loadMore');
+    let operation = new LoadMoreOperation(this);
+    return this._schedule(operation);
+  }
+
+  autoloadIfNecessary(key) {
+    console.log('autoloadIfNecessary', key);
+    let operation = new AutoloadOperation(this, [ key ]);
+    this._schedule(operation);
   }
 
   // kicks off autoload if not already loading
   getStateProperty(key, autoload) {
-    console.log('getStateProperty', { key, autoload });
+    if(autoload) {
+      this.autoloadIfNecessary(key);
+    }
     return this.state[key];
   }
 
   //
 
-  // usage: this._withState(true, (state, changed) => state.onLoading(changed));
-  _withState(notify, cb) {
+  _withState(notify, cb, skip) {
     withPropertyChanges(this, notify, changed => {
       cb(this.state, changed);
-    });
+      if(changed.count) {
+        changed('state');
+      }
+    }, skip);
   }
 
   //

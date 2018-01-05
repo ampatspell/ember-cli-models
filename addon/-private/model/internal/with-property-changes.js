@@ -1,19 +1,26 @@
 const noop = () => {};
 
-const context = (internal, notify=true) => {
+const context = (internal, skip, notify=true) => {
   let model;
   let changed = noop;
   if(notify) {
     model = internal.model(false);
     if(model) {
-      changed = key => model.notifyPropertyChange(key);
+      changed = key => {
+        changed.count++;
+        if(skip && skip.includes(key)) {
+          return;
+        }
+        model.notifyPropertyChange(key);
+      };
+      changed.count = 0;
     }
   }
   return { model, changed };
 };
 
-export default (internal, notify, cb) => {
-  let { model, changed } = context(internal, notify);
+export default (internal, notify, cb, skip) => {
+  let { model, changed } = context(internal, skip, notify);
 
   if(model) {
     model.beginPropertyChanges();
