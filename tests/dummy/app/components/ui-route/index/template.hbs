@@ -14,6 +14,7 @@
     loader.isLoading={{loader.isLoading}} <span {{action 'enableAutoload'}}>[autoload]</span>
   {{/if}}
   <button {{action 'load' target=loader}}>Load</button>
+  <button {{action 'reload' target=loader}}>Reload</button>
   {{ui-block/json loader.state}}
 </div>
 

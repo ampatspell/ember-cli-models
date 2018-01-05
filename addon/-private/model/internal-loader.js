@@ -1,3 +1,4 @@
+import { resolve } from 'rsvp';
 import Internal from './internal';
 import ModelMixin from './internal/model-mixin';
 import ObjectObserver from '../util/object-observer';
@@ -69,15 +70,38 @@ export default class InternalLoader extends ModelMixin(Internal) {
     console.log('reset');
   }
 
-  // load if not yet loaded
   load() {
-    let operation = new LoadOperation(this);
+    let { isLoaded, isLoading } = this.state;
+
+    if(isLoaded) {
+      return resolve();
+    }
+
+    let operation = this.queue.find(() => true);
+
+    if(operation) {
+      return operation.promise;
+    }
+
+    operation = new LoadOperation(this);
     return this._schedule(operation);
   }
 
-  // reloads ignoring isLoaded state
   reload() {
-    let operation = new ReloadOperation(this);
+    let { isLoaded } = this.state;
+
+    let operation = this.queue.find(operation => {
+      if(!isLoaded) {
+        return true;
+      }
+      return operation.type === 'reload';
+    });
+
+    if(operation) {
+      return operation.promise;
+    }
+
+    operation = new ReloadOperation(this);
     return this._schedule(operation);
   }
 
