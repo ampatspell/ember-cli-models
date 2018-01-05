@@ -3,11 +3,7 @@ import Collection from './-collection';
 export default Collection.extend({
 
   type: 'author',
-
-  // temporary
-  loadAll() {
-    return this.get('database').find({ ddoc: 'author', view: 'by-id-with-blogs' });
-  },
+  view: 'by-id-with-blogs',
 
   // temporary
   loadByPermalink(id) {

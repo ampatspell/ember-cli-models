@@ -3,11 +3,10 @@ import { state } from 'dummy/models/state';
 
 export default Route.extend({
 
-  // temporary
   state: state(),
 
   model() {
-    return this.get('state.authors').loadAll();
+    return this.get('state.authors.loader').load();
   }
 
 });

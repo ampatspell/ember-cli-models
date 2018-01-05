@@ -1,26 +1,36 @@
 {{#ui-block/master-detail as |md|}}
   {{#md.master}}
 
-    <div class="row">
-      {{#ui-block/rows as |rows|}}
-        {{#each authors.all as |author|}}
-          {{#rows.row action=(action 'select' author)}}
-            <div class="title">{{author.screenName}} {{if author.isNew '(NEW)'}}</div>
-            <div class="subtitle">{{if author.email author.email 'no email'}}</div>
-            <div class="subtitle">
-              {{if author.blogs.length
-                  (concat author.blogs.length ' ' (pluralize 'blog' 'blogs' author.blogs.length))
-                  'No blogs'
-              }}
-            </div>
-          {{/rows.row}}
-        {{/each}}
-      {{/ui-block/rows}}
-    </div>
+    {{#if state.authors.loader.autoload.isLoading}}
 
-    <div class="row">
-      {{link-to 'Add new author' 'authors.new'}}
-    </div>
+      <div class="row">
+        Loading…
+      </div>
+
+    {{else}}
+
+      <div class="row">
+        {{#ui-block/rows as |rows|}}
+          {{#each authors.all as |author|}}
+            {{#rows.row action=(action 'select' author)}}
+              <div class="title">{{author.screenName}} {{if author.isNew '(NEW)'}}</div>
+              <div class="subtitle">{{if author.email author.email 'no email'}}</div>
+              <div class="subtitle">
+                {{if author.blogs.length
+                    (concat author.blogs.length ' ' (pluralize 'blog' 'blogs' author.blogs.length))
+                    'No blogs'
+                }}
+              </div>
+            {{/rows.row}}
+          {{/each}}
+        {{/ui-block/rows}}
+      </div>
+
+      <div class="row">
+        {{link-to 'Add new author' 'authors.new'}}
+      </div>
+
+    {{/if}}
 
   {{/md.master}}
   {{#md.detail}}
