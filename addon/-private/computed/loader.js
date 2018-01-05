@@ -1,3 +1,4 @@
+import { A } from '@ember/array';
 import destroyable from '../util/destroyable-computed';
 import { getStores } from '../util/get-stores';
 import { isObject, isBoolean, isArray, isFunction } from '../util/assert';
@@ -27,10 +28,15 @@ const invoke = (owner, fn, stores) => fn.call(owner, owner, stores);
 
 const validate = (object, result) => {
   isObject('result', result);
+
   let { recurrent, owner, perform } = result;
+
   isBoolean('result.recurrent', recurrent);
   isArray('result.owner', owner);
   isFunction('result.perform', perform);
+
+  owner = A(owner).compact();
+
   return {
     operation: {
       recurrent,
