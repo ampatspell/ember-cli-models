@@ -1,7 +1,7 @@
 import Model from 'ember-cli-models/model/transient';
 import { database, loader } from 'ember-cli-models/computed';
 import { readOnly } from '@ember/object/computed';
-import { filterByType, prop } from '../-computed-remote';
+import { filterByType, prop, view } from '../-computed-remote';
 
 export default Model.extend({
 
@@ -12,20 +12,7 @@ export default Model.extend({
 
   all: filterByType({ type: prop('type'), new: false }),
 
-  loader: loader(function(owner, stores) {
-    return {
-      recurrent: false,
-      owner: [ 'type', 'view' ],
-      perform() {
-        let {
-          type: ddoc,
-          view
-        } = this.getProperties('type', 'view');
-
-        return stores.database('remote', 'main').find({ ddoc, view });
-      }
-    }
-  }),
+  loader: view({ ddoc: prop('type'), view: prop('view') }),
 
   _count: readOnly('all.length'),
 

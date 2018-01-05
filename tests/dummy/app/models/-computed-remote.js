@@ -6,7 +6,8 @@ const {
   filterByType,
   model,
   hasManyPersisted,
-  manyToManyInverse
+  manyToManyInverse,
+  view
 } = withDatabase({ store: 'remote', database: 'main' });
 
 export {
@@ -15,5 +16,6 @@ export {
   filterByType,
   model,
   hasManyPersisted,
-  manyToManyInverse
+  manyToManyInverse,
+  view
 };

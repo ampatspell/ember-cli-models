@@ -1,6 +1,17 @@
 import { assign } from '@ember/polyfills';
-import { find as _find, filter as _filter, model as _model } from 'ember-cli-models/computed';
-import { prop, getKey, getValue } from 'ember-cli-models/prop';
+
+import {
+  find as _find,
+  filter as _filter,
+  model as _model,
+  loader as _loader
+} from 'ember-cli-models/computed';
+
+import {
+  prop,
+  getKey,
+  getValue
+} from 'ember-cli-models/prop';
 
 // opts: { store, database }
 const sourceFromOptions = (owner, stores, opts) => {
@@ -96,6 +107,22 @@ export const manyToManyInverse = opts => {
   });
 }
 
+// opts: { store, database, ddoc, view }
+export const view = opts => {
+  return _loader(function(owner, stores) {
+    return {
+      recurrent: false,
+      owner: [ getKey(opts.ddoc), getKey(opts.view) ],
+      perform() {
+        let ddoc = getValue(opts.ddoc, owner);
+        let view = getValue(opts.view, owner);
+        let database = sourceFromOptions(owner, stores, opts);
+        return database.find({ ddoc, view });
+      }
+    }
+  });
+}
+
 // database: { store, database }
 export const withDatabase = database => {
   const mergeDatabase = opts => assign({}, database, opts);
@@ -105,6 +132,7 @@ export const withDatabase = database => {
     filterByType:      opts => filterByType(mergeDatabase(opts)),
     model:             fn   => model(mergeDatabase(), fn),
     hasManyPersisted:  opts => hasManyPersisted(mergeDatabase(opts)),
-    manyToManyInverse: opts => manyToManyInverse(mergeDatabase(opts))
+    manyToManyInverse: opts => manyToManyInverse(mergeDatabase(opts)),
+    view:              opts => view(mergeDatabase(opts))
   };
 }
