@@ -1,8 +1,7 @@
 # TODO
 
-* loaders
-  * autoload tests
-  * tests for load, reload queue
+* loader `loadMore`
+* loader `reset`
 * database, store, stores `settle`
 
 * what was compact about?
