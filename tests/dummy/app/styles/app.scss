@@ -58,6 +58,9 @@ $font-family: 'Raleway', sans-serif;
     font-weight: 600;
     line-height: 17px;
   }
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .ui-block-json {
@@ -138,4 +141,10 @@ $font-family: 'Raleway', sans-serif;
       font-size: 11px;
     }
   }
+}
+
+.ui-block-session-sign-in {
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 4px;
 }

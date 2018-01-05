@@ -3,11 +3,14 @@
   <div>{{store}}</div>
   <div>{{database}}</div>
   <div>{{state}}</div>
+  <div>{{state.session}}</div>
 </div>
 
 <div class="row">
   <button onclick={{action 'setup'}}>Setup database</button>
 </div>
+
+{{ui-block/session/sign-in}}
 
 {{#if setup}}
   <div class="row">{{ui-block/json setup}}</div>

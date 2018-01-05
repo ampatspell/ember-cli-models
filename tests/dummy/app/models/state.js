@@ -11,7 +11,13 @@ const remote = name => model(function() {
   };
 });
 
+const session = () => model(function() {
+  return { name: 'session' };
+});
+
 export default Model.extend({
+
+  session: session(),
 
   changes: remote('state/changes'),
   design:  remote('state/design'),

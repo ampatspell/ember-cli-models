@@ -1,0 +1,27 @@
+{{#if session.isAuthenticated}}
+  <div class="row">
+    <div class="heading">
+      Signed in as {{session.name}} at {{session.url}}
+    </div>
+  </div>
+  <div class="row">
+    <button {{action 'delete' target=session}}>Sign out</button>
+  </div>
+{{else}}
+  <div class="row">
+    <div class="heading">
+      Sign in at {{session.url}}
+    </div>
+  </div>
+  <form {{action 'save' target=session}}>
+    <div class="row">
+      {{input placeholder='Name' value=session.name}}
+    </div>
+    <div class="row">
+      {{input placeholder='Password' value=session.password type='password'}}
+    </div>
+    <div class="row">
+      <button type="submit">Sign in</button>
+    </div>
+  </form>
+{{/if}}
