@@ -15,7 +15,7 @@ export default class SequentialQueue {
   }
 
   schedule(operation) {
-    this.operations.pushObject(operation);
+    this.operations.insertAt(0, operation);
     this._promise = settle(this._promise).then(() => this._invoke(operation));
   }
 
