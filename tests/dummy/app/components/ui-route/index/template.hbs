@@ -6,19 +6,6 @@
 </div>
 
 <div class="row">
-  {{loader}}
-  {{loader.autoload}}
-  {{#if autoload}}
-    loader.autoload.isLoading={{loader.autoload.isLoading}}
-  {{else}}
-    loader.isLoading={{loader.isLoading}} <span {{action 'enableAutoload'}}>[autoload]</span>
-  {{/if}}
-  <button {{action 'load' target=loader}}>Load</button>
-  <button {{action 'reload' target=loader}}>Reload</button>
-  {{ui-block/json loader.state}}
-</div>
-
-<div class="row">
   <button onclick={{action 'setup'}}>Setup database</button>
 </div>
 
