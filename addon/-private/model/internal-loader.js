@@ -87,8 +87,17 @@ export default class InternalLoader extends ModelMixin(Internal) {
     return this._schedule(operation);
   }
 
-  autoloadIfNecessary(key) {
-    console.log('autoloadIfNecessary', key);
+  autoloadForKey(key) {
+    let { isLoading, isLoaded } = this.state;
+
+    if(isLoading || isLoaded) {
+      return;
+    }
+
+    if(this.queue.operations.length > 0) {
+      return;
+    }
+
     let operation = new AutoloadOperation(this, [ key ]);
     this._schedule(operation);
   }
@@ -96,7 +105,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
   // kicks off autoload if not already loading
   getStateProperty(key, autoload) {
     if(autoload) {
-      this.autoloadIfNecessary(key);
+      this.autoloadForKey(key);
     }
     return this.state[key];
   }
