@@ -13,7 +13,7 @@
       Sign in at {{session.url}}
     </div>
   </div>
-  <form {{action 'save' target=session}}>
+  <form {{action 'save' target=session on='submit'}}>
     <div class="row">
       {{input placeholder='Name' value=session.name}}
     </div>
