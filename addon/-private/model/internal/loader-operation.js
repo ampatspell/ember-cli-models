@@ -1,4 +1,4 @@
-import { reject } from 'rsvp';
+import { resolve, reject } from 'rsvp';
 import Operation from '../../util/operation/operation';
 
 class LoaderOperation extends Operation {
@@ -13,7 +13,7 @@ class LoaderOperation extends Operation {
     let opts = this.loader.opts;
     let { object } = opts.owner;
     let { state, perform } = opts.operation;
-    return perform.call(object, state, object);
+    return resolve(perform.call(object, state, object));
   }
 
   _withState(notify, cb) {
