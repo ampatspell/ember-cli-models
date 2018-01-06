@@ -21,6 +21,14 @@ export default class SequentialQueue {
     this._promise = settle(this._promise).then(() => this._invoke(operation));
   }
 
+  cancel() {
+    this.operations.forEach(operation => operation.cancel());
+  }
+
+  includesPending() {
+    return !!this.find(operation => !operation.cancelled);
+  }
+
   _invoke(operation) {
     this.operation = operation;
     return settle(operation.invoke()).then(() => {
