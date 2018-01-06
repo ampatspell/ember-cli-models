@@ -1,5 +1,5 @@
 import { allSettled, defer } from 'rsvp';
-import { schedule } from '@ember/runloop';
+import { next, schedule } from '@ember/runloop';
 
 export default class Settle {
 
@@ -22,9 +22,13 @@ export default class Settle {
     schedule('afterRender', () => this._afterRender(deferred));
   }
 
+  _next(deferred) {
+    next(() => this._iteration(deferred));
+  }
+
   _settle() {
     let deferred = defer();
-    this._iteration(deferred);
+    this._next(deferred);
     return deferred;
   }
 
