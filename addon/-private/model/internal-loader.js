@@ -113,9 +113,9 @@ export default class InternalLoader extends ModelMixin(Internal) {
   }
 
   autoloadForKey(key) {
-    let { isLoading, isLoaded } = this.state;
+    let { isLoading, isLoaded, isError } = this.state;
 
-    if(isLoading || isLoaded) {
+    if(isLoading || isLoaded || isError) {
       return;
     }
 
