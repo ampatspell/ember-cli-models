@@ -1,1 +1,14 @@
-{{yield}}
+{{#if authorsLoader.autoload.isLoading}}
+  <div data-test-authors="loading" class="row">Authors loading…</div>
+{{else if authorsLoader.isLoaded}}
+  <div data-test-authors="loaded" class="row">{{authors.length}} authors loaded</div>
+  {{#if blogsLoader.autoload.isLoading}}
+    <div data-test-blogs="loading" class="row">Blogs loading…</div>
+  {{else if blogsLoader.isLoaded}}
+    <div data-test-blogs="loaded" class="row">{{blogs.length}} blogs loaded</div>
+  {{else if blogsLoader.isError}}
+    <div data-test-blogs="error" class="row">Blogs load failed</div>
+  {{/if}}
+{{else if authorsLoader.isError}}
+  <div data-test-authors="error" class="row">Authors load failed</div>
+{{/if}}

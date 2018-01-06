@@ -5,6 +5,15 @@ import { database } from 'ember-cli-models/computed';
 
 /* global emit */
 const ddocs = {
+  main: {
+    views: {
+      'by-type': {
+        map(doc) {
+          emit(doc.type);
+        }
+      }
+    }
+  },
   author: {
     views: {
       'by-id': {

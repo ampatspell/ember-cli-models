@@ -107,17 +107,18 @@ export const manyToManyInverse = opts => {
   });
 }
 
-// opts: { store, database, ddoc, view }
+// opts: { store, database, ddoc, view, key }
 export const view = opts => {
   return _loader(function(owner, stores) {
     return {
       recurrent: false,
-      owner: [ getKey(opts.ddoc), getKey(opts.view) ],
+      owner: [ getKey(opts.ddoc), getKey(opts.view), getKey(opts.key) ],
       perform() {
         let ddoc = getValue(opts.ddoc, owner);
         let view = getValue(opts.view, owner);
+        let key = getValue(opts.key, owner);
         let database = sourceFromOptions(owner, stores, opts);
-        return database.find({ ddoc, view });
+        return database.find({ ddoc, view, key });
       }
     }
   });
