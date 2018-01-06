@@ -34,6 +34,24 @@ export const findByType = opts => {
   });
 }
 
+// opts: { store, database, id }
+export const findById = opts => {
+  return _find(function(owner, stores) {
+    return {
+      source: sourceFromOptions(owner, stores, opts),
+      model: [ 'storage.id' ],
+      owner: [ getKey(opts.id) ],
+      matches(model, owner) {
+        let id = getValue(opts.id, owner);
+        if(!id) {
+          return;
+        }
+        return model.get('storage.id') === id;
+      }
+    };
+  });
+}
+
 // opts: { store, database, type, new }
 export const filterByType = opts => {
   return _filter(function(owner, stores) {
@@ -124,16 +142,36 @@ export const view = opts => {
   });
 }
 
+// opts: { store, database, id }
+export const loadById = opts => {
+  return _loader(function(owner, stores) {
+    return {
+      recurrent: false,
+      owner: [ getKey(opts.id) ],
+      perform() {
+        let key = getValue(opts.id, owner);
+        if(!key) {
+          return;
+        }
+        let database = sourceFromOptions(owner, stores, opts);
+        return database.first({ all: true, key });
+      }
+    }
+  });
+}
+
 // database: { store, database }
 export const withDatabase = database => {
   const mergeDatabase = opts => assign({}, database, opts);
   return {
     prop,
     findByType:        opts => findByType(mergeDatabase(opts)),
+    findById:          opts => findById(mergeDatabase(opts)),
     filterByType:      opts => filterByType(mergeDatabase(opts)),
     model:             fn   => model(mergeDatabase(), fn),
     hasManyPersisted:  opts => hasManyPersisted(mergeDatabase(opts)),
     manyToManyInverse: opts => manyToManyInverse(mergeDatabase(opts)),
-    view:              opts => view(mergeDatabase(opts))
+    view:              opts => view(mergeDatabase(opts)),
+    loadById:          opts => loadById(mergeDatabase(opts))
   };
 }

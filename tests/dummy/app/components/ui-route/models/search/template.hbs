@@ -1,0 +1,27 @@
+<div class="row">
+  {{input value=id}}
+</div>
+
+{{#if loader.autoload.isLoading}}
+
+  <div class="row">
+    Loading '{{id}}'…
+  </div>
+
+{{else if loader.isError}}
+
+  <div class="row">
+    {{ui-block/json loader.error}}
+  </div>
+
+{{else}}
+
+  <div class="row">
+    {{model}}
+  </div>
+
+  <div class="row">
+    {{ui-block/json model.serialized}}
+  </div>
+
+{{/if}}

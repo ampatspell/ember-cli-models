@@ -15,6 +15,10 @@ Router.map(function() {
     });
   });
 
+  this.route('models', function() {
+    this.route('search');
+  });
+
   this.route('wip');
 
   this.route('internal', function() {
