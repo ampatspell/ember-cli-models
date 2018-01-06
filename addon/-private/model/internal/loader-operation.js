@@ -89,4 +89,11 @@ export class AutoloadOperation extends LoaderOperation {
     super(loader, 'autoload');
   }
 
+  perform() {
+    if(this.cancelled) {
+      return;
+    }
+    return super.perform();
+  }
+
 }
