@@ -56,6 +56,10 @@ export default class LoaderState extends State {
      }, changed);
   }
 
+  onReset(changed) {
+    this._update(defaults, changed);
+  }
+
   toJSON() {
     return keys.reduce((json, key) => {
       json[key] = this[key];

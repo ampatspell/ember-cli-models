@@ -11,7 +11,6 @@ import {
   ReloadOperation,
   AutoloadOperation
 } from './internal/loader-operation';
-import { info } from 'ember-cli-models/-private/util/logger';
 
 const normalizeOptions = opts => {
   let { operation } = opts;
@@ -65,10 +64,9 @@ export default class InternalLoader extends ModelMixin(Internal) {
     return operation.promise;
   }
 
-  // ignore/cancel pending loads, return state to initial values
-  // called when owner props change
   reset() {
-    info('InternalLoader.reset is not implemented yet');
+    this._withState(true, (state, changed) => state.onReset(changed));
+    this.queue.cancel();
   }
 
   load() {
@@ -119,7 +117,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
       return;
     }
 
-    if(this.queue.operations.length > 0) {
+    if(this.queue.includesPending()) {
       return;
     }
 
