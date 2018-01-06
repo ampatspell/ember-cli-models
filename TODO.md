@@ -1,8 +1,7 @@
 # TODO
 
-* database, store, stores `settle`
 * loader `loadMore`
-* loader `reset`
+* loader `isLoadable`, meta
 
 * what was compact about?
 * optional destroy for models instantiated in route's `model` hook (`isNew`)
