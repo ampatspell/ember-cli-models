@@ -1,33 +1,34 @@
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
-import EmberObject from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
+import { run } from '@ember/runloop';
 import { loader } from 'ember-cli-models/computed';
-import { resolve } from 'rsvp';
 import { next } from 'ember-cli-models/-private/util/promise';
 import ModelsError from 'ember-cli-models/-private/util/error';
 
 module('computed-loader', {
   beforeEach() {
-    this.log = [];
-    let log = this.log;
     this.subject = () => {
       this.register('app:subject', EmberObject.extend({
         id: 'duck',
         error: null,
+        log: computed(function() {
+          return [];
+        }),
         loader: loader(function() {
           return {
             recurrent: false,
             owner: [ 'id', 'error' ],
             async perform() {
-              await next();
+              let { id, error } = this.getProperties('id', 'error');
+
               await next();
 
-              let { id, error } = this.getProperties('id', 'error');
               if(error) {
-                log.push(`error ${id} ${error}`);
+                this.get('log').push(`error ${id} ${error}`);
                 throw new ModelsError({ error: 'perform', reason: error });
               } else {
-                log.push(`load ${id}`);
+                this.get('log').push(`load ${id}`);
                 return { id };
               }
             }
@@ -61,6 +62,7 @@ test('load state', async function(assert) {
   let promise = loader.load();
 
   await next();
+  await next();
 
   assert.deepEqual(loader.get('state'), {
     "error": null,
@@ -91,9 +93,6 @@ test('two loads', async function(assert) {
   let two = loader._internal.load();
 
   assert.ok(one === two);
-
-  await one;
-  await two;
 });
 
 test('autoload and load', async function(assert) {
@@ -104,9 +103,6 @@ test('autoload and load', async function(assert) {
   let two = loader._internal.load();
 
   assert.ok(one === two);
-
-  await one;
-  await two;
 });
 
 test('load and reload', async function(assert) {
@@ -117,9 +113,6 @@ test('load and reload', async function(assert) {
   let two = loader._internal.reload();
 
   assert.ok(one === two);
-
-  await one;
-  await two;
 });
 
 test('two reloads', async function(assert) {
@@ -130,9 +123,6 @@ test('two reloads', async function(assert) {
   let two = loader._internal.reload();
 
   assert.ok(one === two);
-
-  await one;
-  await two;
 });
 
 test('load and two reloads', async function(assert) {
@@ -145,10 +135,6 @@ test('load and two reloads', async function(assert) {
 
   assert.ok(zero === one);
   assert.ok(one === two);
-
-  await zero;
-  await one;
-  await two;
 });
 
 test('autoload and reload', async function(assert) {
@@ -159,9 +145,6 @@ test('autoload and reload', async function(assert) {
   let two = loader._internal.reload();
 
   assert.ok(one === two);
-
-  await one;
-  await two;
 });
 
 test('loader.autoload', async function(assert) {
@@ -190,4 +173,67 @@ test('loader.autoload does not load after error', async function(assert) {
   });
 
   assert.equal(loader.get('autoload.isLoading'), false);
+});
+
+test('load reset load', async function(assert) {
+  let subject = this.subject();
+  subject.set('id', 'yellow');
+  let loader = subject.get('loader');
+
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  await this.stores.settle();
+
+  subject.set('id', 'green');
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  await this.stores.settle();
+
+  assert.deepEqual(subject.get('log'), [
+    "load yellow",
+    "load green"
+  ]);
+});
+
+test('load and reset while loading', async function(assert) {
+  let subject = this.subject();
+  subject.set('id', 'yellow');
+  let loader = subject.get('loader');
+
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  await next();
+  await next();
+
+  subject.set('id', 'green');
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  await next();
+
+  await this.stores.settle();
+
+  assert.deepEqual(subject.get('log'), [
+    "load yellow",
+    "load green"
+  ]);
+});
+
+test('autoload and reset while loading are not scheduling two operations', async function(assert) {
+  let subject = this.subject();
+  subject.set('id', 'yellow');
+  let loader = subject.get('loader');
+
+  assert.equal(loader.get('autoload.isLoading'), true);
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  subject.set('id', 'green');
+
+  assert.equal(loader.get('autoload.isLoading'), true);
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  await run(() => this.stores.settle());
+
+  assert.deepEqual(subject.get('log'), [
+    "load green"
+  ]);
 });
