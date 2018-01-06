@@ -5,6 +5,7 @@ import ObjectObserver from '../util/object-observer';
 import LoaderState from './internal/loader-state';
 import withPropertyChanges from './internal/with-property-changes';
 import SequentialQueue from '../util/operation/sequential-queue';
+import { keys } from './internal/loader-state';
 import {
   LoadOperation,
   LoadMoreOperation,
@@ -57,6 +58,16 @@ export default class InternalLoader extends ModelMixin(Internal) {
     return autoload;
   }
 
+  _notifyAutoloadKeysChanged() {
+    let autoload = this.autoload(false);
+    if(!autoload) {
+      return;
+    }
+    autoload.beginPropertyChanges();
+    keys.forEach(key => autoload.notifyPropertyChange(key));
+    autoload.endPropertyChanges();
+}
+
   //
 
   _schedule(operation) {
@@ -67,6 +78,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
   reset() {
     this._withState(true, (state, changed) => state.onReset(changed));
     this.queue.cancel();
+    this._notifyAutoloadKeysChanged();
   }
 
   load() {
@@ -137,12 +149,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
   //
 
   _withState(notify, cb, skip) {
-    withPropertyChanges(this, notify, changed => {
-      cb(this.state, changed);
-      if(changed.count) {
-        changed('state');
-      }
-    }, skip);
+    withPropertyChanges(this, notify, changed => cb(this.state, changed), skip);
   }
 
   //

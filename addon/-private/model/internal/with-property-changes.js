@@ -7,13 +7,11 @@ const context = (internal, skip, notify=true) => {
     model = internal.model(false);
     if(model) {
       changed = key => {
-        changed.count++;
         if(skip && skip.includes(key)) {
           return;
         }
         model.notifyPropertyChange(key);
       };
-      changed.count = 0;
     }
   }
   return { model, changed };

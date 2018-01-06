@@ -8,7 +8,7 @@ const state = key => computed(function() {
   return this._internal && this._internal.getStateProperty(key, false);
 }).readOnly();
 
-const toJSON = () => computed(function() {
+const toJSON = () => computed(...keys, function() {
   return this._internal && this._internal.state.toJSON();
 }).readOnly();
 
