@@ -24,7 +24,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
   constructor(context, opts) {
     super(context, normalizeOptions(opts));
     this.state = new LoaderState(this);
-    this.queue = new SequentialQueue();
+    this.queue = new SequentialQueue(context.operations);
     this.observer = this._createObserver();
     this._autoload = null;
   }

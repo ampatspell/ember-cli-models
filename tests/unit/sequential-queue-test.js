@@ -1,3 +1,4 @@
+import { A } from '@ember/array';
 import module from '../helpers/module-for-stores';
 import { test } from '../helpers/qunit';
 import SequentialQueue from 'ember-cli-models/-private/util/operation/sequential-queue';
@@ -6,7 +7,16 @@ import { next, later } from 'ember-cli-models/-private/util/promise';
 
 module('sequential-queue', {
   beforeEach() {
-    this.queue = new SequentialQueue();
+    this.parent = {
+      operations: A(),
+      register(op) {
+        this.operations.pushObject(op)
+      },
+      unregister(op) {
+        this.operations.removeObject(op)
+      }
+    }
+    this.queue = new SequentialQueue(this.parent);
     this.fn = (fn, opts) => new FunctionOperation(fn, opts);
   }
 });
@@ -71,6 +81,7 @@ test('run first reject', async function(assert) {
 
 test('run multiple', async function(assert) {
   let log = [];
+  let parent = this.parent;
   let queue = this.queue;
   let op = (success, message, delay) => this.fn(() => {
     log.push(`start ${message}`);
@@ -85,16 +96,20 @@ test('run multiple', async function(assert) {
     });
   });
 
+  assert.ok(parent.operations.length === 0);
+
   queue.schedule(op(false, 'one', 50));
   queue.schedule(op(true, 'two', 30));
   queue.schedule(op(false, 'three', 10));
   queue.schedule(op(true, 'four', 0));
 
+  assert.ok(parent.operations.length === 4);
   assert.ok(queue.operations.length === 4);
 
   await queue.settle();
 
   assert.ok(queue.operations.length === 0);
+  assert.ok(parent.operations.length === 0);
 
   assert.deepEqual(log, [
     "start one",

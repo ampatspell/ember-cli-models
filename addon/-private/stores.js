@@ -8,11 +8,13 @@ import { omit } from './util/object';
 import factoryFor from './util/factory-for';
 import ExistingMixin from './existing-mixin';
 import FilterByClass from './identity/by-class';
+import Operations from './util/operation/operations';
 
 class StoresContext extends Context {
   constructor(owner) {
     super(owner);
     this.stores = new Registry();
+    this.operations = new Operations();
     this.classFactory = this.create('models:class-factory');
     this.modelClassFactory = this.create('models:model-class-factory');
     this.modelFactory = this.create('models:model-factory');
@@ -106,6 +108,10 @@ export default EmberObject.extend(ContextMixin, ExistingMixin, {
 
   compact() {
     this._context.stores.map(store => store.compact());
+  },
+
+  settle() {
+    return this._context.operations.settle();
   }
 
 });

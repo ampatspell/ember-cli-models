@@ -4,7 +4,8 @@ import { settle } from '../promise';
 
 export default class SequentialQueue {
 
-  constructor() {
+  constructor(parent) {
+    this.parent = parent;
     this.operations = A();
     this.operation = null;
     this._promise = resolve();
@@ -16,6 +17,7 @@ export default class SequentialQueue {
 
   schedule(operation) {
     this.operations.insertAt(0, operation);
+    this.parent.register(operation);
     this._promise = settle(this._promise).then(() => this._invoke(operation));
   }
 
@@ -24,6 +26,7 @@ export default class SequentialQueue {
     return settle(operation.invoke()).then(() => {
       this.operation = null;
       this.operations.removeObject(operation);
+      this.parent.unregister(operation);
     });
   }
 
