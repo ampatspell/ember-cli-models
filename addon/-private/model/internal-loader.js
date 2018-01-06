@@ -76,7 +76,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
       return resolve();
     }
 
-    let operation = this.queue.find(() => true);
+    let operation = this.queue.findPending(() => true);
 
     if(operation) {
       return operation.promise;
@@ -89,7 +89,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
   reload() {
     let { isLoaded } = this.state;
 
-    let operation = this.queue.find(operation => {
+    let operation = this.queue.findPending(operation => {
       if(!isLoaded) {
         return true;
       }

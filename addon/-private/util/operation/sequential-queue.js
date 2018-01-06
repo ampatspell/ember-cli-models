@@ -15,6 +15,14 @@ export default class SequentialQueue {
     return this.operations.find(fn);
   }
 
+  findPending(fn) {
+    return this.find(operation => !operation.cancelled && fn(operation));
+  }
+
+  includesPending() {
+    return !!this.findPending(() => true);
+  }
+
   schedule(operation) {
     this.operations.insertAt(0, operation);
     this.parent.register(operation);
@@ -23,10 +31,6 @@ export default class SequentialQueue {
 
   cancel() {
     this.operations.forEach(operation => operation.cancel());
-  }
-
-  includesPending() {
-    return !!this.find(operation => !operation.cancelled);
   }
 
   _invoke(operation) {
