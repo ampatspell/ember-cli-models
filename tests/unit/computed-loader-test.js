@@ -62,7 +62,6 @@ test('load state', async function(assert) {
   let promise = loader.load();
 
   await next();
-  await next();
 
   assert.deepEqual(loader.get('state'), {
     "error": null,

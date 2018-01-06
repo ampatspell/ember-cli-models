@@ -1,5 +1,4 @@
-import { defer } from 'rsvp';
-import { next } from '../promise';
+import { defer, resolve } from 'rsvp';
 
 export default class Operation {
 
@@ -11,9 +10,7 @@ export default class Operation {
   // }
 
   invoke() {
-    next()
-      .then(() => this.perform())
-      .then(arg => this._deferred.resolve(arg), err => this._deferred.reject(err));
+    resolve(this.perform()).then(arg => this._deferred.resolve(arg), err => this._deferred.reject(err));
     return this.promise;
   }
 
