@@ -32,7 +32,7 @@ export default Model.extend({
 });
 ```
 
-## model
+## model
 
 Creates transient model, owned by parent object. Model is destroyed along with parent:
 
