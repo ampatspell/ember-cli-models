@@ -105,7 +105,7 @@ Lookups first or all matching models in stores/store/database identity (also any
 
 Basic example:
 
-``` javascript
+``` javascript
 export default EmberObject.extend({
 
   id: 'zeeba',
@@ -159,7 +159,7 @@ export const findById = opts => {
 };
 ```
 
-## loader
+## loader
 
 Loads and autoloads models
 
