@@ -170,12 +170,19 @@ export default EmberObject.extend({
 
   database: database('remote', 'main'),
 
+  // database: 'foobar',
+  // type: 'recurrent' / 'first' / 'find'
+  // query(state, owner) {
+  //   return { id };
+  // }
+
   loader: loader('database', function() {
     return {
       recurrent: false,
       owner: [ 'id' ],
       async perform(state, owner) {
         let database = this.get('database');
+        let id = owner.get('id');
         let models = await database.first({ id });
         // useful for { recurrent: true } including pagination
         return {
