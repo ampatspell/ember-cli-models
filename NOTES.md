@@ -203,7 +203,34 @@ export default EmberObject.extend({
 
 ## Backed
 
+``` javascript
+import BackedModel from 'ember-cli-models/model/backed';
+import { store, database } from 'ember-cli-models/computed';
+
+export default BackedModel.extend({
+
+  // storage
+  // isDeleted
+
+  database: database(),
+  store: store(),
+
+});
+```
+
 ## Transient
+
+``` javascript
+import TransientModel from 'ember-cli-models/model/transient';
+import { store, database } from 'ember-cli-models/computed';
+
+export default TransientModel.extend({
+
+  database: database(),
+  store: store(),
+
+});
+```
 
 # Stores
 
