@@ -8,11 +8,11 @@ const context = (internal, skip, notify=true) => {
     if(model) {
       let properties = [];
       changed = key => {
-        if(skip && skip.includes(key)) {
-          return;
-        }
         if(!properties.includes(key)) {
           properties.push(key);
+        }
+        if(skip && skip.includes(key)) {
+          return;
         }
         model.notifyPropertyChange(key);
       };

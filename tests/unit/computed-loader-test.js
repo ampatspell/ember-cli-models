@@ -236,3 +236,57 @@ test('autoload and reset while loading are not scheduling two operations', async
     "load green"
   ]);
 });
+
+test('autoload state', async function(assert) {
+  let subject = this.subject();
+  subject.set('id', 'yellow');
+  let loader = subject.get('loader');
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
+    "isLoaded": false,
+    "isLoading": false,
+    "isMore": false
+  });
+
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
+    "isLoaded": false,
+    "isLoading": true,
+    "isMore": false
+  });
+
+  subject.set('id', 'green');
+
+  assert.equal(loader.get('autoload.isLoading'), true);
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
+    "isLoaded": false,
+    "isLoading": true,
+    "isMore": false
+  });
+
+  await run(() => this.stores.settle());
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
+    "isLoaded": true,
+    "isLoading": false,
+    "isMore": false
+  });
+
+  assert.deepEqual(subject.get('log'), [
+    "load green"
+  ]);
+});
