@@ -2,6 +2,10 @@
   {{input value=id}}
 </div>
 
+<div class="row">
+  {{ui-block/json loader.state}}
+</div>
+
 {{#if loader.autoload.isLoading}}
 
   <div class="row">
