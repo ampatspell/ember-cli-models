@@ -66,7 +66,7 @@ export default class InternalLoader extends ModelMixin(Internal) {
     autoload.beginPropertyChanges();
     keys.forEach(key => autoload.notifyPropertyChange(key));
     autoload.endPropertyChanges();
-}
+  }
 
   //
 
