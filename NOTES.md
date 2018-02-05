@@ -199,6 +199,11 @@ export default EmberObject.extend({
 });
 ```
 
+```
+* loader.autoload.isLoading
+* loader.isLoading
+```
+
 # Model
 
 ## Backed
