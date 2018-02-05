@@ -149,7 +149,12 @@ export default class InternalLoader extends ModelMixin(Internal) {
   //
 
   _withState(notify, cb, skip) {
-    withPropertyChanges(this, notify, changed => cb(this.state, changed), skip);
+    withPropertyChanges(this, notify, changed => {
+      cb(this.state, changed);
+      if(changed.properties.length) {
+        changed('state');
+      }
+    }, skip);
   }
 
   //
