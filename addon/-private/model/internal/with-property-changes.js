@@ -1,24 +1,32 @@
-const noop = () => {};
-
 const context = (internal, skip, notify=true) => {
   let model;
-  let changed = noop;
+  let changed;
+  let properties = [];
+
+  let push = key => {
+    if(!properties.includes(key)) {
+      properties.push(key);
+    }
+  };
+
   if(notify) {
     model = internal.model(false);
     if(model) {
-      let properties = [];
       changed = key => {
-        if(!properties.includes(key)) {
-          properties.push(key);
-        }
+        push(key);
         if(skip && skip.includes(key)) {
           return;
         }
         model.notifyPropertyChange(key);
       };
-      changed.properties = properties;
     }
   }
+
+  if(!changed) {
+    changed = key => push(key);
+  }
+
+  changed.properties = properties;
   return { model, changed };
 };
 
