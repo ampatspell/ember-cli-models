@@ -6,12 +6,17 @@ const context = (internal, skip, notify=true) => {
   if(notify) {
     model = internal.model(false);
     if(model) {
+      let properties = [];
       changed = key => {
         if(skip && skip.includes(key)) {
           return;
         }
+        if(!properties.includes(key)) {
+          properties.push(key);
+        }
         model.notifyPropertyChange(key);
       };
+      changed.properties = properties;
     }
   }
   return { model, changed };
