@@ -18,8 +18,6 @@
 // models/state.js
 export default Model.extend({
 
-  store: store('remote'),
-
   session: model(function() {
     let store = this.get('store');
     return {
@@ -42,6 +40,7 @@ export default Model.extend({
 
   author: model(function() {
     return {
+      store: this.get('store'),
       owner: [ 'name' ],
       id() {
         let { name, isAuthenticated } = this.getProperties('name', 'isAuthenticated');
@@ -54,10 +53,9 @@ export default Model.extend({
         if(!this.get('isAuthenticated')) {
           return;
         }
-        let store = this.get('store');
         return {
           name: 'author',
-          props: { store }
+          props: {}
         };
       }
     }
@@ -81,16 +79,25 @@ export default Model.extend({
   store: null,
   id: readOnly('storage.id'),
 
+  name: readOnly('storage.name'),
+
   loader: loader('store', function() {
     return {
+      type: 'first',
       store: this.get('store'),
-      owner: [ 'id' ],
-      perform() {
+      owner: [ 'id', 'storage.isLoaded' ],
+      isLoadable() {
+        return !!this.get('id');
+      },
+      isLoaded() {
+        return this.get('storage.isLoaded');
+      },
+      query() {
         let id = this.get('id');
         return { id };
       }
     }
-  }),
+  })
 
 });
 ```
@@ -98,5 +105,31 @@ export default Model.extend({
 ### Base
 
 ``` javascript
+export const state = model(function() {
+  return {
+    store: getStore('remote'),
+    owner: [],
+    id() {
+      return 'state:singleton';
+    },
+    create() {
+      return {
+        name: 'state',
+        props: {}
+      };
+    }
+  }
+});
+```
+
+``` javascript
 // routes/application.js
+return Route.extend({
+
+  state: state(),
+
+  async model() {
+    await this.get('state').restore();
+  }
+});
 ```
